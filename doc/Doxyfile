@@ -153,7 +153,7 @@ STRIP_FROM_INC_PATH    =
 # (but less readable) file names. This can be useful if your file system 
 # doesn't support long names like on DOS, Mac, or CD-ROM.
 
-SHORT_NAMES            = NO
+SHORT_NAMES            = YES
 
 # If the JAVADOC_AUTOBRIEF tag is set to YES then Doxygen 
 # will interpret the first line (until the first dot) of a JavaDoc-style 
@@ -624,7 +624,7 @@ WARNINGS               = YES
 # for undocumented members. If EXTRACT_ALL is set to YES then this flag will 
 # automatically be disabled.
 
-WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_UNDOCUMENTED   = NO
 
 # If WARN_IF_DOC_ERROR is set to YES, doxygen will generate warnings for 
 # potential errors in the documentation, such as not documenting some 
@@ -1683,7 +1683,7 @@ GROUP_GRAPHS           = YES
 # collaboration diagrams in a style similar to the OMG's Unified Modeling 
 # Language.
 
-UML_LOOK               = NO
+UML_LOOK               = YES
 
 # If the UML_LOOK tag is enabled, the fields and methods are shown inside 
 # the class node. If there are many fields or methods and many nodes the 
@@ -1697,7 +1697,7 @@ UML_LIMIT_NUM_FIELDS   = 10
 # If set to YES, the inheritance and collaboration graphs will show the 
 # relations between templates and their instances.
 
-TEMPLATE_RELATIONS     = NO
+TEMPLATE_RELATIONS     = YES
 
 # If the ENABLE_PREPROCESSING, SEARCH_INCLUDES, INCLUDE_GRAPH, and HAVE_DOT 
 # tags are set to YES then doxygen will generate a graph for each documented 
