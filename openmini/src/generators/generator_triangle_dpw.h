@@ -28,7 +28,7 @@ namespace generators {
 
 /// @brief Triangle signal generator
 /// using Differentiated Parabolic Wave (DPW) algorithm
-class TriangleDPW {
+class TriangleDPW : public Generator_Interface {
  public:
   TriangleDPW();
   virtual float operator()(void);
