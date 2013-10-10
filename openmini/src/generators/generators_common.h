@@ -85,6 +85,10 @@ class Differentiator {
 /// @brief One pole signal filter class
 class OnePoleFilter {
  public:
+  /// Default constructor: user has to provide the filter coefficients
+  ///
+  /// @param[in]   b0_     Gain value
+  /// @param[in]   b1_     Pole value
   OnePoleFilter(const double b0_, const double b1_);
   void init(void);
   float operator()(const float input);
@@ -1133,6 +1137,7 @@ static const int kErfTableSize = sizeof(kErfTable) / sizeof(float);
 float ErfTabulated(const float input);
 
 /// @brief Helper function: increment the input and wraps it into [-1.0 ; 1.0[
+///
 /// @param[in]  input         Input to be wrapped - supposed not to be < 1.0
 /// @param[in]  increment     Increment to add to the input
 ///@return the incremented output in [-1.0 ; 1.0[

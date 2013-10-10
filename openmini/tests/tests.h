@@ -60,6 +60,7 @@ static const int kDataPerfSetSize(64 * 1024 * 1024);
 class GeneratorNormFrequency {
  public:
   /// @brief Actual generation functor
+  ///
   /// @return a random number in ] 0.0f ; kMaxFundamentalNorm [
   float operator()(void) const {
     return (std::fmod(static_cast<float>(std::rand()) / RAND_MAX,
@@ -68,8 +69,10 @@ class GeneratorNormFrequency {
 };
 
 /// @brief Compute the mean value of a signal generator for the given length
+///
 /// @param[in]    generator      Generator to compute value from
 /// @param[in]    length         Sample length
+///
 /// @return the generator mean for such length
 template <typename TypeGenerator>
 float ComputeMean(TypeGenerator generator, const unsigned int length) {
@@ -87,8 +90,10 @@ int sgn(const TypeValue val) {
 }
 
 /// @brief Compute zero crossings of a signal generator for the given length
+///
 /// @param[in]    generator      Generator to compute value from
 /// @param[in]    length         Sample length
+///
 /// @return zero crossings occurence for such length
 template <typename TypeGenerator>
 int ComputeZeroCrossing(TypeGenerator generator, const unsigned int length) {

@@ -45,12 +45,14 @@ class Generator_Interface {
   /// @brief Reset the instance to the given phase - nothing else gets changed
   ///
   /// Phase is normalized - the input value should be in [-1.0f ; 1.0f]
-  /// [in]    phase     Phase to set the generator to
+  ///
+  /// @param[in]    phase     Phase to set the generator to
   virtual void SetPhase(const float phase) = 0;
   /// @brief Set the generator to the given output frequency
   ///
   /// Frequency is not normalized here - the unit is Hz
-  /// [in]    frequency         Frequency to set the generator to
+  ///
+  /// @param[in]    frequency         Frequency to set the generator to
   virtual void SetFrequency(const float frequency) = 0;
 
  protected:
