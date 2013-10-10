@@ -94,8 +94,8 @@ class OnePoleFilter {
   float operator()(const float input);
 
  private:
-  double b0_;  ///< Gain value
-  double b1_;  ///< Pole value
+  const double b0_;  ///< Gain value
+  const double b1_;  ///< Pole value
   float last_;  ///< Last processed sample value
 };
 
