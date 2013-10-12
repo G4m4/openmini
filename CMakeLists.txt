@@ -78,8 +78,8 @@ function(set_target_mt _TARGET_NAME)
     else()
       set(FLAG "/MTd")
     endif()
+    add_compiler_flags(${_TARGET_NAME} ${FLAG})
   endif(MSVC)
-  add_compiler_flags(${_TARGET_NAME} ${FLAG})
 endfunction(set_target_mt)
 
 # @brief Turns off warnings for one given file
