@@ -22,19 +22,17 @@
 
 #include "openmini/src/generators/generator_triangle_dpw.h"
 
-// Using declarations for all generators
-using openmini::generators::GeneratorNormFloatRand;
 // Using declarations for tested generator
 using openmini::generators::TriangleDPW;
 
 /// @brief Generates a triangle, check for null mean (no DC offset)
 TEST(Generators, TriangleDPWMean) {
+  const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
     // Random normalized frequency
-    const float kFrequency(std::fmod(GeneratorNormFrequency()(),
-                                     kMaxFundamentalNorm));
+    const float kFrequency(freq_generator());
 
     // We are generating complete periods to prevent false positive
     const unsigned int kDataLength(static_cast<unsigned int>(

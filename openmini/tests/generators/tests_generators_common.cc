@@ -22,19 +22,17 @@
 
 #include "openmini/src/generators/generators_common.h"
 
-// Using declarations for all generators
-using openmini::generators::GeneratorNormFloatRand;
 // Using declarations for tested generator
 using openmini::generators::PhaseAccumulator;
 using openmini::generators::Differentiator;
 
 /// @brief Generates a triangle, check for null mean (no DC offset)
 TEST(Generators, PhaseAccumulatorMean) {
+  const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
     // Random normalized frequency
-    const float kFrequency = std::fmod(GeneratorNormFrequency()(),
-                                       kMaxFundamentalNorm);
+    const float kFrequency(freq_generator());
 
     // We are generating complete periods to prevent false positive
     const unsigned int kDataLength(static_cast<unsigned int>(
@@ -57,11 +55,11 @@ TEST(Generators, PhaseAccumulatorMean) {
 /// @brief Generates a triangle,
 /// check for normalized range (within [-1.0f ; 1.0f])
 TEST(Generators, PhaseAccumulatorRange) {
+  const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
-    const float kFrequency = std::fmod(GeneratorNormFrequency()(),
-                                       kMaxFundamentalNorm);
+    const float kFrequency(freq_generator());
     PhaseAccumulator generator;
     generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
 
@@ -76,11 +74,11 @@ TEST(Generators, PhaseAccumulatorRange) {
 /// @brief Generates a triangle and check for expected zero crossing
 /// according parameterized frequency (1 expected zero crossings per period)
 TEST(Generators, PhaseAccumulatorZeroCrossings) {
+  const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
-    const float kFrequency(std::fmod(GeneratorNormFrequency()(),
-                                     kMaxFundamentalNorm));
+    const float kFrequency(freq_generator());
     const unsigned int kDataLength(static_cast<unsigned int>(
                                      std::floor((1.0f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
@@ -111,8 +109,8 @@ TEST(Generators, DifferentiatedConstant) {
 /// @brief Generates a triangle, check for its differentiated output:
 /// it is supposed to be almost null everywhere except at discontinuities
 TEST(Generators, DifferentiatedSawtooth) {
-  const float kFrequency(std::fmod(GeneratorNormFrequency()(),
-                                    kMaxFundamentalNorm));
+  const GeneratorNormFrequency freq_generator;
+  const float kFrequency(freq_generator());
   PhaseAccumulator generator;
   generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
   std::vector<float> data(kDataTestSetSize);
@@ -121,8 +119,8 @@ TEST(Generators, DifferentiatedSawtooth) {
                 generator);
 
   // This is the sawtooth period e.g. each time the discontinuity occurs
-  const int kPeriod = static_cast<int>(
-    std::floor(kFrequency * openmini::kSamplingRateHalf));
+  const int kPeriod(static_cast<int>(
+    std::floor(kFrequency * openmini::kSamplingRateHalf)));
   // The sawtooth is not perfect:
   // there may be a small DC offset for its derivative
   const float kThreshold(0.1f);

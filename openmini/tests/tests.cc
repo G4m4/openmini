@@ -28,6 +28,34 @@ float GeneratorNormFloatRand::operator()(void) const {
   return static_cast<float>(rng_seed) * 4.6566129e-010f;
 }
 
+GeneratorRangedFloat::GeneratorRangedFloat(const float min, const float max)
+    : min_(min),
+      max_(max) {
+  // Positive values only
+  ASSERT(min >= 0.0f);
+  ASSERT(max > min);
+}
+
+float GeneratorRangedFloat::operator()(void) const {
+  const float normalized_positive((GeneratorNormFloatRand::operator()() + 1.0f)
+                                  * 0.5f);
+  return normalized_positive * (max_ - min_) + min_;
+}
+
+GeneratorRangedInteger::GeneratorRangedInteger(const int min, const int max)
+    : generator_(static_cast<float>(min), static_cast<float>(max)) {
+  // Nothing to do here for now
+}
+
+int GeneratorRangedInteger::operator()(void) const {
+  return static_cast<int>(generator_());
+}
+
+GeneratorNormFrequency::GeneratorNormFrequency(void)
+    : GeneratorRangedFloat(0.0f, kMaxFundamentalNorm) {
+  // Nothing to do here for now
+}
+
 float NoteToFrequency(const unsigned int key_number) {
   const float exponent((static_cast<float>(key_number) - 49.0f) / 12.0f);
   return std::pow(2.0f, exponent) * 440.0f;

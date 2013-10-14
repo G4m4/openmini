@@ -23,10 +23,8 @@
 
 // std::generate
 #include <algorithm>
-// std::floor, std::pow
+// std::floor
 #include <cmath>
-// rand(), RAND_MAX
-#include <cstdlib>
 // std::vector
 #include <vector>
 
@@ -61,9 +59,6 @@ static int rng_seed = 317;
 
 /// @brief Generates normalized random floats from an uniform distribution
 class GeneratorNormFloatRand {
-/// @brief Generates normalized frequencies from an uniform random distribution
-/// (naive implementation using std::rand)
-class GeneratorNormFrequency {
  public:
   virtual ~GeneratorNormFloatRand() {};
   /// @brief Actual generation functor
@@ -71,6 +66,49 @@ class GeneratorNormFrequency {
   /// @return a random number in ] -1.0f ; 1.0f [
   float operator()(void) const;
 };
+
+/// @brief Generates a positive normalized floating point value
+/// on a given interval > 0.0
+class GeneratorRangedFloat : public GeneratorNormFloatRand {
+ public:
+  virtual ~GeneratorRangedFloat() {};
+  /// @brief Constructor: parameterizes the generator output range
+  ///
+  /// @param[in]     min     Output range lower bound
+  /// @param[out]    max     Output range upper bound
+  GeneratorRangedFloat(const float min, const float max);
+  /// @brief Actual generation functor
+  ///
+  /// @return a random number in ] min ; max [
+  virtual float operator()(void) const;
+ private:
+  const float min_;
+  const float max_;
+};
+
+/// @brief Generates a normalized integer value in a given interval
+/// TODO(gm): this should not aggregate a generator...
+class GeneratorRangedInteger  {
+ public:
+  virtual ~GeneratorRangedInteger() {};
+  /// @brief Constructor: parameterizes the generator output range
+  ///
+  /// @param[in]     min     Output range lower bound
+  /// @param[out]    max     Output range upper bound
+  GeneratorRangedInteger(const int min, const int max);
+  /// @brief Actual generation functor
+  ///
+  /// @return a random number in ] min ; max [
+  virtual int operator()(void) const;
+ private:
+  GeneratorRangedFloat generator_;
+};
+
+/// @brief Generates normalized frequencies in ] 0.0f ; kMaxFundamentalNorm [
+class GeneratorNormFrequency : public GeneratorRangedFloat {
+ public:
+  virtual ~GeneratorNormFrequency() {};
+  GeneratorNormFrequency();
 };
 
 /// @brief Compute the mean value of a signal generator for the given length
