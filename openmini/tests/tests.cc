@@ -27,3 +27,8 @@ float GeneratorNormFloatRand::operator()(void) const {
   rng_seed *= 16807;
   return static_cast<float>(rng_seed) * 4.6566129e-010f;
 }
+
+float NoteToFrequency(const unsigned int key_number) {
+  const float exponent((static_cast<float>(key_number) - 49.0f) / 12.0f);
+  return std::pow(2.0f, exponent) * 440.0f;
+}

@@ -115,9 +115,6 @@ int ComputeZeroCrossing(TypeGenerator generator, const unsigned int length) {
 }
 
 /// @brief Compute the frequency of a given piano key (A4 = 440Hz)
-static inline float NoteToFrequency(const unsigned int key_number) {
-  const float exponent((static_cast<float>(key_number) - 49.0f) / 12.0f);
-  return std::pow(2.0f, exponent) * 440.0f;
-}
+float NoteToFrequency(const unsigned int key_number);
 
 #endif  // OPENMINI_TESTS_TESTS_H_
