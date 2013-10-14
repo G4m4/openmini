@@ -35,21 +35,13 @@ namespace generators {
 static int rng_seed = 317;
 
 /// @brief Init random seed
-// Implementation detail:
-// Defined "static inline" to be accessible from everywhere
-// without having the linker complaining
-static inline void InitSeed(int seed) {
-  rng_seed = seed;
-}
+void InitSeed(int seed);
 
 /// @brief Generates normalized random floats from an uniform distribution
 class GeneratorNormFloatRand {
  public:
   /// @brief Actual generation functor
-  float operator()(void) const {
-    rng_seed *= 16807;
-    return static_cast<float>(rng_seed) * 4.6566129e-010f;
-  }
+  float operator()(void) const;
 };
 
 /// @brief Basic sawtooth signal generator

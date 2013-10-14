@@ -25,6 +25,15 @@
 namespace openmini {
 namespace generators {
 
+void InitSeed(int seed) {
+  rng_seed = seed;
+}
+
+float GeneratorNormFloatRand::operator()(void) const {
+  rng_seed *= 16807;
+  return static_cast<float>(rng_seed) * 4.6566129e-010f;
+}
+
 // PhaseAccumulator
 
 PhaseAccumulator::PhaseAccumulator()
@@ -35,7 +44,7 @@ PhaseAccumulator::PhaseAccumulator()
   // Nothing to do here for now
 }
 
-inline float PhaseAccumulator::operator()(void) {
+float PhaseAccumulator::operator()(void) {
   ProcessParameters();
   const float out(current_);
   current_ = IncrementAndWrap(current_, increment_);
@@ -59,7 +68,7 @@ void PhaseAccumulator::SetFrequency(const float frequency) {
   update_ = true;
 }
 
-inline void PhaseAccumulator::ProcessParameters(void) {
+void PhaseAccumulator::ProcessParameters(void) {
   if (update_) {
     increment_ = (2.0f * frequency_) / openmini::kSamplingRate;
     update_ = false;
@@ -87,7 +96,7 @@ OnePoleFilter::OnePoleFilter(const double b0, const double b1)
   // Nothing to do here
 }
 
-inline float OnePoleFilter::operator()(const float input) {
+float OnePoleFilter::operator()(const float input) {
   float out(input * static_cast<float>(b0_));
   out += static_cast<float>(b1_) * last_;
   last_ = out;

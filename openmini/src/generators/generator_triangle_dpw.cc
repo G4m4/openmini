@@ -34,7 +34,7 @@ TriangleDPW::TriangleDPW()
   // Nothing to do here for now
 }
 
-inline float TriangleDPW::operator()(void) {
+float TriangleDPW::operator()(void) {
   ProcessParameters();
   // Raw sawtooth signal
   float current(sawtooth_gen_());
@@ -64,7 +64,7 @@ void TriangleDPW::SetFrequency(const float frequency) {
   update_ = true;
 }
 
-inline void TriangleDPW::ProcessParameters(void) {
+void TriangleDPW::ProcessParameters(void) {
   if (update_) {
     normalization_factor_ = openmini::kSamplingRate / (2.0f * frequency_);
     update_ = false;

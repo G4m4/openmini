@@ -38,9 +38,7 @@ class Generator_Interface {
  public:
   /// @brief Actual process function for one sample
   ///
-  /// Process is done per-sample for readability,
-  /// but note that this function will be inlined for performance reason
-  /// (it actually is declared "inline" in the .cc implementation file)
+  /// Process is done per-sample
   virtual float operator()(void) = 0;
   /// @brief Reset the instance to the given phase - nothing else gets changed
   ///
