@@ -25,15 +25,6 @@
 namespace openmini {
 namespace generators {
 
-void InitSeed(int seed) {
-  rng_seed = seed;
-}
-
-float GeneratorNormFloatRand::operator()(void) const {
-  rng_seed *= 16807;
-  return static_cast<float>(rng_seed) * 4.6566129e-010f;
-}
-
 // PhaseAccumulator
 
 PhaseAccumulator::PhaseAccumulator()

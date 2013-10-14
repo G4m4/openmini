@@ -55,17 +55,22 @@ static const int kDataPerfSetSize(64 * 1024);
 static const int kDataPerfSetSize(64 * 1024 * 1024);
 #endif  // (CHTZ_CONFIGURATION_DEBUG)
 
+/// @brief Random generator seed
+// It is prime, and mutually prime with the LCG multiplicator
+static int rng_seed = 317;
+
+/// @brief Generates normalized random floats from an uniform distribution
+class GeneratorNormFloatRand {
 /// @brief Generates normalized frequencies from an uniform random distribution
 /// (naive implementation using std::rand)
 class GeneratorNormFrequency {
  public:
+  virtual ~GeneratorNormFloatRand() {};
   /// @brief Actual generation functor
   ///
-  /// @return a random number in ] 0.0f ; kMaxFundamentalNorm [
-  float operator()(void) const {
-    return (std::fmod(static_cast<float>(std::rand()) / RAND_MAX,
-                      kMaxFundamentalNorm));
-  }
+  /// @return a random number in ] -1.0f ; 1.0f [
+  float operator()(void) const;
+};
 };
 
 /// @brief Compute the mean value of a signal generator for the given length

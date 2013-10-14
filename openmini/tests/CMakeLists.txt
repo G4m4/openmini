@@ -27,6 +27,7 @@ source_group("synthesizer"
 # Source files
 set(OPENMINI_TESTS_SRC
     main.cc
+    tests.cc
     ${OPENMINI_GENERATORS_TESTS_SRC}
     ${OPENMINI_SYNTHESIZER_TESTS_SRC}
 )

@@ -30,20 +30,6 @@
 namespace openmini {
 namespace generators {
 
-/// @brief Random generator seed
-// It is prime, and mutually prime with the LCG multiplicator
-static int rng_seed = 317;
-
-/// @brief Init random seed
-void InitSeed(int seed);
-
-/// @brief Generates normalized random floats from an uniform distribution
-class GeneratorNormFloatRand {
- public:
-  /// @brief Actual generation functor
-  float operator()(void) const;
-};
-
 /// @brief Basic sawtooth signal generator
 /// Generates a lot of aliasing, not to be used straight to audio
 class PhaseAccumulator : public Generator_Interface {
