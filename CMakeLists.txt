@@ -9,18 +9,6 @@ set(OPENMINI_INCLUDE_DIR
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set(GTEST_DIR
-  ${CMAKE_CURRENT_SOURCE_DIR}/../gtest-1.6.0
-)
-
-set(GTEST_BUILD_DIR
-  ${CMAKE_CURRENT_BINARY_DIR}/gtest
-)
-
-set(GTEST_INCLUDE_DIR
-  ${GTEST_DIR}/include
-)
-
 # MSVC-specific option for known GTest/MSVC 2011 issue
 if(MSVC)
   # VS2012 doesn't support correctly the tuples yet
@@ -99,5 +87,53 @@ function(disable_file_warnings _FILE)
                )
 endfunction(disable_file_warnings)
 
-add_subdirectory(${GTEST_DIR} ${GTEST_BUILD_DIR})
+option(OPENMINI_BUILD_TESTS "Build all tests projects (require Gtest framework)." OFF)
+message(STATUS "Tests build: ${OPENMINI_BUILD_TESTS}")
+
+option(OPENMINI_BUILD_PLUGINS "Build all plugins projects (require JUCE framework and the VST SDK)." OFF)
+message(STATUS "Plugins build: ${OPENMINI_BUILD_PLUGINS}")
+
+
+# Various includes
+
+
+# Google Test framework
+set(GTEST_DIR
+  $ENV{GTEST_ROOT}
+)
+set(GTEST_BUILD_DIR
+  ${CMAKE_CURRENT_BINARY_DIR}/gtest
+)
+set(GTEST_INCLUDE_DIR
+  ${GTEST_DIR}/include
+)
+if(EXISTS ${GTEST_DIR})
+  add_subdirectory(${GTEST_DIR} ${GTEST_BUILD_DIR})
+endif(EXISTS ${GTEST_DIR})
+
+
+# JUCE
+set(JUCE_DIR
+  $ENV{JUCE_ROOT}
+)
+set(JUCE_BUILD_DIR
+  ${CMAKE_CURRENT_BINARY_DIR}/juce
+)
+set(JUCE_INCLUDE_DIR
+  ${JUCE_DIR}/JUCE
+)
+
+
+# VST SDK
+set(VST_DIR
+  $ENV{VST_ROOT}
+)
+set(VST_BUILD_DIR
+  ${CMAKE_CURRENT_BINARY_DIR}/vst
+)
+set(VST_INCLUDE_DIR
+  ${VST_DIR}
+)
+
+
 add_subdirectory(openmini)
