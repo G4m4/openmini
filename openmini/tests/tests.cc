@@ -37,7 +37,7 @@ GeneratorRangedFloat::GeneratorRangedFloat(const float min, const float max)
       max_(max) {
   // Positive values only
   ASSERT(min >= 0.0f);
-  ASSERT(max > min);
+  ASSERT(max >= min);
 }
 
 float GeneratorRangedFloat::operator()(void) const {
