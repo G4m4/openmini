@@ -35,16 +35,14 @@
 
 // Using declarations for openmini stuff
 using openmini::IGNORE;
+using openmini::kMinKeyNote;
+using openmini::kMaxKeyNote;
 
 static const unsigned int kDataTestSetSize(64 * 1024);
 static const unsigned int kIterations(32);
 static const unsigned int kSignalDataPeriodsCount(32);
 /// @brief Arbitrary highest allowed fundamental
 static const float kMaxFundamentalNorm(10000.0f / openmini::kSamplingRateHalf);
-/// @brief Arbitrary lowest allowed key note (= C1)
-static const unsigned int kMinKeyNote(4);
-/// @brief Arbitrary highest allowed key note (= C8)
-static const unsigned int kMaxKeyNote(88);
 
 // Smaller performance test sets in debug
 #if (CHTZ_CONFIGURATION_DEBUG)
