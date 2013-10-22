@@ -23,15 +23,13 @@
 
 // std::generate
 #include <algorithm>
-// std::floor
-#include <cmath>
 // std::vector
 #include <vector>
 
 #include "gtest/gtest.h"
 
-#include "openmini/src/configuration.h"
 #include "openmini/src/common.h"
+#include "openmini/src/configuration.h"
 
 // Using declarations for openmini stuff
 using openmini::IGNORE;
