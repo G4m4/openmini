@@ -21,6 +21,8 @@
 #ifndef OPENMINI_SRC_COMMON_H_
 #define OPENMINI_SRC_COMMON_H_
 
+#include <cassert>
+
 #include "openmini/src/configuration.h"
 
 namespace openmini {
@@ -40,7 +42,6 @@ template<typename Type> void IGNORE(const Type&) {}
 
 /// @brief Asserts _condition_ == true
 #if(_BUILD_CONFIGURATION_DEBUG)
-  #include <cassert>
   #define ASSERT(_condition_) assert(_condition_)
 #else
   // Maps to "assume" in release configuration for better optimization
