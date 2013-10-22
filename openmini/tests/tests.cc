@@ -59,8 +59,3 @@ GeneratorNormFrequency::GeneratorNormFrequency(void)
     : GeneratorRangedFloat(0.0f, kMaxFundamentalNorm) {
   // Nothing to do here for now
 }
-
-float NoteToFrequency(const unsigned int key_number) {
-  const float exponent((static_cast<float>(key_number) - 49.0f) / 12.0f);
-  return std::pow(2.0f, exponent) * 440.0f;
-}

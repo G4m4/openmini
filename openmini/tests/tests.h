@@ -30,11 +30,13 @@
 
 #include "openmini/src/common.h"
 #include "openmini/src/configuration.h"
+#include "openmini/src/synthesizer/synthesizer_common.h"
 
 // Using declarations for openmini stuff
 using openmini::IGNORE;
 using openmini::kMinKeyNote;
 using openmini::kMaxKeyNote;
+using openmini::synthesizer::NoteToFrequency;
 
 static const unsigned int kDataTestSetSize(64 * 1024);
 static const unsigned int kIterations(32);
@@ -143,8 +145,5 @@ int ComputeZeroCrossing(TypeGenerator generator, const unsigned int length) {
   }
   return zero_crossings;
 }
-
-/// @brief Compute the frequency of a given piano key (A4 = 440Hz)
-float NoteToFrequency(const unsigned int key_number);
 
 #endif  // OPENMINI_TESTS_TESTS_H_
