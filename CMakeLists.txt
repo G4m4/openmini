@@ -25,6 +25,8 @@ if(UNIX)
   add_definitions(-ggdb)
 elseif(MSVC)
   add_definitions(-W4)
+  # This disable useless msvc warnings about checked iterators
+  add_definitions(-D_SCL_SECURE_NO_WARNINGS)
 endif(UNIX)
 
 # Default parameters
