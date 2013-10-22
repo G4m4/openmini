@@ -51,10 +51,6 @@ static const int kDataPerfSetSize(64 * 1024);
 static const int kDataPerfSetSize(64 * 1024 * 1024);
 #endif  // (CHTZ_CONFIGURATION_DEBUG)
 
-/// @brief Random generator seed
-// It is prime, and mutually prime with the LCG multiplicator
-static int rng_seed = 317;
-
 /// @brief Generates normalized random floats from an uniform distribution
 class GeneratorNormFloatRand {
  public:

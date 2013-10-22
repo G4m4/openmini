@@ -23,6 +23,10 @@
 
 #include "openmini/tests/tests.h"
 
+/// @brief Random generator seed
+// It is prime, and mutually prime with the LCG multiplicator
+static int rng_seed = 317;
+
 float GeneratorNormFloatRand::operator()(void) const {
   rng_seed *= 16807;
   return static_cast<float>(rng_seed) * 4.6566129e-010f;
