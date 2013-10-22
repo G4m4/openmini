@@ -39,7 +39,9 @@ class Generator_Interface {
   virtual ~Generator_Interface() {};
   /// @brief Actual process function for one sample
   ///
-  /// Process is done per-sample
+  /// Process is done per-sample for flexibility purpose, beware of not having
+  /// one of this called per-sample! Check in the final code that it actually
+  /// gets inlined
   virtual float operator()(void) = 0;
   /// @brief Reset the instance to the given phase - nothing else gets changed
   ///

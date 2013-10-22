@@ -1140,9 +1140,9 @@ int GetSign(const TypeInput input) {
 ///       left              right
 ///         |<    ratio   >|
 ///
-/// @param[in] left     Previous value
-/// @param[in] right    Next value
-/// @param[out] ratio   Location of the required interpolated value
+/// @param[in]  left     Previous value
+/// @param[in]  right    Next value
+/// @param[out] ratio    Location of the required interpolated value
 ///
 /// @return The interpolated value
 float LinearInterpolation(
