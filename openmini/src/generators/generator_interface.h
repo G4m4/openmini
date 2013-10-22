@@ -36,6 +36,7 @@ namespace generators {
 /// and buffer length - these may be changed in compile-time in configuration.h
 class Generator_Interface {
  public:
+  virtual ~Generator_Interface() {};
   /// @brief Actual process function for one sample
   ///
   /// Process is done per-sample
