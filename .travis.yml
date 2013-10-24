@@ -11,4 +11,4 @@ script:
   - cd build
   - cmake -DOPENMINI_HAS_GTEST=ON ..
   - make
-  - ./openmini/tests/openmini
+  - ./openmini/tests/openmini_tests
