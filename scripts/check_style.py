@@ -55,7 +55,7 @@ if __name__ == "__main__":
                                           os.pardir,
                                           os.pardir),
                              "openmini")
-    file_exts = (".cc", ".h")
+    file_exts = (".cc", ".cpp", ".h")
     arguments = ["--filter=-whitespace/comments,-build/header_guard",
                  "--counting=detailed",
                  "--output=vs7"]
