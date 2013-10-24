@@ -89,11 +89,11 @@ function(disable_file_warnings _FILE)
                )
 endfunction(disable_file_warnings)
 
-option(OPENMINI_BUILD_TESTS "Build all tests projects (require Gtest framework)." OFF)
-message(STATUS "Tests build: ${OPENMINI_BUILD_TESTS}")
+option(OPENMINI_HAS_GTEST "Allowing to use GTest framework (should be present into environment variable GTEST_ROOT." OFF)
+message(STATUS "GTest framework: ${OPENMINI_HAS_GTEST}")
 
-option(OPENMINI_BUILD_PLUGINS "Build all plugins projects (require JUCE framework and the VST SDK)." OFF)
-message(STATUS "Plugins build: ${OPENMINI_BUILD_PLUGINS}")
+option(OPENMINI_HAS_JUCE "Allowing to use Juce framework (should be present into environment variable JUCE_ROOT, and the VST SDK into VST_ROOT)." OFF)
+message(STATUS "Juce framework: ${OPENMINI_HAS_JUCE}")
 
 
 # Various includes
