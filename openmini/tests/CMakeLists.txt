@@ -2,8 +2,7 @@
 
 include_directories(
   SYSTEM
-  ${GTEST_DIR}
-  ${GTEST_INCLUDE_DIR}
+  ${GTEST_INCLUDE_DIRS}
 )
 
 include_directories(
