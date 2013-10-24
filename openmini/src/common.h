@@ -62,9 +62,9 @@ static const float kSamplingRate = 96000.0f;
 static const float kSamplingRateHalf = kSamplingRate / 2.0f;
 
 /// @brief Arbitrary lowest allowed key note (= C1)
-static const unsigned int kMinKeyNote(4);
-/// @brief Arbitrary highest allowed key note (= C8)
-static const unsigned int kMaxKeyNote(88);
+static const unsigned int kMinKeyNote(24);
+/// @brief Arbitrary highest allowed key note (= C7)
+static const unsigned int kMaxKeyNote(96);
 
 // (Using the "enum in its own namespace" trick)
 /// @brief Allowed Waveform for all generators
