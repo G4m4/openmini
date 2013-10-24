@@ -35,11 +35,11 @@ TriangleDPW::TriangleDPW()
 }
 
 float TriangleDPW::operator()(void) {
-  ProcessParameters();
   // Raw sawtooth signal
   float current(sawtooth_gen_());
-  // "Parabolized" here
-  current -= current * std::abs(current);
+  const float current_abs(std::abs(current));
+  // Parabolization
+  current -= current * current_abs;
   // Differentiation & Normalization
   current = differentiator_(current) * normalization_factor_;
   return current;
@@ -62,6 +62,7 @@ void TriangleDPW::SetFrequency(const float frequency) {
   sawtooth_gen_.SetFrequency(frequency);
 
   update_ = true;
+  ProcessParameters();
 }
 
 void TriangleDPW::ProcessParameters(void) {

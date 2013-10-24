@@ -36,7 +36,6 @@ PhaseAccumulator::PhaseAccumulator()
 }
 
 float PhaseAccumulator::operator()(void) {
-  ProcessParameters();
   const float out(current_);
   current_ = IncrementAndWrap(current_, increment_);
   return out;
@@ -57,6 +56,7 @@ void PhaseAccumulator::SetFrequency(const float frequency) {
 
   frequency_ = frequency;
   update_ = true;
+  ProcessParameters();
 }
 
 void PhaseAccumulator::ProcessParameters(void) {
