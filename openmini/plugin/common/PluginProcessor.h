@@ -76,6 +76,8 @@ class OpenMiniAudioProcessor  : public AudioProcessor {
   void triggerNoteOn(const int midi_note);
   void triggerNoteOff(const int midi_note);
 
+  juce::MidiKeyboardState keyboard_state_;
+
  private:
   openmini::synthesizer::Synthesizer synth_;
 

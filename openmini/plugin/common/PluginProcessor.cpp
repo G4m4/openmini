@@ -127,7 +127,32 @@ void OpenMiniAudioProcessor::releaseResources() {
   // spare memory, etc.
 }
 
-void OpenMiniAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages) {
+void OpenMiniAudioProcessor::processBlock(juce::AudioSampleBuffer& buffer,
+                                          juce::MidiBuffer& midiMessages) {
+  // This scans the keyboard state and inject into our current midi buffer
+  // any pending events
+  keyboard_state_.processNextMidiBuffer(midiMessages,
+                                        0,
+                                        buffer.getNumSamples(),
+                                        true);
+
+  // Iterating on midi messages...
+  juce::MidiBuffer::Iterator midi_iterator(midiMessages);
+  juce::MidiMessage midi_message;
+  int midi_event_position(0);
+  bool event_found = midi_iterator.getNextEvent(midi_message,
+                                                midi_event_position);
+  while (event_found) {
+    if (midi_message.isNoteOn()) {
+      triggerNoteOn(midi_message.getNoteNumber());
+    } else if (midi_message.isNoteOff()) {
+      triggerNoteOff(midi_message.getNoteNumber());
+    }
+    event_found = midi_iterator.getNextEvent(midi_message,
+                                             midi_event_position);
+  }  // Iterating on midi messages...
+  midiMessages.clear();
+
   synth_.ProcessAudio(buffer.getArrayOfChannels()[0], buffer.getNumSamples());
 }
 
@@ -151,11 +176,11 @@ void OpenMiniAudioProcessor::setStateInformation(const void* data,
   // whose contents will have been created by the getStateInformation() call.
 }
 
-void OpenMiniAudioProcessor::triggerNoteOn() {
-  synth_.NoteOn(42);
+void OpenMiniAudioProcessor::triggerNoteOn(const int midi_note) {
+  synth_.NoteOn(midi_note);
 }
-void OpenMiniAudioProcessor::triggerNoteOff() {
-  synth_.NoteOff(42);
+void OpenMiniAudioProcessor::triggerNoteOff(const int midi_note) {
+  synth_.NoteOff(midi_note);
 }
 
 AudioProcessor* JUCE_CALLTYPE createPluginFilter() {

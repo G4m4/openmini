@@ -32,11 +32,10 @@
 static const int kMainWindowSizeX(800);
 static const int kMainWindowSizeY(600);
 
-class OpenMiniAudioProcessorEditor  : public AudioProcessorEditor,
-                                      public Button::Listener
 /// @brief Plugin "editor" class
 ///
 /// Contains all UI and user control stuff
+class OpenMiniAudioProcessorEditor  : public AudioProcessorEditor {
  public:
   explicit OpenMiniAudioProcessorEditor(OpenMiniAudioProcessor* owner);
   ~OpenMiniAudioProcessorEditor();
@@ -48,11 +47,8 @@ class OpenMiniAudioProcessorEditor  : public AudioProcessorEditor,
  private:
   /// @brief Retrieve an access to the audio processor
   OpenMiniAudioProcessor* getProcessor() const;
-    virtual void buttonClicked(Button*);
-    virtual void buttonStateChanged(Button* button);
 
-private:
-  juce::ScopedPointer<juce::TextButton> keyboard_;
+  juce::MidiKeyboardComponent keyboard_;
   OpenMiniAudioProcessor* owner_;
 };
 

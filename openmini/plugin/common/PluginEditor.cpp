@@ -23,31 +23,33 @@
 // That's why we apply our coding style here
 
 #include "openmini/plugin/common/PluginEditor.h"
-OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor (OpenMiniAudioProcessor* ownerFilter)
-    : AudioProcessorEditor (ownerFilter),
-      owner_(ownerFilter) {
-  addAndMakeVisible (keyboard_ = new juce::TextButton("Trigger Note On"));
-  keyboard_->addListener(this);
+
+#include "openmini/src/common.h"
+
+OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
+    OpenMiniAudioProcessor* owner)
+    : AudioProcessorEditor(owner),
+      owner_(owner),
+      keyboard_(owner->keyboard_state_,
+                juce::MidiKeyboardComponent::horizontalKeyboard) {
+  // For some reason Juce keyboard is one octave higher...
+  keyboard_.setAvailableRange(openmini::kMinKeyNote + 12,
+                              openmini::kMaxKeyNote + 12);
+  addAndMakeVisible(&keyboard_);
   // This is where our plugin's editor size is set.
-  setSize (kMainWindowSizeX, kMainWindowSizeY);
+  setSize(kMainWindowSizeX, kMainWindowSizeY);
 }
 
 OpenMiniAudioProcessorEditor::~OpenMiniAudioProcessorEditor() {
 }
 
-void OpenMiniAudioProcessorEditor::paint (Graphics& g) {
-  g.fillAll (Colours::white);
-  keyboard_->setBounds(0, 0, 100, 100);
+void OpenMiniAudioProcessorEditor::paint(Graphics& g) {
+  g.fillAll(Colours::white);
+  const int kKeyboardHeight(this->getHeight() / 4);
+  const int kKeyboardTop(this->getHeight() - kKeyboardHeight);
+  keyboard_.setBounds(0, kKeyboardTop, this->getWidth(), kKeyboardHeight);
 }
 
-void OpenMiniAudioProcessorEditor::buttonClicked (Button*) {
-  return;
-}
-
-void OpenMiniAudioProcessorEditor::buttonStateChanged (Button* button) {
-  if (button->isDown()) {
-    owner_->triggerNoteOn();
-  } else {
-    owner_->triggerNoteOff();
-  }
+OpenMiniAudioProcessor* OpenMiniAudioProcessorEditor::getProcessor() const {
+  return static_cast<OpenMiniAudioProcessor*>(getAudioProcessor());
 }
