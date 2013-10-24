@@ -54,7 +54,9 @@ static const int kDataPerfSetSize(64 * 1024 * 1024);
 /// @brief Generates normalized random floats from an uniform distribution
 class GeneratorNormFloatRand {
  public:
-  virtual ~GeneratorNormFloatRand() {};
+  virtual ~GeneratorNormFloatRand() {
+    // Nothing to do here for now
+  };
   /// @brief Actual generation functor
   ///
   /// @return a random number in ] -1.0f ; 1.0f [
@@ -65,7 +67,9 @@ class GeneratorNormFloatRand {
 /// on a given interval > 0.0
 class GeneratorRangedFloat : public GeneratorNormFloatRand {
  public:
-  virtual ~GeneratorRangedFloat() {};
+  virtual ~GeneratorRangedFloat() {
+    // Nothing to do here for now
+  };
   /// @brief Constructor: parameterizes the generator output range
   ///
   /// @param[in]     min     Output range lower bound
@@ -84,7 +88,9 @@ class GeneratorRangedFloat : public GeneratorNormFloatRand {
 /// TODO(gm): this should not aggregate a generator...
 class GeneratorRangedInteger  {
  public:
-  virtual ~GeneratorRangedInteger() {};
+  virtual ~GeneratorRangedInteger() {
+    // Nothing to do here for now
+  };
   /// @brief Constructor: parameterizes the generator output range
   ///
   /// @param[in]     min     Output range lower bound
@@ -101,7 +107,9 @@ class GeneratorRangedInteger  {
 /// @brief Generates normalized frequencies in ] 0.0f ; kMaxFundamentalNorm [
 class GeneratorNormFrequency : public GeneratorRangedFloat {
  public:
-  virtual ~GeneratorNormFrequency() {};
+  virtual ~GeneratorNormFrequency() {
+    // Nothing to do here for now
+  };
   GeneratorNormFrequency();
 };
 
