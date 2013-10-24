@@ -17,7 +17,7 @@
 //==============================================================================
 // [BEGIN_USER_CODE_SECTION]
 
-// (You can add your own code in this section, and the Introjucer will not overwrite it)
+#include "openmini/src/configuration.h"
 
 // [END_USER_CODE_SECTION]
 
@@ -156,7 +156,11 @@
  #define JucePlugin_Build_AAX              0
 #endif
 #ifndef  JucePlugin_Name
- #define JucePlugin_Name                   "OpenMini"
+  #if (_BUILD_CONFIGURATION_DEBUG)
+    #define JucePlugin_Name                   "OpenMini_d"
+  #else
+    #define JucePlugin_Name                   "OpenMini_r"
+  #endif  // (_BUILD_CONFIGURATION_DEBUG)
 #endif
 #ifndef  JucePlugin_Desc
  #define JucePlugin_Desc                   "OpenMini"

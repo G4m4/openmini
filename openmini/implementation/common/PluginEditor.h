@@ -26,8 +26,8 @@
 #ifndef OPENMINI_PLUGIN_COMMON_PLUGINEDITOR_H_
 #define OPENMINI_PLUGIN_COMMON_PLUGINEDITOR_H_
 
-#include "openmini/plugin/vst/JuceHeader.h"
-#include "openmini/plugin/common/PluginProcessor.h"
+#include "JuceHeader.h"
+#include "openmini/implementation/common/PluginProcessor.h"
 
 static const int kMainWindowSizeX(800);
 static const int kMainWindowSizeY(600);

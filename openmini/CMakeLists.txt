@@ -2,8 +2,8 @@
 
 add_subdirectory(src)
 
-  add_subdirectory(plugin)
 if (${OPENMINI_HAS_JUCE} STREQUAL "ON")
+  add_subdirectory(implementation)
 endif (${OPENMINI_HAS_JUCE} STREQUAL "ON")
 
 if (${OPENMINI_HAS_GTEST} STREQUAL "ON")

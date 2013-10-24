@@ -25,7 +25,7 @@
 #ifndef OPENMINI_PLUGIN_COMMON_PLUGINPROCESSOR_H_
 #define OPENMINI_PLUGIN_COMMON_PLUGINPROCESSOR_H_
 
-#include "openmini/plugin/vst/JuceHeader.h"
+#include "JuceHeader.h"
 #include "openmini/src/synthesizer/synthesizer.h"
 
 /// @brief Plugin "processor" class

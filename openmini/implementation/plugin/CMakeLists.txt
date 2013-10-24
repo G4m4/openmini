@@ -7,7 +7,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 endif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 set(OPENMINI_PLUGIN_DIR
-    ${OPENMINI_INCLUDE_DIR}/openmini/plugin
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 include_directories(SYSTEM
@@ -66,20 +66,19 @@ else()
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 # Include all subdirectories plugin source files
-add_subdirectory(common)
 add_subdirectory(vst)
 
 source_group("juce_externals" FILES ${OPENMINI_JUCE_SRC})
 source_group("openmini" FILES ${OPENMINI_SRC} ${OPENMINI_HDR})
-source_group("openmini_plugin" FILES ${OPENMINI_PLUGIN_SRC} ${OPENMINI_PLUGIN_HDR})
+source_group("openmini_implementation" FILES ${OPENMINI_IMPLEMENTATION_SRC} ${OPENMINI_IMPLEMENTATION_HDR})
 source_group("vst_specifics" FILES ${OPENMINI_PLUGIN_VST_SRC} ${OPENMINI_PLUGIN_VST_HDR})
 
 add_library(openmini_vst SHARED
   ${OPENMINI_JUCE_SRC}
   ${OPENMINI_SRC}
   ${OPENMINI_HDR}
-  ${OPENMINI_PLUGIN_SRC}
-  ${OPENMINI_PLUGIN_HDR}
+  ${OPENMINI_IMPLEMENTATION_SRC}
+  ${OPENMINI_IMPLEMENTATION_HDR}
   ${OPENMINI_PLUGIN_VST_SRC}
   ${OPENMINI_PLUGIN_VST_HDR}
 )

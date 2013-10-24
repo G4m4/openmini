@@ -23,8 +23,8 @@
 // That's why we apply our coding style here
 
 
-#include "openmini/plugin/common/PluginProcessor.h"
-#include "openmini/plugin/common/PluginEditor.h"
+#include "openmini/implementation/common/PluginProcessor.h"
+#include "openmini/implementation/common/PluginEditor.h"
 
 OpenMiniAudioProcessor::OpenMiniAudioProcessor() {
 }

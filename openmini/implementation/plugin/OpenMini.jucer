@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="OQ1Z0t" name="OpenMini" projectType="audioplug" version="1.0.0"
+              bundleIdentifier="com.gama.OpenMini" includeBinaryInAppConfig="1"
+              buildVST="1" buildAU="1" pluginName="OpenMini" pluginDesc="OpenMini"
+              pluginManufacturer="gama" pluginManufacturerCode="GAMA" pluginCode="OpMi"
+              pluginChannelConfigs="{0, 1}" pluginIsSynth="1" pluginWantsMidiIn="1"
+              pluginProducesMidiOut="0" pluginSilenceInIsSilenceOut="0" pluginEditorRequiresKeys="0"
+              pluginAUExportPrefix="OpenMiniAU" pluginRTASCategory="" aaxIdentifier="com.gama.OpenMini"
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="3.1.0">
+  <MAINGROUP id="Qljwho" name="OpenMini">
+    <GROUP id="{04A0982B-1B0F-A671-2CE4-88ED4304E93F}" name="Source">
+      <FILE id="xajpxO" name="MainWindow.cpp" compile="1" resource="0" file="common/MainWindow.cpp"/>
+      <FILE id="eE8t73" name="MainWindow.h" compile="0" resource="0" file="common/MainWindow.h"/>
+      <FILE id="eizfRY" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="hxHXxJ" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="BaYQMw" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="fIK1NX" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <VS2010 targetFolder="Builds/VisualStudio2010" vstFolder="c:\SDKs\vstsdk2.4">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="OpenMini"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="OpenMini"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="..\..\..\juce\JUCE\modules"/>
+        <MODULEPATH id="juce_events" path="..\..\..\juce\JUCE\modules"/>
+        <MODULEPATH id="juce_graphics" path="..\..\..\juce\JUCE\modules"/>
+        <MODULEPATH id="juce_data_structures" path="..\..\..\juce\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="..\..\..\juce\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_extra" path="..\..\..\juce\JUCE\modules"/>
+        <MODULEPATH id="juce_cryptography" path="..\..\..\juce\JUCE\modules"/>
+        <MODULEPATH id="juce_opengl" path="..\..\..\juce\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_basics" path="..\..\..\juce\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_devices" path="..\..\..\juce\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_processors" path="..\..\..\juce\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="..\..\..\juce\JUCE\modules"/>
+      </MODULEPATHS>
+    </VS2010>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULES id="juce_audio_basics" showAllCode="0" useLocalCopy="0"/>
+    <MODULES id="juce_audio_devices" showAllCode="0" useLocalCopy="0"/>
+    <MODULES id="juce_audio_formats" showAllCode="0" useLocalCopy="0"/>
+    <MODULES id="juce_audio_plugin_client" showAllCode="0" useLocalCopy="0"/>
+    <MODULES id="juce_audio_processors" showAllCode="0" useLocalCopy="0"/>
+    <MODULES id="juce_core" showAllCode="0" useLocalCopy="0"/>
+    <MODULES id="juce_data_structures" showAllCode="0" useLocalCopy="0"/>
+    <MODULES id="juce_events" showAllCode="0" useLocalCopy="0"/>
+    <MODULES id="juce_graphics" showAllCode="0" useLocalCopy="0"/>
+    <MODULES id="juce_gui_basics" showAllCode="0" useLocalCopy="0"/>
+    <MODULES id="juce_gui_extra" showAllCode="0" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_QUICKTIME="disabled"/>
+</JUCERPROJECT>
