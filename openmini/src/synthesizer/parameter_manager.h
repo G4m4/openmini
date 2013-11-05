@@ -23,11 +23,10 @@
 #ifndef OPENMINI_SRC_SYNTHESIZER_PARAMETERS_MANAGER_H_
 #define OPENMINI_SRC_SYNTHESIZER_PARAMETERS_MANAGER_H_
 
+#include "openmini/src/synthesizer/parameter_meta.h"
+
 namespace openmini {
 namespace synthesizer {
-
-// Internal forward declarations
-class ParameterMeta;
 
 // Normalization utilities
 
