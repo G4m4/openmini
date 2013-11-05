@@ -25,6 +25,7 @@
 
 #include "openmini/implementation/common/PluginProcessor.h"
 #include "openmini/implementation/common/PluginEditor.h"
+#include "openmini/src/synthesizer/parameter_meta.h"
 
 OpenMiniAudioProcessor::OpenMiniAudioProcessor() {
 }
@@ -37,22 +38,23 @@ const juce::String OpenMiniAudioProcessor::getName() const {
 }
 
 int OpenMiniAudioProcessor::getNumParameters() {
-  return 0;
+  return synth_.ParametersCount();
 }
 
 float OpenMiniAudioProcessor::getParameter(int index) {
-  return 0.0f;
+  return synth_.GetValue(index);
 }
 
 void OpenMiniAudioProcessor::setParameter(int index, float newValue) {
+  synth_.SetValue(index, newValue);
 }
 
 const juce::String OpenMiniAudioProcessor::getParameterName(int index) {
-  return juce::String::empty;
+  return juce::String(synth_.GetMetadata(index).name());
 }
 
 const juce::String OpenMiniAudioProcessor::getParameterText(int index) {
-  return juce::String::empty;
+  return juce::String(synth_.GetMetadata(index).description());
 }
 
 const juce::String OpenMiniAudioProcessor::getInputChannelName(
@@ -172,8 +174,6 @@ void OpenMiniAudioProcessor::getStateInformation(juce::MemoryBlock& destData) {
 
 void OpenMiniAudioProcessor::setStateInformation(const void* data,
                                                  int sizeInBytes) {
-  // You should use this method to restore your parameters from this memory block,
-  // whose contents will have been created by the getStateInformation() call.
 }
 
 void OpenMiniAudioProcessor::triggerNoteOn(const int midi_note) {
