@@ -33,8 +33,8 @@ namespace generators {
 ///
 /// @param[in]  waveform    Waveform of the signal generator to be created
 ///
-/// @return a reference to the created generator
-Generator_Interface& CreateGenerator(const Waveform::Type waveform);
+/// @return a pointer to the created generator
+Generator_Interface* CreateGenerator(const Waveform::Type waveform);
 
 }  // namespace generators
 }  // namespace openmini

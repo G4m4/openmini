@@ -20,15 +20,19 @@
 
 #include "openmini/src/generators/generators_factory.h"
 
+#include "openmini/src/generators/generator_sawtooth_dpw.h"
 #include "openmini/src/generators/generator_triangle_dpw.h"
 
 namespace openmini {
 namespace generators {
 
-Generator_Interface& CreateGenerator(const Waveform::Type waveform) {
+Generator_Interface* CreateGenerator(const Waveform::Type waveform) {
   switch (waveform) {
     case(Waveform::kTriangle): {
-      return *(new TriangleDPW());
+      return new TriangleDPW();
+    }
+    case(Waveform::kSawtooth): {
+      return new SawtoothDPW();
     }
     default: {
       // Should never happen
