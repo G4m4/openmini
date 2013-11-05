@@ -18,6 +18,8 @@
 /// You should have received a copy of the GNU General Public License
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <cmath>
+
 #include "openmini/tests/tests.h"
 
 #include "openmini/src/generators/generator_triangle_dpw.h"
