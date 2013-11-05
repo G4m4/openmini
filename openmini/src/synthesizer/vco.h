@@ -73,6 +73,7 @@ class Vco {
 
   generators::Generator_Interface* generator_;  ///< Internal generator
   float volume_;
+  Waveform::Type waveform_;
 };
 
 }  // namespace synthesizer

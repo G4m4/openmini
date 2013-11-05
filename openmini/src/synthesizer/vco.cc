@@ -28,7 +28,8 @@ namespace synthesizer {
 Vco::Vco(void)
   : // Default on Triangle
     generator_(generators::CreateGenerator(Waveform::kTriangle)),
-    volume_(1.0f) {
+    volume_(1.0f),
+    waveform_(Waveform::kTriangle) {
   // Nothing to do here for now
 }
 
@@ -48,8 +49,12 @@ void Vco::SetVolume(const float volume) {
 }
 
 void Vco::SetWaveform(const Waveform::Type value) {
-  delete generator_;
-  generator_ = generators::CreateGenerator(value);
+  // This is temporary
+  if (value != waveform_) {
+    delete generator_;
+    generator_ = generators::CreateGenerator(value);
+    waveform_ = value;
+  }
 }
 
 float Vco::operator()(void) {
