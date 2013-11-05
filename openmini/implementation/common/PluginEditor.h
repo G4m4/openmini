@@ -35,14 +35,16 @@ static const int kMainWindowSizeY(600);
 /// @brief Plugin "editor" class
 ///
 /// Contains all UI and user control stuff
-class OpenMiniAudioProcessorEditor  : public AudioProcessorEditor {
+class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
+                                     public juce::Slider::Listener {
  public:
   explicit OpenMiniAudioProcessorEditor(OpenMiniAudioProcessor* owner);
   ~OpenMiniAudioProcessorEditor();
 
-  void paint(Graphics& g);
+  void paint(juce::Graphics& g);
 
   // Overrides from inherited classes
+  void sliderValueChanged(juce::Slider* slider);
 
  private:
   /// @brief Retrieve an access to the audio processor
@@ -50,6 +52,12 @@ class OpenMiniAudioProcessorEditor  : public AudioProcessorEditor {
 
   juce::MidiKeyboardComponent keyboard_;
   OpenMiniAudioProcessor* owner_;
+  juce::Slider osc1_waveform_;
+  juce::Slider osc2_waveform_;
+  juce::Slider osc3_waveform_;
+  juce::Slider osc1_volume_;
+  juce::Slider osc2_volume_;
+  juce::Slider osc3_volume_;
 };
 
 #endif  // OPENMINI_PLUGIN_COMMON_PLUGINEDITOR_H_

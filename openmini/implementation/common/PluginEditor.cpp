@@ -28,13 +28,29 @@
 #include "openmini/implementation/common/PluginEditor.h"
 
 #include "openmini/src/common.h"
+#include "openmini/src/synthesizer/parameters.h"
+
+// Using directives for OpenMini parameters
+using namespace openmini::synthesizer::Parameters;
 
 OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
     OpenMiniAudioProcessor* owner)
     : AudioProcessorEditor(owner),
       owner_(owner),
       keyboard_(owner->keyboard_state_,
-                juce::MidiKeyboardComponent::horizontalKeyboard) {
+                juce::MidiKeyboardComponent::horizontalKeyboard),
+      osc1_waveform_(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+                     juce::Slider::TextEntryBoxPosition::NoTextBox),
+      osc2_waveform_(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+                     juce::Slider::TextEntryBoxPosition::NoTextBox),
+      osc3_waveform_(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+                     juce::Slider::TextEntryBoxPosition::NoTextBox),
+      osc1_volume_(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+                   juce::Slider::TextEntryBoxPosition::NoTextBox),
+      osc2_volume_(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+                   juce::Slider::TextEntryBoxPosition::NoTextBox),
+      osc3_volume_(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+                   juce::Slider::TextEntryBoxPosition::NoTextBox) {
   // For some reason Juce keyboard is one octave higher...
   keyboard_.setAvailableRange(openmini::kMinKeyNote + 12,
                               openmini::kMaxKeyNote + 12);
@@ -43,6 +59,24 @@ OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
                         // remember, 5 keys out of 12 are black!
                         * 7.0f / 12.0f)));
   addAndMakeVisible(&keyboard_);
+  addAndMakeVisible(&osc1_waveform_);
+  addAndMakeVisible(&osc2_waveform_);
+  addAndMakeVisible(&osc3_waveform_);
+  addAndMakeVisible(&osc1_volume_);
+  addAndMakeVisible(&osc2_volume_);
+  addAndMakeVisible(&osc3_volume_);
+  osc1_waveform_.setRange(0.0, 1.0);
+  osc2_waveform_.setRange(0.0, 1.0);
+  osc3_waveform_.setRange(0.0, 1.0);
+  osc1_volume_.setRange(0.0, 1.0);
+  osc2_volume_.setRange(0.0, 1.0);
+  osc3_volume_.setRange(0.0, 1.0);
+  osc1_waveform_.addListener(this);
+  osc2_waveform_.addListener(this);
+  osc3_waveform_.addListener(this);
+  osc1_volume_.addListener(this);
+  osc2_volume_.addListener(this);
+  osc3_volume_.addListener(this);
   // This is where our plugin's editor size is set.
   setSize(kMainWindowSizeX, kMainWindowSizeY);
 }
@@ -50,11 +84,34 @@ OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
 OpenMiniAudioProcessorEditor::~OpenMiniAudioProcessorEditor() {
 }
 
-void OpenMiniAudioProcessorEditor::paint(Graphics& g) {
+void OpenMiniAudioProcessorEditor::paint(juce::Graphics& g) {
   g.fillAll(Colours::white);
   const int kKeyboardHeight(this->getHeight() / 4);
   const int kKeyboardTop(this->getHeight() - kKeyboardHeight);
   keyboard_.setBounds(0, kKeyboardTop, this->getWidth(), kKeyboardHeight);
+  osc1_waveform_.setBounds(0, 0, 60, 60);
+  osc2_waveform_.setBounds(0, 70, 60, 60);
+  osc3_waveform_.setBounds(0, 140, 60, 60);
+  osc1_volume_.setBounds(200, 0, 60, 60);
+  osc2_volume_.setBounds(200, 70, 60, 60);
+  osc3_volume_.setBounds(200, 140, 60, 60);
+}
+
+void OpenMiniAudioProcessorEditor::sliderValueChanged(juce::Slider* slider) {
+  const float value(static_cast<float>(slider->getValue()));
+  if (slider == &osc1_waveform_) {
+    getProcessor()->setParameterNotifyingHost(kOsc1Waveform, value);
+  } else if (slider == &osc2_waveform_) {
+    getProcessor()->setParameterNotifyingHost(kOsc2Waveform, value);
+  } else if (slider == &osc3_waveform_) {
+    getProcessor()->setParameterNotifyingHost(kOsc3Waveform, value);
+  } else if (slider == &osc1_volume_) {
+    getProcessor()->setParameterNotifyingHost(kOsc1Volume, value);
+  } else if (slider == &osc2_volume_) {
+    getProcessor()->setParameterNotifyingHost(kOsc2Volume, value);
+  } else if (slider == &osc3_volume_) {
+    getProcessor()->setParameterNotifyingHost(kOsc3Volume, value);
+  }
 }
 
 OpenMiniAudioProcessor* OpenMiniAudioProcessorEditor::getProcessor() const {
