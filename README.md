@@ -67,7 +67,7 @@ On Linux, this can be done as follows~:
     export JUCE_ROOT=~/juce/
 
 JUCE requires a few additional dependencies:
-    sudo apt-get -y install g++
+
     sudo apt-get -y install libfreetype6-dev
     sudo apt-get -y install libx11-dev
     sudo apt-get -y install libxinerama-dev
