@@ -9,12 +9,6 @@ set(OPENMINI_INCLUDE_DIR
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# MSVC-specific option for known GTest/MSVC 2011 issue
-if(MSVC)
-  # VS2012 doesn't support correctly the tuples yet
-  add_definitions(/D _VARIADIC_MAX=10)
-endif(MSVC)
-
 # Project-wide warning options
 if(UNIX)
   add_definitions(-pedantic)
@@ -110,6 +104,12 @@ set(GTEST_INCLUDE_DIRS
   ${GTEST_DIR}/include
 )
 if(EXISTS ${GTEST_DIR})
+  # MSVC-specific issues
+  if(MSVC)
+    # Known GTest/MSVC 2011 issue: VS2012 doesn't support correctly the tuples yet
+    add_definitions(-D _VARIADIC_MAX=10)
+  endif(MSVC)
+
   add_subdirectory(${GTEST_DIR} ${GTEST_BUILD_DIR})
 endif(EXISTS ${GTEST_DIR})
 
