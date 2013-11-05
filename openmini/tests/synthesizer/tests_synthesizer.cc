@@ -30,8 +30,8 @@ using openmini::synthesizer::Synthesizer;
 ///
 /// Using default values everywhere (sampling rate, block size etc.)
 TEST(Synthesizer, SynthesizerNoteOnNoteOff) {
-  // Default synth block size
-  const int kBlockSize(openmini::kBlockSize);
+  // Random, weird block size
+  const unsigned int kBlockSize(GeneratorRangedInteger(32, 1024)());
   std::vector<float> block(kBlockSize);
   Synthesizer synth;
 
