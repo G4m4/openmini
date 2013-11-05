@@ -71,6 +71,7 @@ static const unsigned int kMaxKeyNote(96);
 namespace Waveform {
 enum Type {
   kTriangle = 0,
+  kSawtooth,
   kMaxCount
 };
 }  // namespace Waveform
