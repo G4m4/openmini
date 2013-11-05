@@ -18,9 +18,6 @@
 /// You should have received a copy of the GNU General Public License
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
-// std::fill
-#include <algorithm>
-
 #include "openmini/src/common.h"
 #include "openmini/src/synthesizer/mixer.h"
 #include "openmini/src/synthesizer/synthesizer_common.h"
@@ -29,20 +26,13 @@
 namespace openmini {
 namespace synthesizer {
 
-//static const int kVCOsCount(3);
-
-Mixer::Mixer() {
-  for (int vco_idx(0); vco_idx < kVCOsCount; ++vco_idx) {
-    // Default on Triangle generators
-    vcos_[vco_idx] = new Vco(Waveform::kTriangle);
-  }
-  std::fill(&vcos_gain_[0], &vcos_gain_[kVCOsCount], 0.0f);
+Mixer::Mixer()
+    : active_(false) {
+  // Nothing to do here for now
 }
 
 Mixer::~Mixer() {
-  for (int vco_idx(0); vco_idx < kVCOsCount; ++vco_idx) {
-    delete vcos_[vco_idx];
-  }
+  // Nothing to do here for now
 }
 
 void Mixer::ProcessAudio(float* const output, const int length) {

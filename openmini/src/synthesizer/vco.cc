@@ -25,21 +25,24 @@
 namespace openmini {
 namespace synthesizer {
 
-Vco::Vco(const Waveform::Type waveform)
-    : generator_(generators::CreateGenerator(waveform)) {
+Vco::Vco(void)
+  : // Default on Triangle
+    generator_(generators::CreateGenerator(Waveform::kTriangle)),
+    volume_(1.0f) {
   // Nothing to do here for now
 }
 
 Vco::~Vco() {
-  delete &generator_;
+  delete generator_;
 }
 
 void Vco::SetFrequency(const float frequency) {
-  generator_.SetFrequency(frequency);
+  generator_->SetFrequency(frequency);
+}
 }
 
 float Vco::operator()(void) {
-  return generator_();
+  return volume_ * (*generator_)();
 }
 
 }  // namespace synthesizer

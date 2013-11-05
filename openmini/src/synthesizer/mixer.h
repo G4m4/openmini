@@ -21,11 +21,11 @@
 #ifndef OPENMINI_SRC_SYNTHESIZER_MIXER_H_
 #define OPENMINI_SRC_SYNTHESIZER_MIXER_H_
 
+#include "openmini/src/common.h"
+#include "openmini/src/synthesizer/vco.h"
+
 namespace openmini {
 namespace synthesizer {
-
-// Internal forward declarations
-class Vco;
 
 /// @brief: Number of VCOs a Mixer handles
 static const int kVCOsCount(3);
@@ -65,8 +65,7 @@ class Mixer {
   void NoteOff(const int note);
 
  private :
-  Vco* vcos_[kVCOsCount];  ///< List of VCOs
-  float vcos_gain_[kVCOsCount];  ///< List of VCOs gain
+  Vco vcos_[kVCOsCount];  ///< List of VCOs
 };
 
 }  // namespace synthesizer

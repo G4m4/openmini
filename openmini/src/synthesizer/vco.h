@@ -45,7 +45,7 @@ class Vco {
   /// @brief Default constructor, set the form this VCO is supposed to generate
   ///
   /// @param[in]   waveform      Signal waveform to be generated
-  explicit Vco(const Waveform::Type waveform);
+  Vco(void);
   /// @brief Default destructor
   ~Vco();
   /// @brief Set the VCO to the given frequency
@@ -60,7 +60,9 @@ class Vco {
  private:
   // No assignment operator for this class
   Vco& operator=(const Vco& right);
-  generators::Generator_Interface& generator_;  ///< Internal generator
+
+  generators::Generator_Interface* generator_;  ///< Internal generator
+  float volume_;
 };
 
 }  // namespace synthesizer
