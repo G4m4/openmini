@@ -30,6 +30,8 @@ import os
 
 import cpplint
 
+kIgnoredFilenames = ('JuceHeader.h', 'AppConfig.h')
+
 def CheckRecursivelyCppFiles(root_path, file_exts, arguments):
     '''
     Recursively browse through all subfiles in "root_path" and applies cpplint
@@ -39,7 +41,7 @@ def CheckRecursivelyCppFiles(root_path, file_exts, arguments):
     absolute_root = os.path.abspath(root_path)
     concatenated_filenames = ""
     for sub_root,filenames in [(sub_root,filenames) for sub_root,_,filenames in os.walk(absolute_root)]:
-        for filename in filenames:
+        for filename in [filename for filename in filenames if (filename not in kIgnoredFilenames)]:
             if os.path.splitext(filename)[1] in file_exts:
                 concatenated_filenames += os.path.join(sub_root, filename) + ' '
     arguments.append(concatenated_filenames)
