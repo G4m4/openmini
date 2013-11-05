@@ -24,18 +24,22 @@
 #include "openmini/src/synthesizer/synthesizer.h"
 
 #include "openmini/src/synthesizer/mixer.h"
+#include "openmini/src/synthesizer/parameters.h"
 
 namespace openmini {
 namespace synthesizer {
 
-Synthesizer::Synthesizer() {
+Synthesizer::Synthesizer()
+    : ParametersManager(&kParameters[0], kParametersCount) {
   // Nothing to do here for now
+  ASSERT(kParametersCount == Parameters::kMaxCount);
 }
 
 void Synthesizer::ProcessAudio(float* const output,
                                const unsigned int length) {
   // First, zeroing the output
   std::fill(&output[0], &output[length], 0.0f);
+  ProcessParameters();
   mixer_.ProcessAudio(output, length);
 }
 
@@ -45,6 +49,18 @@ void Synthesizer::NoteOn(const int note) {
 
 void Synthesizer::NoteOff(const int note) {
   mixer_.NoteOff(note);
+}
+
+void Synthesizer::ProcessParameters(void) {
+  if (update_) {
+    mixer_.SetWaveform(0, GetDiscreteValue<Waveform::Type>(Parameters::kOsc1Waveform));
+    mixer_.SetWaveform(1, GetDiscreteValue<Waveform::Type>(Parameters::kOsc2Waveform));
+    mixer_.SetWaveform(2, GetDiscreteValue<Waveform::Type>(Parameters::kOsc3Waveform));
+    mixer_.SetVolume(0, GetValue(Parameters::kOsc1Volume));
+    mixer_.SetVolume(1, GetValue(Parameters::kOsc2Volume));
+    mixer_.SetVolume(2, GetValue(Parameters::kOsc3Volume));
+    update_ = false;
+  }
 }
 
 }  // namespace synthesizer

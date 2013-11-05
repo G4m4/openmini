@@ -22,12 +22,13 @@
 #define OPENMINI_SRC_SYNTHESIZER_SYNTHESIZER_H_
 
 #include "openmini/src/synthesizer/mixer.h"
+#include "openmini/src/synthesizer/parameter_manager.h"
 
 namespace openmini {
 namespace synthesizer {
 
 /// @brief Synthesizer: main object, everything lives within it
-class Synthesizer {
+class Synthesizer : public ParametersManager {
  public:
   /// @brief Default constructor
   Synthesizer();
@@ -52,7 +53,13 @@ class Synthesizer {
   /// @param[in]    note      Note to stop
   void NoteOff(const int note);
 
- private :
+ protected:
+  /// @brief Asynchronous parameters update
+  ///
+  /// (overriden from inherited class)
+  void ProcessParameters(void);
+
+ private:
   Mixer mixer_;  ///< Mixer object for VCOs management
 };
 
