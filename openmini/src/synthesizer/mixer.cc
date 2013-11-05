@@ -36,26 +36,30 @@ Mixer::~Mixer() {
 }
 
 void Mixer::ProcessAudio(float* const output, const int length) {
-  float* current_sample(output);
-  for (int sample_idx(0); sample_idx < length; ++sample_idx) {
-    for (int vco_idx(0); vco_idx < kVCOsCount; ++vco_idx) {
-      *current_sample += vcos_[vco_idx]->operator()() * vcos_gain_[vco_idx];
+  if (active_) {
+    float* current_sample(output);
+    for (int sample_idx(0); sample_idx < length; ++sample_idx) {
+      VcoIterator iter(this);
+      do {
+        *current_sample += iter.GetVco()();
+      } while (iter.Next());
+      current_sample += 1;
     }
-    current_sample += 1;
   }
 }
 
 void Mixer::NoteOn(const int note) {
-  for (int vco_idx(0); vco_idx < kVCOsCount; ++vco_idx) {
-    vcos_[vco_idx]->SetFrequency(NoteToFrequency(note));
-  }
-  // TODO(gm): actual oscillators management
-  std::fill(&vcos_gain_[0], &vcos_gain_[kVCOsCount], 0.2f);
+  const float frequency(NoteToFrequency(note));
+  VcoIterator iter(this);
+  do {
+    iter.GetVco().SetFrequency(frequency);
+  } while (iter.Next());
+  active_ = true;
 }
 
 void Mixer::NoteOff(const int note) {
-  // TODO(gm): actual oscillators management
-  std::fill(&vcos_gain_[0], &vcos_gain_[kVCOsCount], 0.0f);
+  active_ = false;
+}
 Mixer::VcoIterator::VcoIterator(Mixer* mixer_to_iterate)
     : mixer_(mixer_to_iterate),
       index_(0) {

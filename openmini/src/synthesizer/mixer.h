@@ -82,6 +82,7 @@ class Mixer {
 
  private :
   Vco vcos_[kVCOsCount];  ///< List of VCOs
+  bool active_;
   friend class VcoIterator;
 };
 
