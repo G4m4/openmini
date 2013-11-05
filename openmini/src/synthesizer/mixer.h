@@ -64,6 +64,20 @@ class Mixer {
   /// @param[in]    note      Note to stop
   void NoteOff(const int note);
 
+  /// @brief Set the VCO whose ID is given to the given volume
+  ///
+  /// This is normalized! Volume within [0.0f ; 1.0f]
+  ///
+  /// @param[in]    vco_id         VCO to set
+  /// @param[in]    value          Volume to set the VCO to
+  void SetVolume(const int vco_id, const float value);
+
+  /// @brief Set the VCO whose ID is given to the given waveform
+  ///
+  /// @param[in]    vco_id         VCO to set
+  /// @param[in]    value          Waveform type to set the VCO to
+  void SetWaveform(const int vco_id, const Waveform::Type value);
+
   class VcoIterator {
    public:
     explicit VcoIterator(Mixer* mixer_to_iterate);

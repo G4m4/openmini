@@ -60,6 +60,23 @@ void Mixer::NoteOn(const int note) {
 void Mixer::NoteOff(const int note) {
   active_ = false;
 }
+
+void Mixer::SetVolume(const int vco_id, const float value) {
+  // TODO(gm): actual parameters management
+  ASSERT(vco_id >= 0);
+  ASSERT(vco_id < kVCOsCount);
+
+  vcos_[vco_id].SetVolume(value);
+}
+
+void Mixer::SetWaveform(const int vco_id, const Waveform::Type value) {
+  // TODO(gm): actual parameters management
+  ASSERT(vco_id >= 0);
+  ASSERT(vco_id < kVCOsCount);
+
+  vcos_[vco_id].SetWaveform(value);
+}
+
 Mixer::VcoIterator::VcoIterator(Mixer* mixer_to_iterate)
     : mixer_(mixer_to_iterate),
       index_(0) {

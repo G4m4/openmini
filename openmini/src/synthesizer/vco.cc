@@ -39,6 +39,17 @@ Vco::~Vco() {
 void Vco::SetFrequency(const float frequency) {
   generator_->SetFrequency(frequency);
 }
+
+void Vco::SetVolume(const float volume) {
+  ASSERT(volume <= 1.0f);
+  ASSERT(volume >= 0.0f);
+
+  volume_ = volume;
+}
+
+void Vco::SetWaveform(const Waveform::Type value) {
+  delete generator_;
+  generator_ = generators::CreateGenerator(value);
 }
 
 float Vco::operator()(void) {

@@ -54,6 +54,16 @@ class Vco {
   ///
   /// @param[in]    frequency         Frequency to set the VCO to
   void SetFrequency(const float frequency);
+  /// @brief Set the VCO to the given volume
+  ///
+  /// This is normalized! Volume within [0.0f ; 1.0f]
+  ///
+  /// @param[in]    volume         Volume to set the VCO to
+  void SetVolume(const float volume);
+  /// @brief Set the VCO to the given waveform
+  ///
+  /// @param[in]    value          Waveform type to set the VCO to
+  void SetWaveform(const Waveform::Type value);
   /// @brief Actual process function for one sample
   float operator()(void);
 
