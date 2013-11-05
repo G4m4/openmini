@@ -17,12 +17,27 @@ if(UNIX)
   add_definitions(-Wpointer-arith)
   add_definitions(-Wcast-qual)
   add_definitions(-ggdb)
-  add_definitions(-std=c++11)
 elseif(MSVC)
   add_definitions(-W4)
   # This disable useless msvc warnings about checked iterators
   add_definitions(-D_SCL_SECURE_NO_WARNINGS)
 endif(UNIX)
+
+# C++11 related options:
+# If using Clang we have to add the flag "std=c++11"
+# if using gcc, the c++11 flag change depending on the version
+# Nothing special with msvc
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  add_definitions(-std=c++11)
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
+                  OUTPUT_VARIABLE GCC_VERSION)
+  if ((GCC_VERSION VERSION_LESS 4.6) OR (GCC_VERSION VERSION_EQUAL 4.6))
+    add_definitions(-std=c++0x)
+  else()
+    add_definitions(-std=c++11)
+  endif()
+endif()
 
 # Default parameters
 
