@@ -17,6 +17,7 @@ if(UNIX)
   add_definitions(-Wpointer-arith)
   add_definitions(-Wcast-qual)
   add_definitions(-ggdb)
+  add_definitions(-std=c++11)
 elseif(MSVC)
   add_definitions(-W4)
   # This disable useless msvc warnings about checked iterators
