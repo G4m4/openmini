@@ -36,17 +36,8 @@ endif()
 # @param _TARGET_NAME           target name
 # @param _FLAGS                 flags to set
 function(add_compiler_flags _TARGET_NAME _FLAGS)
-
-  get_property(COMP_FLAGS TARGET ${_TARGET_NAME}
-               PROPERTY COMPILE_FLAGS
-               )
-  # manual appending
-  set(COMP_FLAGS
-      "${COMP_FLAGS} ${_FLAGS}"
-      )
-
   set_property(TARGET ${_TARGET_NAME}
-               PROPERTY COMPILE_FLAGS ${COMP_FLAGS}
+               APPEND PROPERTY COMPILE_FLAGS ${_FLAGS}
                )
 endfunction(add_compiler_flags)
 
