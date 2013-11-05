@@ -143,6 +143,7 @@ set(VST_BUILD_DIR
 set(VST_INCLUDE_DIR
   ${VST_DIR}
 )
+message("${VST_INCLUDE_DIR}")
 
 
 add_subdirectory(openmini)
