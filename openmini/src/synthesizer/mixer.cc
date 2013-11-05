@@ -56,6 +56,27 @@ void Mixer::NoteOn(const int note) {
 void Mixer::NoteOff(const int note) {
   // TODO(gm): actual oscillators management
   std::fill(&vcos_gain_[0], &vcos_gain_[kVCOsCount], 0.0f);
+Mixer::VcoIterator::VcoIterator(Mixer* mixer_to_iterate)
+    : mixer_(mixer_to_iterate),
+      index_(0) {
+  // Nothing to do here
+}
+
+bool Mixer::VcoIterator::Next() {
+  if (index_ >= kVCOsCount - 1) {
+    return false;
+  } else {
+    index_ += 1;
+    return true;
+  }
+}
+
+Vco& Mixer::VcoIterator::GetVco() const {
+  return mixer_->vcos_[index_];
+}
+
+int Mixer::VcoIterator::GetIndex() const {
+  return index_;
 }
 
 }  // namespace synthesizer

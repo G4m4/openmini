@@ -64,8 +64,25 @@ class Mixer {
   /// @param[in]    note      Note to stop
   void NoteOff(const int note);
 
+  class VcoIterator {
+   public:
+    explicit VcoIterator(Mixer* mixer_to_iterate);
+
+    bool Next();
+    Vco& GetVco() const;
+    int GetIndex() const;
+
+   private:
+    // No assignment operator for this class
+    VcoIterator& operator=(const VcoIterator& right);
+
+    Mixer* mixer_;
+    int index_;
+  };
+
  private :
   Vco vcos_[kVCOsCount];  ///< List of VCOs
+  friend class VcoIterator;
 };
 
 }  // namespace synthesizer
