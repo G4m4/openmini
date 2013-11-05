@@ -1,10 +1,18 @@
 # @brief OpenMini standalone root cmake file
 
+# On Linux these are required in order to build an audio application
+if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  find_package(Freetype REQUIRED)
+  find_package(X11 REQUIRED)
+endif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
 set(OPENMINI_STANDALONE_DIR
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 include_directories(SYSTEM
+  ${FREETYPE_INCLUDE_DIRS}  # Linux-specific stuff
+  ${X11_INCLUDE_DIRS}  # Linux-specific stuff
   ${JUCE_INCLUDE_DIR}  # Juce library root path
 )
 
@@ -87,7 +95,18 @@ else()
   )
 endif(MSVC)
 
-target_link_libraries(openmini
-                      openmini_lib)
+# On Linux the application has to be linked with many others libraries
+if (UNIX)
+  target_link_libraries(openmini
+                        openmini_lib
+                        dl
+                        ${FREETYPE_LIBRARIES}
+                        pthread
+                        ${X11_LIBRARIES}
+                        asound)
+else()
+  target_link_libraries(openmini
+                        openmini_lib)
+endif(UNIX)
 
 set_target_mt(openmini)
