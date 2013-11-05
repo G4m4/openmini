@@ -31,6 +31,7 @@ namespace generators {
 class TriangleDPW : public Generator_Interface {
  public:
   TriangleDPW();
+  virtual ~TriangleDPW() {};
   virtual float operator()(void);
   virtual void SetPhase(const float phase);
   virtual void SetFrequency(const float frequency);
@@ -38,7 +39,6 @@ class TriangleDPW : public Generator_Interface {
  protected:
   virtual void ProcessParameters(void);
 
- private:
   PhaseAccumulator sawtooth_gen_;  //< Internal basic sawtooth signal generator
   Differentiator differentiator_;  //< Internal basic differentiator
   float normalization_factor_;  //< To be applied on the signal after synthesis
