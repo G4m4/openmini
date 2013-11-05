@@ -99,7 +99,7 @@ endif(MSVC)
 if (UNIX)
   target_link_libraries(openmini
                         openmini_lib
-                        dl
+                        ${CMAKE_DL_LIBS}
                         ${FREETYPE_LIBRARIES}
                         pthread
                         ${X11_LIBRARIES}
