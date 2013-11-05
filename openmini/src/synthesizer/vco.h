@@ -58,6 +58,8 @@ class Vco {
   float operator()(void);
 
  private:
+  // No assignment operator for this class
+  Vco& operator=(const Vco& right);
   generators::Generator_Interface& generator_;  ///< Internal generator
 };
 

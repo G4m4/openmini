@@ -72,6 +72,9 @@ class OnePoleFilter {
   float operator()(const float input);
 
  private:
+  // No assignment operator for this class
+  OnePoleFilter& operator=(const OnePoleFilter& right);
+
   const double b0_;  ///< Gain value
   const double b1_;  ///< Pole value
   float last_;  ///< Last processed sample value
