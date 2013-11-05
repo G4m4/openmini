@@ -55,7 +55,7 @@ static const ParameterMeta kParameters[] = {
                 "Waveform for oscillator 3"),
   ParameterMeta(0.0f,
                 1.0f,
-                0.0f,
+                1.0f,
                 true,
                 1,
                 0,
