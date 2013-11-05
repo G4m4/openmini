@@ -41,7 +41,7 @@ bool MainApplication::moreThanOneInstanceAllowed() {
 
 void MainApplication::initialise(const juce::String& commandLine) {
   plugin_.resetFilter();
-  plugin_.setVisible (true);
+  plugin_.setVisible(true);
 }
 
 void MainApplication::shutdown() {
