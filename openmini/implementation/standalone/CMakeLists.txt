@@ -63,15 +63,29 @@ source_group("openmini" FILES ${OPENMINI_SRC} ${OPENMINI_HDR})
 source_group("openmini_implementation" FILES ${OPENMINI_IMPLEMENTATION_SRC} ${OPENMINI_IMPLEMENTATION_HDR})
 source_group("standalone_specifics" FILES ${OPENMINI_STANDALONE_SRC} ${OPENMINI_STANDALONE_HDR})
 
-add_executable(openmini
-  ${OPENMINI_JUCE_SRC}
-  ${OPENMINI_SRC}
-  ${OPENMINI_HDR}
-  ${OPENMINI_IMPLEMENTATION_SRC}
-  ${OPENMINI_IMPLEMENTATION_HDR}
-  ${OPENMINI_STANDALONE_SRC}
-  ${OPENMINI_STANDALONE_HDR}
-)
+# MSVC-specific issues
+if(MSVC)
+  # Known MSVC issue: can't figure out whether we're building a console or windows application
+  add_executable(openmini WIN32
+    ${OPENMINI_JUCE_SRC}
+    ${OPENMINI_SRC}
+    ${OPENMINI_HDR}
+    ${OPENMINI_IMPLEMENTATION_SRC}
+    ${OPENMINI_IMPLEMENTATION_HDR}
+    ${OPENMINI_STANDALONE_SRC}
+    ${OPENMINI_STANDALONE_HDR}
+  )
+else()
+  add_executable(openmini
+    ${OPENMINI_JUCE_SRC}
+    ${OPENMINI_SRC}
+    ${OPENMINI_HDR}
+    ${OPENMINI_IMPLEMENTATION_SRC}
+    ${OPENMINI_IMPLEMENTATION_HDR}
+    ${OPENMINI_STANDALONE_SRC}
+    ${OPENMINI_STANDALONE_HDR}
+  )
+endif(MSVC)
 
 target_link_libraries(openmini
                       openmini_lib)
