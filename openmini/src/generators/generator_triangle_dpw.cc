@@ -41,7 +41,8 @@ float TriangleDPW::operator()(void) {
   // Parabolization
   current -= current * current_abs;
   // Differentiation & Normalization
-  current = differentiator_(current) * normalization_factor_;
+  current = differentiator_(current);
+  current *= normalization_factor_;
   return current;
 }
 
