@@ -35,7 +35,7 @@ TEST(Synthesizer, SynthesizerNoteOnNoteOff) {
   std::vector<float> block(kBlockSize);
   Synthesizer synth;
 
-  int sample_idx(0);
+  unsigned int sample_idx(0);
   float mean_square(0.0f);
   // Generating a signal during half the complete time
   synth.NoteOn(kMinKeyNote);
