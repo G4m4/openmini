@@ -1,5 +1,5 @@
-OpenMini - a Minimoog-like digital synthesizer
-==============================================
+OpenMini - Open homage to Minimoog
+==================================
 
 OpenMini is a modern C++ implementation of a Minimoog-like digital synthesizer.
 It aims at showing a simple, cross-platform yet efficient implementation of state of the art low-aliasing audio synthesis algorithms.
