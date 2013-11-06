@@ -78,13 +78,26 @@ class Mixer {
   /// @param[in]    value          Waveform type to set the VCO to
   void SetWaveform(const int vco_id, const Waveform::Type value);
 
+  /// @brief An iterator class to browse through all managed VCOs
+  ///
+  /// Usage (from within a mixer method):
+  ///
+  /// VcoIterator iter(this);
+  /// do {
+  ///   iter.GetVco().DO_YOUR_STUFF
+  /// } while (iter.Next());
+  ///
   class VcoIterator {
    public:
+    /// @brief Default constructor - needs a mixer to iterate within!
     explicit VcoIterator(Mixer* mixer_to_iterate);
 
+    /// @brief Increment iterator to the next VCO
+    ///
+    /// @return True if the increment could be done
     bool Next();
+    /// @brief Current pointed VCO getter
     Vco& GetVco() const;
-    int GetIndex() const;
 
    private:
     // No assignment operator for this class

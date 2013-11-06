@@ -96,9 +96,5 @@ Vco& Mixer::VcoIterator::GetVco() const {
   return mixer_->vcos_[index_];
 }
 
-int Mixer::VcoIterator::GetIndex() const {
-  return index_;
-}
-
 }  // namespace synthesizer
 }  // namespace openmini
