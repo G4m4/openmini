@@ -10,5 +10,6 @@ script:
   - mkdir build
   - cd build
   - cmake -DOPENMINI_HAS_GTEST=ON ..
+  - make clean
   - make
   - ./openmini/tests/openmini_tests
