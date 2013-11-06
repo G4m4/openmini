@@ -32,8 +32,20 @@ float GeneratorNormFloatRand::operator()(void) const {
   return static_cast<float>(rng_seed) * 4.6566129e-010f;
 }
 
+GeneratorRangedFloat::GeneratorRangedFloat(const GeneratorRangedFloat& other)
+    : GeneratorNormFloatRand(),
+      min_(other.min()),
+      max_(other.max()) {
+  // Nothing to do here for now
+};
+
+GeneratorRangedFloat::~GeneratorRangedFloat() {
+  // Nothing to do here for now
+};
+
 GeneratorRangedFloat::GeneratorRangedFloat(const float min, const float max)
-    : min_(min),
+    : GeneratorNormFloatRand(),
+      min_(min),
       max_(max) {
   // Positive values only
   ASSERT(min >= 0.0f);
@@ -44,6 +56,14 @@ float GeneratorRangedFloat::operator()(void) const {
   const float normalized_positive((GeneratorNormFloatRand::operator()() + 1.0f)
                                   * 0.5f);
   return normalized_positive * (max_ - min_) + min_;
+}
+
+float GeneratorRangedFloat::min(void) const {
+  return min_;
+}
+
+float GeneratorRangedFloat::max(void) const {
+  return max_;
 }
 
 GeneratorRangedInteger::GeneratorRangedInteger(const int min, const int max)

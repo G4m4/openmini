@@ -31,7 +31,9 @@ namespace generators {
 class TriangleDPW : public Generator_Interface {
  public:
   TriangleDPW();
-  virtual ~TriangleDPW() {};
+  virtual ~TriangleDPW() {
+    // Nothing to do here for now
+  };
   virtual float operator()(void);
   virtual void SetPhase(const float phase);
   virtual void SetFrequency(const float frequency);

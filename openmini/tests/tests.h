@@ -54,6 +54,9 @@ static const int kDataPerfSetSize(64 * 1024 * 1024);
 /// @brief Generates normalized random floats from an uniform distribution
 class GeneratorNormFloatRand {
  public:
+  GeneratorNormFloatRand() {
+    // Nothing to do here for now
+  }
   virtual ~GeneratorNormFloatRand() {
     // Nothing to do here for now
   };
@@ -67,9 +70,10 @@ class GeneratorNormFloatRand {
 /// on a given interval > 0.0
 class GeneratorRangedFloat : public GeneratorNormFloatRand {
  public:
-  virtual ~GeneratorRangedFloat() {
-    // Nothing to do here for now
-  };
+  // Class is non assignable but copyable
+  GeneratorRangedFloat(const GeneratorRangedFloat& other);
+  virtual ~GeneratorRangedFloat();
+
   /// @brief Constructor: parameterizes the generator output range
   ///
   /// @param[in]     min     Output range lower bound
@@ -79,9 +83,16 @@ class GeneratorRangedFloat : public GeneratorNormFloatRand {
   ///
   /// @return a random number in ] min ; max [
   virtual float operator()(void) const;
+
+  // Members accessors
+  float min(void) const;
+  float max(void) const;
+
  private:
   const float min_;
   const float max_;
+  // Non-assignable class
+  GeneratorRangedFloat& operator=(const GeneratorRangedFloat&);
 };
 
 /// @brief Generates a normalized integer value in a given interval
