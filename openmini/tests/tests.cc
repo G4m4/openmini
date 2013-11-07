@@ -37,11 +37,11 @@ GeneratorRangedFloat::GeneratorRangedFloat(const GeneratorRangedFloat& other)
       min_(other.min()),
       max_(other.max()) {
   // Nothing to do here for now
-};
+}
 
 GeneratorRangedFloat::~GeneratorRangedFloat() {
   // Nothing to do here for now
-};
+}
 
 GeneratorRangedFloat::GeneratorRangedFloat(const float min, const float max)
     : GeneratorNormFloatRand(),

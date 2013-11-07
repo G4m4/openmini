@@ -85,7 +85,7 @@ class Mixer {
   /// VcoIterator iter(this);
   /// do {
   ///   iter.GetVco().DO_YOUR_STUFF
-  /// } while (iter.Next());
+  /// } while (iter.Next())
   ///
   class VcoIterator {
    public:
