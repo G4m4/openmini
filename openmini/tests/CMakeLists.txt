@@ -42,7 +42,17 @@ add_executable(openmini_tests
 
 set_target_mt(openmini_tests)
 
-target_link_libraries(openmini_tests
-  openmini_lib
-  gtest_main
-)
+if (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
+  target_link_libraries(openmini_tests
+    openmini_lib
+    gtest_main
+  )
+  add_test(openmini_coverage
+    openmini_tests
+  )
+else()
+  target_link_libraries(openmini_tests
+    openmini_lib
+    gtest_main
+  )
+endif (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
