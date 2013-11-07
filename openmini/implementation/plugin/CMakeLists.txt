@@ -65,6 +65,9 @@ else()
   )
 endif(${SYSTEM_IS_MACOSX})
 
+# Disable warnings for external source
+disable_warnings_list("${OPENMINI_JUCE_SRC}")
+
 # Include all subdirectories plugin source files
 add_subdirectory(vst)
 

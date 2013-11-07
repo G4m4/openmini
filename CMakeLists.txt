@@ -90,6 +90,22 @@ function(add_compiler_flags _TARGET_NAME _FLAGS)
                )
 endfunction(add_compiler_flags)
 
+# @brief For the given list of targets, disable all warnings
+#
+# @param _TARGETS      List of targets
+function(disable_warnings_list _TARGETS)
+ if (${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+   set(FLAG
+       "-w")
+ else()
+   set(FLAG
+       "/W0")
+ endif()
+ SET_SOURCE_FILES_PROPERTIES(${_TARGETS}
+                             PROPERTIES COMPILE_FLAGS ${FLAG}
+                             )
+endfunction(disable_warnings_list)
+
 # @brief (MSVC only) Set one specific target to use MT runtime library,
 # or MTd in debug configuration
 #
@@ -105,23 +121,6 @@ function(set_target_mt _TARGET_NAME)
     add_compiler_flags(${_TARGET_NAME} ${FLAG})
   endif(${COMPILER_IS_MSVC})
 endfunction(set_target_mt)
-
-# @brief Turns off warnings for one given file
-# @param _FILE           File whose warnings will be ignored
-function(disable_file_warnings _FILE)
-  if (MSVC)
-    # Windows
-    set(FLAG "/W0")
-  else()
-    # Linux, Mac (gcc and Clang)
-    set(FLAG "-w")
-  endif(MSVC)
-
-  SET_SOURCE_FILES_PROPERTIES(TARGET
-               ${_FILE}
-               PROPERTIES COMPILE_FLAGS ${FLAG}
-               )
-endfunction(disable_file_warnings)
 
 option(OPENMINI_HAS_GTEST "Allowing to use GTest framework (should be present into environment variable GTEST_ROOT." OFF)
 message(STATUS "GTest framework: ${OPENMINI_HAS_GTEST}")

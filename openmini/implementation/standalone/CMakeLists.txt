@@ -56,6 +56,9 @@ else()
   )
 endif(${SYSTEM_IS_MACOSX})
 
+# Disable warnings for external source
+disable_warnings_list("${OPENMINI_JUCE_SRC}")
+
 # Look for all standalone-specific files
 set (OPENMINI_STANDALONE_SRC
      ${OPENMINI_STANDALONE_DIR}/MainApplication.cpp
