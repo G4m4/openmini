@@ -17,7 +17,13 @@ endif()
 
 # Various detection, to be used as shortcuts below
 
-# Compiler
+# Compilers
+set(COMPILER_IS_CLANG
+    0)
+set(COMPILER_IS_GCC
+    0)
+set(COMPILER_IS_MSVC
+    0)
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   set(COMPILER_IS_CLANG
       1)
@@ -32,7 +38,13 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   message("Compiler detected as MSVC")
 endif()
 
-# Compiler
+# Systems
+set(SYSTEM_IS_WINDOWS
+    0)
+set(SYSTEM_IS_MACOSX
+    0)
+set(SYSTEM_IS_LINUX
+    0)
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   set(SYSTEM_IS_WINDOWS
       1)
