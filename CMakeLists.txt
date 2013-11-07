@@ -96,6 +96,20 @@ message(STATUS "GTest framework: ${OPENMINI_HAS_GTEST}")
 option(OPENMINI_HAS_JUCE "Allowing to use Juce framework (should be present into environment variable JUCE_ROOT, and the VST SDK into VST_ROOT)." OFF)
 message(STATUS "Juce framework: ${OPENMINI_HAS_JUCE}")
 
+option(OPENMINI_ENABLE_COVERAGE "Enables coverage build (using gcov)." OFF)
+message(STATUS "Coverage: ${OPENMINI_ENABLE_COVERAGE}")
+
+# Coverage only available on Linux, with debug configuration
+if (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
+  if (UNIX)
+    if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+      include(CTest)
+      enable_testing()
+      add_definitions("--coverage")
+      set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+    endif (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+  endif(UNIX)
+endif (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
 
 # Various includes
 
