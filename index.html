@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Openmini by ElGat0</title>
+    <title>Openmini by G4m4</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -18,18 +18,18 @@
         <h1>Openmini</h1>
         <p>An open source, Minimoog-like digital synthesizer</p>
 
-        <p class="view"><a href="https://github.com/ElGat0/openmini">View the Project on GitHub <small>ElGat0/openmini</small></a></p>
+        <p class="view"><a href="https://github.com/G4m4/openmini">View the Project on GitHub <small>G4m4/openmini</small></a></p>
 
 
         <ul>
-          <li><a href="https://github.com/ElGat0/openmini/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/ElGat0/openmini/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/ElGat0/openmini">View On <strong>GitHub</strong></a></li>
+          <li><a href="https://github.com/G4m4/openmini/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/G4m4/openmini/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/G4m4/openmini">View On <strong>GitHub</strong></a></li>
         </ul>
       </header>
       <section>
         <h1>
-<a name="openmini---a-minimoog-like-digital-synthesizer" class="anchor" href="#openmini---a-minimoog-like-digital-synthesizer"><span class="octicon octicon-link"></span></a>OpenMini - a Minimoog-like digital synthesizer</h1>
+<a name="openmini---open-homage-to-minimoog" class="anchor" href="#openmini---open-homage-to-minimoog"><span class="octicon octicon-link"></span></a>OpenMini - Open homage to Minimoog</h1>
 
 <p>OpenMini is a modern C++ implementation of a Minimoog-like digital synthesizer.
 It aims at showing a simple, cross-platform yet efficient implementation of state of the art low-aliasing audio synthesis algorithms.</p>
@@ -37,34 +37,114 @@ It aims at showing a simple, cross-platform yet efficient implementation of stat
 <p>As its main goal is education, information sharing and (hopefully) inspiring other people to hack and spread audio synthesis tools and art, it is licensed under GPLv3 license.
 It basically means that every one can use, copy and modify it with the sole condition that the source code must be made public.</p>
 
-<h1>
-<a name="building-openmini---using-cmake" class="anchor" href="#building-openmini---using-cmake"><span class="octicon octicon-link"></span></a>Building OpenMini - Using CMake</h1>
+<h2>
+<a name="organization" class="anchor" href="#organization"><span class="octicon octicon-link"></span></a>Organization</h2>
 
-<p>OpenMini currently has only been tested on Windows platforms, but its code aims at being portable.
-Unix-like systems, including Mac, soon to be tested continuously.</p>
+<p>OpenMini is organized in third parts as follows:</p>
 
-<p>On most systems you can build the project using the following commands</p>
+<ul>
+<li>A "generators" part, offering numerous signal generators for various forms (sin, square, triangle...) each one implemented using differents algorithms (DPW, BLIT-derived methods...)
+A lot of these algorithms theory comes from Institute for the 'Digital Sound Generation' online book, published by the Computer Music and Sound Technology. The implementation itself is first prototyped in Python - scripts are made public in OpenMini, under the same license.</li>
+<li>A "synthesizer" part, which is the actual synthesizer boilerplate - managing synthesis algorithms parameterization, user input and so on.</li>
+<li>An "implementation" part, relying heavily on the open source <a href="http://www.juce.com/">JUCE framework</a>, wraps the latter synthesizer into an actual audio plugin that can easily be used in various audio editor. For now only VST is available, RTAS should follow. Lastly, a standalone version is available using the same code as the plugin but without any dependencies to the proprietary Steinberg's VST SDK.</li>
+</ul><p>All of this code is heavily tested using the Google Test Framework.
+It is documented following Doxygen convention, and strictly follows Google style - cpplint script is included for this purpose.
+All the code is standard C++: no OS-specific headers.</p>
 
-<pre><code>$ mkdir build &amp;&amp; cd build
-$ cmake ..
-$ cmake --build .
+<p>Note that OpenMini is under continuous integration, building under Linux (using gcc and Clang) at each push with <a href="https://travis-ci.org/G4m4/openmini">Travis CI</a>.
+The Windows build is continuously tested as well.</p>
+
+<h2>
+<a name="building-openmini-library" class="anchor" href="#building-openmini-library"><span class="octicon octicon-link"></span></a>Building OpenMini library</h2>
+
+<p>OpenMini build system is Cmake.</p>
+
+<p>Its most basic use would be, from the root directory openmini/ :</p>
+
+<pre><code>mkdir build &amp;&amp; cd build
+cmake ..
+cmake --build .
 </code></pre>
 
-<p>Alternatively you can point the CMake GUI tool to the CMakeLists.txt file and generate platform specific build project or IDE workspace.</p>
+<p>This only build the library - nothing else. You can also build OpenMini tests and implementations as explained below.</p>
+
+<h2>
+<a name="building-openmini-tests" class="anchor" href="#building-openmini-tests"><span class="octicon octicon-link"></span></a>Building OpenMini tests</h2>
+
+<p>Tests are using the <a href="http://code.google.com/p/googletest/">Google Test Framework</a>.
+To build the test, set the environment variable GTEST_ROOT to the directory where you put the GTest sources.
+On Linux, this can be done as follows:</p>
+
+<pre><code>sudo apt-get install libgtest-dev
+export GTEST_ROOT=/usr/src/gtest
+</code></pre>
+
+<p>On Windows, this is done by going to Control Panel-&gt;System-&gt;Advanced system settings-&gt;Environment variables.</p>
+
+<p>Once this is done, you only have to set the flag OPENMINI_HAS_GTEST to ON (caps matters) when invoking cmake:</p>
+
+<pre><code>cmake -DOPENMINI_HAS_GTEST=ON ../
+</code></pre>
+
+<h2>
+<a name="building-openmini-implementations" class="anchor" href="#building-openmini-implementations"><span class="octicon octicon-link"></span></a>Building OpenMini implementations</h2>
+
+<p>"Implementation" means here the plugins as well as a standalone version of OpenMini.
+Both are made using the <a href="https://github.com/julianstorer/JUCE">JUCE framework</a>.
+To build the implementations, set the environment variable JUCE_ROOT to the directory where you put the JUCE sources.
+On Linux, this can be done as follows~:</p>
+
+<pre><code>cd ~/
+mkdir juce
+cd juce
+git clone --depth 1 git://github.com/julianstorer/JUCE.git
+export JUCE_ROOT=~/juce/
+</code></pre>
+
+<p>JUCE requires a few additional dependencies:</p>
+
+<pre><code>sudo apt-get -y install libfreetype6-dev
+sudo apt-get -y install libx11-dev
+sudo apt-get -y install libxinerama-dev
+sudo apt-get -y install libxcursor-dev
+sudo apt-get -y install mesa-common-dev
+sudo apt-get -y install libasound2-dev
+sudo apt-get -y install freeglut3-dev
+sudo apt-get -y install libxcomposite-dev
+</code></pre>
+
+<p>Lastly, if you wish to build the VST plugin, you will have to get the (proprietary) <a href="http://www.steinberg.net/en/company/developer.html">Steinberg VST SDK</a> and set the environment variable VST_ROOT to its location.</p>
+
+<p>Once all of this is done, you only have to set the flag OPENMINI_HAS_JUCE to ON (caps matters) when invoking cmake:</p>
+
+<pre><code>cmake -DOPENMINI_HAS_JUCE=ON ../
+</code></pre>
+
+<p>Note that both these flags can be used simultaneously.</p>
 
 <h1>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h1>
 
-<p>OpenMini is under GPLv3</p>
+<p>OpenMini is under GPLv3.</p>
 
 <p>See the COPYING file for the full license text.</p>
       </section>
       <footer>
-        <p>This project is maintained by <a href="https://github.com/ElGat0">ElGat0</a></p>
+        <p>This project is maintained by <a href="https://github.com/G4m4">G4m4</a></p>
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-45544733-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
