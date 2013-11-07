@@ -9,27 +9,66 @@ set(OPENMINI_INCLUDE_DIR
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+# Default parameters
+
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
+  set(CMAKE_BUILD_TYPE Debug)
+endif()
+
+# Various detection, to be used as shortcuts below
+
+# Compiler
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  set(COMPILER_IS_CLANG
+      1)
+  message("Compiler detected as Clang")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  set(COMPILER_IS_GCC
+      1)
+  message("Compiler detected as gcc")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+  set(COMPILER_IS_MSVC
+      1)
+  message("Compiler detected as MSVC")
+endif()
+
+# Compiler
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  set(SYSTEM_IS_WINDOWS
+      1)
+  message("System detected as Windows")
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  set(SYSTEM_IS_MACOSX
+      1)
+  message("System detected as Mac OS X")
+else()
+  # ${CMAKE_SYSTEM_NAME} MATCHES "Linux" may be true on Mac!
+  set(SYSTEM_IS_LINUX
+      1)
+  message("System detected as Linux")
+endif()
+
 # Project-wide warning options
-if(UNIX)
+if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
   add_definitions(-pedantic)
   add_definitions(-Wall)
   add_definitions(-Wextra)
   add_definitions(-Wpointer-arith)
   add_definitions(-Wcast-qual)
   add_definitions(-ggdb)
-elseif(MSVC)
+elseif(${COMPILER_IS_MSVC})
   add_definitions(-W4)
   # This disable useless msvc warnings about checked iterators
   add_definitions(-D_SCL_SECURE_NO_WARNINGS)
-endif(UNIX)
+endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
 
 # C++11 related options:
 # If using Clang we have to add the flag "std=c++11"
 # if using gcc, the c++11 flag change depending on the version
 # Nothing special with msvc
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+if (${COMPILER_IS_CLANG})
   add_definitions(-std=c++11)
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+elseif (${COMPILER_IS_GCC})
   execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
                   OUTPUT_VARIABLE GCC_VERSION)
   if ((GCC_VERSION VERSION_LESS 4.6) OR (GCC_VERSION VERSION_EQUAL 4.6))
@@ -37,12 +76,6 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   else()
     add_definitions(-std=c++11)
   endif()
-endif()
-
-# Default parameters
-
-if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
-  set(CMAKE_BUILD_TYPE Debug)
 endif()
 
 # Functions
@@ -62,7 +95,7 @@ endfunction(add_compiler_flags)
 #
 # @param _TARGET_NAME           target name
 function(set_target_mt _TARGET_NAME)
-  if(MSVC)
+  if(${COMPILER_IS_MSVC})
     # Debug is the default when anything else than "Release" is set
     if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
       set(FLAG "/MT")
@@ -70,7 +103,7 @@ function(set_target_mt _TARGET_NAME)
       set(FLAG "/MTd")
     endif()
     add_compiler_flags(${_TARGET_NAME} ${FLAG})
-  endif(MSVC)
+  endif(${COMPILER_IS_MSVC})
 endfunction(set_target_mt)
 
 # @brief Turns off warnings for one given file

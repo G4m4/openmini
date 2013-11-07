@@ -1,10 +1,10 @@
 # @brief OpenMini plugin root cmake file
 
 # On Linux these are required in order to build an audio plugin
-if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if (${SYSTEM_IS_LINUX})
   find_package(Freetype REQUIRED)
   find_package(X11 REQUIRED)
-endif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+endif (${SYSTEM_IS_LINUX})
 
 set(OPENMINI_PLUGIN_DIR
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -26,7 +26,7 @@ include_directories(
 )
 
 # Source files declaration
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(${SYSTEM_IS_MACOSX})
   # On Mac we have to pass through Juce wrappers (.mm files)
   set(OPENMINI_JUCE_SRC
     ${JUCE_INCLUDE_DIR}/modules/juce_audio_basics/juce_audio_basics.mm
@@ -63,7 +63,7 @@ else()
     ${JUCE_INCLUDE_DIR}/modules/juce_gui_extra/juce_gui_extra.cpp
     ${JUCE_INCLUDE_DIR}/modules/juce_audio_plugin_client/VST/juce_VST_Wrapper.cpp
   )
-endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+endif(${SYSTEM_IS_MACOSX})
 
 # Include all subdirectories plugin source files
 add_subdirectory(vst)
