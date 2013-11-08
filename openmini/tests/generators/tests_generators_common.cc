@@ -175,7 +175,7 @@ TEST(Generators, DifferentiatedSawtooth) {
     std::floor(kFrequency * openmini::kSamplingRateHalf)));
   // The sawtooth is not perfect:
   // there may be a small DC offset for its derivative
-  const float kThreshold(0.1f);
+  const float kThreshold(0.15f);
 
   Differentiator differentiator;
   for (unsigned int i(0); i < kDataTestSetSize; ++i) {
