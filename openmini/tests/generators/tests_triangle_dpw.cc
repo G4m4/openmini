@@ -27,7 +27,7 @@
 // Using declarations for tested generator
 using openmini::generators::TriangleDPW;
 
-/// @brief Generates a triangle, check for null mean (no DC offset)
+/// @brief Generates a signal, check for null mean (no DC offset)
 TEST(Generators, TriangleDPWMean) {
   const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
@@ -53,7 +53,7 @@ TEST(Generators, TriangleDPWMean) {
   }  // iterations?
 }
 
-/// @brief Generates a triangle,
+/// @brief Generates a signal,
 /// check for normalized range (within [-1.0f ; 1.0f])
 TEST(Generators, TriangleDPWRange) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
@@ -72,7 +72,7 @@ TEST(Generators, TriangleDPWRange) {
   }
 }
 
-/// @brief Generates a triangle and check for expected zero crossing
+/// @brief Generates a signal and check for expected zero crossing
 /// according parameterized frequency (1 expected zero crossings per period)
 TEST(Generators, TriangleDPWZeroCrossings) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
@@ -94,7 +94,7 @@ TEST(Generators, TriangleDPWZeroCrossings) {
   }
 }
 
-/// @brief Generates a triangle at each frequency corresponding
+/// @brief Generates a signal at each frequency corresponding
 /// to key notes from C1 to C8, check for expected zero crossing
 TEST(Generators, TriangleDPWNotes) {
   for (unsigned int key_note(kMinKeyNote);

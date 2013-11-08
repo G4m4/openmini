@@ -25,7 +25,7 @@
 // Using declarations for tested generator
 using openmini::generators::SawtoothDPW;
 
-/// @brief Generates a sawtooth, check for null mean (no DC offset)
+/// @brief Generates a signal, check for null mean (no DC offset)
 TEST(Generators, SawtoothDPWMean) {
   const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
@@ -51,7 +51,7 @@ TEST(Generators, SawtoothDPWMean) {
   }  // iterations?
 }
 
-/// @brief Generates a sawtooth,
+/// @brief Generates a signal,
 /// check for normalized range (within [-1.0f ; 1.0f])
 TEST(Generators, SawtoothDPWRange) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
@@ -70,7 +70,7 @@ TEST(Generators, SawtoothDPWRange) {
   }
 }
 
-/// @brief Generates a sawtooth and check for expected zero crossing
+/// @brief Generates a signal and check for expected zero crossing
 /// according parameterized frequency (1 expected zero crossings per period)
 TEST(Generators, SawtoothDPWZeroCrossings) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
@@ -92,7 +92,7 @@ TEST(Generators, SawtoothDPWZeroCrossings) {
   }
 }
 
-/// @brief Generates a sawtooth at each frequency corresponding
+/// @brief Generates a signal at each frequency corresponding
 /// to key notes from C1 to C8, check for expected zero crossing
 TEST(Generators, SawtoothDPWNotes) {
   for (unsigned int key_note(kMinKeyNote);

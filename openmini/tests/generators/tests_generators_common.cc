@@ -28,7 +28,7 @@
 using openmini::generators::PhaseAccumulator;
 using openmini::generators::Differentiator;
 
-/// @brief Generates a triangle, check for null mean (no DC offset)
+/// @brief Generates a signal, check for null mean (no DC offset)
 TEST(Generators, PhaseAccumulatorMean) {
   const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
@@ -54,7 +54,7 @@ TEST(Generators, PhaseAccumulatorMean) {
   }  // iterations?
 }
 
-/// @brief Generates a triangle,
+/// @brief Generates a signal,
 /// check for normalized range (within [-1.0f ; 1.0f])
 TEST(Generators, PhaseAccumulatorRange) {
   const GeneratorNormFrequency freq_generator;
@@ -73,7 +73,7 @@ TEST(Generators, PhaseAccumulatorRange) {
   }
 }
 
-/// @brief Generates a triangle and check for expected zero crossing
+/// @brief Generates a signal and check for expected zero crossing
 /// according parameterized frequency (1 expected zero crossings per period)
 TEST(Generators, PhaseAccumulatorZeroCrossings) {
   const GeneratorNormFrequency freq_generator;

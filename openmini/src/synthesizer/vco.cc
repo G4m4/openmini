@@ -26,7 +26,7 @@
 namespace openmini {
 namespace synthesizer {
 
-Vco::Vco(void)
+Vco::Vco()
   : // Default on Triangle
     generator_(generators::CreateGenerator(Waveform::kTriangle)),
     volume_(1.0f),

@@ -35,17 +35,14 @@ class Generator_Base;
 namespace openmini {
 namespace synthesizer {
 
-/// @brief Simple implementation of a circular buffer
+/// @brief "Voltage controlled oscillator": wraps a generator and gives it
+/// additional parameters as well as a more advanced parameters management.
 ///
-/// Resizable, FIFO-type container; its general philosophy is that,
-/// if one operation could not be done (pushing too much data, etc.)
-/// it asserts - there are no return values nor exceptions.
+/// It handles everything about asynchronous parameters update.
 class Vco {
  public:
-  /// @brief Default constructor, set the form this VCO is supposed to generate
-  ///
-  /// @param[in]   waveform      Signal waveform to be generated
-  Vco(void);
+  /// @brief Default constructor
+  Vco();
   /// @brief Default destructor
   ~Vco();
   /// @brief Set the VCO to the given frequency
