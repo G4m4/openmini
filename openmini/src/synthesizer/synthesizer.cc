@@ -52,14 +52,45 @@ void Synthesizer::NoteOff(const int note) {
 }
 
 void Synthesizer::ProcessParameters(void) {
-  if (update_) {
-    mixer_.SetWaveform(0, GetDiscreteValue<Waveform::Type>(Parameters::kOsc1Waveform));
-    mixer_.SetWaveform(1, GetDiscreteValue<Waveform::Type>(Parameters::kOsc2Waveform));
-    mixer_.SetWaveform(2, GetDiscreteValue<Waveform::Type>(Parameters::kOsc3Waveform));
-    mixer_.SetVolume(0, GetValue(Parameters::kOsc1Volume));
-    mixer_.SetVolume(1, GetValue(Parameters::kOsc2Volume));
-    mixer_.SetVolume(2, GetValue(Parameters::kOsc3Volume));
-    update_ = false;
+  if (ParametersChanged()) {
+    UpdatedParametersIterator iter(*this);
+    do {
+      const int parameter_id(iter.GetID());
+      switch (parameter_id) {
+        case(Parameters::kOsc1Volume): {
+          mixer_.SetVolume(0, GetValue(Parameters::kOsc1Volume));
+          break;
+        }
+        case(Parameters::kOsc2Volume): {
+          mixer_.SetVolume(1, GetValue(Parameters::kOsc2Volume));
+          break;
+        }
+        case(Parameters::kOsc3Volume): {
+          mixer_.SetVolume(2, GetValue(Parameters::kOsc3Volume));
+          break;
+        }
+        case(Parameters::kOsc1Waveform): {
+          mixer_.SetWaveform(0,
+            GetDiscreteValue<Waveform::Type>(Parameters::kOsc1Waveform));
+          break;
+        }
+        case(Parameters::kOsc2Waveform): {
+          mixer_.SetWaveform(1,
+            GetDiscreteValue<Waveform::Type>(Parameters::kOsc2Waveform));
+          break;
+        }
+        case(Parameters::kOsc3Waveform): {
+          mixer_.SetWaveform(2,
+            GetDiscreteValue<Waveform::Type>(Parameters::kOsc3Waveform));
+          break;
+        }
+        default: {
+          // Should never happen
+          ASSERT(false);
+        }
+      }
+    } while (iter.Next());
+    ParametersProcessed();
   }
 }
 

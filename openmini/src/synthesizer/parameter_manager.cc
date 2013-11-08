@@ -64,7 +64,8 @@ int UnnormalizedToInt(const float unnormalized) {
 
 ParametersManager::ParametersManager(const ParameterMeta* param_meta_begin,
                                      const int count)
-    : values_(new float[count]),
+    : updated_parameters_(),
+      values_(new float[count]),
       param_meta_begin_(param_meta_begin),
       count_(count) {
   ASSERT(param_meta_begin != nullptr);
@@ -88,7 +89,7 @@ void ParametersManager::SetValue(const int parameter_id, const float value) {
   } else {
     *value_adress = value;
   }
-  update_ = true;
+  updated_parameters_.insert(parameter_id);
 }
 
 float ParametersManager::GetValue(const int parameter_id) const {
@@ -114,10 +115,37 @@ int ParametersManager::ParametersCount(void) const {
   return count_;
 }
 
+bool ParametersManager::ParametersChanged(void) {
+  return !(updated_parameters_.empty());
+}
+
+void ParametersManager::ParametersProcessed(void) {
+  updated_parameters_.clear();
+}
+
 void ParametersManager::AssignDefault(void) {
   for (int i(0); i < count_; ++i) {
-    values_[i] = GetMetadata(i).default_value();
+    SetValue(i, GetMetadata(i).default_value());
   }
+}
+
+ParametersManager::UpdatedParametersIterator::UpdatedParametersIterator(
+  const ParametersManager& manager)
+    : manager_(manager),
+      iterator_(manager.updated_parameters_.begin()) {
+}
+
+bool ParametersManager::UpdatedParametersIterator::Next() {
+  ++iterator_;
+  if (iterator_ != manager_.updated_parameters_.end()) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+int ParametersManager::UpdatedParametersIterator::GetID(void) const {
+  return *iterator_;
 }
 
 }  // namespace synthesizer

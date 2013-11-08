@@ -23,6 +23,8 @@
 #ifndef OPENMINI_SRC_SYNTHESIZER_PARAMETERS_MANAGER_H_
 #define OPENMINI_SRC_SYNTHESIZER_PARAMETERS_MANAGER_H_
 
+#include <set>
+
 #include "openmini/src/synthesizer/parameter_meta.h"
 
 namespace openmini {
@@ -122,7 +124,47 @@ class ParametersManager {
   /// @brief Return managed parameters count
   virtual int ParametersCount(void) const;
 
+  /// @brief An iterator class to browse through all "updated" parameters
+  ///
+  /// "Updated" here means parameters whose value have been changed
+  /// (through SetValue()) since the last call to ProcessParameters()
+  ///
+  /// UpdatedParametersIterator iter(this);
+  /// do {
+  ///   iter.GetID()
+  ///   DO_YOUR_STUFF
+  /// } while (iter.Next());
+  ///
+  class UpdatedParametersIterator {
+   public:
+    /// @brief Default constructor - needs a parameter manager!
+    explicit UpdatedParametersIterator(
+      const ParametersManager& manager);
+
+    /// @brief Increment iterator to the next parameter
+    ///
+    /// @return True if the increment could be done
+    bool Next();
+    /// @brief Current pointed parameter ID
+    int GetID(void) const;
+
+   private:
+    // No assignment operator for this class
+    UpdatedParametersIterator& operator=(
+      const UpdatedParametersIterator& right);
+
+    const ParametersManager& manager_;
+    std::set<int>::const_iterator iterator_;
+  };
+
  protected:
+  /// @brief Check if any parameter has changed recently
+  ///
+  /// @return true if any parameter was updated
+  /// since the last call to ProcessParameters()
+  bool ParametersChanged(void);
+  /// @brief To be called after each call to ProcessParameters()
+  void ParametersProcessed(void);
   /// @brief Update internal generator variables with lastly set parameters
   ///
   /// When set, parameters are not immediately used - they must be processed
@@ -132,8 +174,6 @@ class ParametersManager {
   /// it should probably be called from within a dedicated "update" loop
   virtual void ProcessParameters(void) = 0;
 
-  bool update_;  //< True if internal values have to be changed
-
  private:
   /// @brief Assign to each parameter its default value
   void AssignDefault(void);
@@ -141,9 +181,13 @@ class ParametersManager {
   // No assignment operator for this class
   ParametersManager& operator=(const ParametersManager& right);
 
+  std::set<int> updated_parameters_;  ///< Parameters updated since last call
+                                      ///< to ProcessParameters()
   float* const values_;  ///< Parameters value data
   const ParameterMeta* param_meta_begin_;  ///< Parameters metadata
   const int count_;  ///< Parameters count
+
+  friend class UpdatedParametersIterator;
 };
 
 
