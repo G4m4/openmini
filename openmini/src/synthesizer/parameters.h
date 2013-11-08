@@ -28,31 +28,9 @@
 namespace openmini {
 namespace synthesizer {
 
+/// @brief Parameters metadata
+// Implementation detail: ordered from the most probable to the least
 static const ParameterMeta kParameters[] = {
-  ParameterMeta(0.0f,
-                1.0f,
-                0.0f,
-                true,
-                1,
-                Waveform::kMaxCount,
-                "Osc1 Waveform",
-                "Waveform for oscillator 1"),
-  ParameterMeta(0.0f,
-                1.0f,
-                0.0f,
-                true,
-                1,
-                Waveform::kMaxCount,
-                "Osc2 Waveform",
-                "Waveform for oscillator 2"),
-  ParameterMeta(0.0f,
-                1.0f,
-                0.0f,
-                true,
-                1,
-                Waveform::kMaxCount,
-                "Osc3 Waveform",
-                "Waveform for oscillator 3"),
   ParameterMeta(0.0f,
                 1.0f,
                 1.0f,
@@ -76,21 +54,46 @@ static const ParameterMeta kParameters[] = {
                 1,
                 0,
                 "Osc3 Volume",
-                "Volume for oscillator 3")
+                "Volume for oscillator 3"),
+  ParameterMeta(0.0f,
+                1.0f,
+                0.0f,
+                true,
+                1,
+                Waveform::kMaxCount,
+                "Osc1 Waveform",
+                "Waveform for oscillator 1"),
+  ParameterMeta(0.0f,
+                1.0f,
+                0.0f,
+                true,
+                1,
+                Waveform::kMaxCount,
+                "Osc2 Waveform",
+                "Waveform for oscillator 2"),
+  ParameterMeta(0.0f,
+                1.0f,
+                0.0f,
+                true,
+                1,
+                Waveform::kMaxCount,
+                "Osc3 Waveform",
+                "Waveform for oscillator 3")
 };
 
 static const int kParametersCount(sizeof(kParameters) / sizeof(ParameterMeta));
 
 // (Using the "enum in its own namespace" trick)
 /// @brief Allowed parameters
+// Implementation detail: ordered from the most probable to the least
 namespace Parameters {
 enum Type {
-  kOsc1Waveform = 0,
-  kOsc2Waveform,
-  kOsc3Waveform,
-  kOsc1Volume,
+  kOsc1Volume = 0,
   kOsc2Volume,
   kOsc3Volume,
+  kOsc1Waveform,
+  kOsc2Waveform,
+  kOsc3Waveform,
   kMaxCount
 };
 }  // namespace Parameters
