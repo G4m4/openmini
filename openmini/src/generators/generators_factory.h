@@ -22,10 +22,12 @@
 #define OPENMINI_SRC_GENERATORS_GENERATORS_FACTORY_H_
 
 #include "openmini/src/common.h"
-#include "openmini/src/generators/generator_interface.h"
 
 namespace openmini {
 namespace generators {
+
+// Internal forward declarations
+class Generator_Base;
 
 /// @brief Create a generator based on the input enum value
 ///
