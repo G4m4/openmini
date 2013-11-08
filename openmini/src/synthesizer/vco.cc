@@ -30,7 +30,9 @@ Vco::Vco()
   : // Default on Triangle
     generator_(generators::CreateGenerator(Waveform::kTriangle)),
     volume_(1.0f),
-    waveform_(Waveform::kTriangle) {
+    frequency_(0.0f),
+    waveform_(Waveform::kTriangle),
+    update_(false) {
   // Nothing to do here for now
 }
 
