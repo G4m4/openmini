@@ -20,6 +20,7 @@
 
 #include "openmini/tests/tests.h"
 
+#include "openmini/src/synthesizer/parameters.h"
 #include "openmini/src/synthesizer/synthesizer.h"
 
 // Using declarations for tested class
@@ -63,3 +64,26 @@ TEST(Synthesizer, SynthesizerNoteOnNoteOff) {
   ASSERT_FLOAT_EQ(0.0f, mean_square * 2.0f / kDataTestSetSize);
 }
 
+/// @brief Update the synthesizer twice in a row
+/// The generated sound should stay unchanged
+TEST(Synthesizer, SynthesizerReupdate) {
+  std::vector<float> data(openmini::kBlockSize * 2);
+  Synthesizer synth;
+
+  unsigned int sample_idx(0);
+  synth.NoteOn(kMinKeyNote);
+
+  synth.SetValue(openmini::synthesizer::Parameters::kOsc1Waveform, 0.0f);
+  while (sample_idx < kDataTestSetSize) {
+    // not storing everything, only creating an "history"
+    synth.ProcessAudio(&data[0], openmini::kBlockSize);
+    sample_idx += openmini::kBlockSize;
+  }
+  synth.SetValue(openmini::synthesizer::Parameters::kOsc1Waveform, 0.0f);
+  // Filling the remaining half
+  synth.ProcessAudio(&data[openmini::kBlockSize], openmini::kBlockSize);
+
+  // Check for clicks
+  const float kEpsilon(1.05f);
+  EXPECT_FALSE(ClickWasFound(&data[0], data.size(), kEpsilon));
+}
