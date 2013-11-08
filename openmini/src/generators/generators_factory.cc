@@ -27,7 +27,7 @@
 namespace openmini {
 namespace generators {
 
-Generator_Base* CreateGenerator(const Waveform::Type waveform) {,
+Generator_Base* CreateGenerator(const Waveform::Type waveform,
                                 const Generator_Base* previous) {
   float phase(0.0f);
   if (previous) {
