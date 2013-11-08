@@ -4,6 +4,7 @@ compiler:
   - gcc
 before_install:
   - sudo apt-get install libgtest-dev
+  - sudo apt-get install valgrind
 before_script:
   - export GTEST_ROOT=/usr/src/gtest
 script:
@@ -12,4 +13,4 @@ script:
   - cmake -DOPENMINI_HAS_GTEST=ON ..
   - make clean
   - make
-  - ./openmini/tests/openmini_tests
+  - valgrind --leak-check=full ./openmini/tests/openmini_tests
