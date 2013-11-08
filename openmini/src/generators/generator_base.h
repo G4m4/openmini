@@ -1,7 +1,7 @@
-/// @filename generator_interface.h
-/// @brief OpenMini generators interface declaration
+/// @filename generator_base.h
+/// @brief OpenMini generators base class declaration
 ///
-/// Base interface for all generators
+/// Base interface and common methods for all generators
 ///
 /// @author gm
 /// @copyright gm 2013
@@ -21,29 +21,40 @@
 /// You should have received a copy of the GNU General Public License
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OPENMINI_SRC_GENERATORS_GENERATOR_INTERFACE_H_
-#define OPENMINI_SRC_GENERATORS_GENERATOR_INTERFACE_H_
+#ifndef OPENMINI_SRC_GENERATORS_GENERATOR_BASE_H_
+#define OPENMINI_SRC_GENERATORS_GENERATOR_BASE_H_
 
 #include "openmini/src/common.h"
 
 namespace openmini {
 namespace generators {
 
-/// @brief Interface defining common methods
+/// @brief Base class, defining common methods
 /// to be implemented in all generators
 ///
 /// All generators are supposed to work at a fixed sampling rate
-/// and buffer length - these may be changed in compile-time in configuration.h
-class Generator_Interface {
+/// which may be changed in compile-time in configuration.h
+///
+/// All generators are "dumb" - they are responsible for generating sound,
+/// and nothing else: they do not do any fancy parameter management.
+/// It means that any asynchronous parameter update has to be managed upstream,
+/// because the setters here are "instantaneous".
+class Generator_Base {
  public:
-  virtual ~Generator_Interface() {
+  /// @brief Default constructor - generator phase may be defined here,
+  /// allowing gapless instantiation from another generator
+  explicit Generator_Base(const float phase = 0.0f) {
+    // Nothing to do here for now
+    IGNORE(phase);
+  }
+  virtual ~Generator_Base() {
     // Nothing to do here for now
   };
   /// @brief Actual process function for one sample
   ///
   /// Process is done per-sample for flexibility purpose, beware of not having
   /// one of this called per-sample! Check in the final code that it actually
-  /// gets inlined
+  /// gets inlined if needed
   virtual float operator()(void) = 0;
   /// @brief Reset the instance to the given phase - nothing else gets changed
   ///
@@ -58,18 +69,11 @@ class Generator_Interface {
   /// @param[in]    frequency         Frequency to set the generator to
   virtual void SetFrequency(const float frequency) = 0;
 
- protected:
-  /// @brief Update internal generator variables with lastly set parameters
-  ///
-  /// When set, parameters are not immediately used - they must be processed
-  /// into generator internal variables
-  ///
-  /// This function allows to make this update asynchronously
-  /// it should probably be called from within a dedicated "update" loop
-  virtual void ProcessParameters(void) = 0;
+  /// @brief Generator current phase getter
+  virtual float Phase(void) const = 0;
 };
 
 }  // namespace generators
 }  // namespace openmini
 
-#endif  // OPENMINI_SRC_GENERATORS_GENERATOR_INTERFACE_H_
+#endif  // OPENMINI_SRC_GENERATORS_GENERATOR_BASE_H_

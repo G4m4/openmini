@@ -19,8 +19,9 @@
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "openmini/src/synthesizer/vco.h"
+
+#include "openmini/src/generators/generator_base.h"
 #include "openmini/src/generators/generators_factory.h"
-#include "openmini/src/generators/generator_interface.h"
 
 namespace openmini {
 namespace synthesizer {
@@ -38,27 +39,43 @@ Vco::~Vco() {
 }
 
 void Vco::SetFrequency(const float frequency) {
-  generator_->SetFrequency(frequency);
+  if (frequency != frequency_) {
+    frequency_ = frequency;
+    update_ = true;
+  }
 }
 
 void Vco::SetVolume(const float volume) {
   ASSERT(volume <= 1.0f);
   ASSERT(volume >= 0.0f);
 
+  // Volume should be managed as any other parameter (e.g. as frequency)
   volume_ = volume;
 }
 
 void Vco::SetWaveform(const Waveform::Type value) {
   // This is temporary
   if (value != waveform_) {
+    generators::Generator_Base* temp = generators::CreateGenerator(value,
+                                                                   generator_);
     delete generator_;
-    generator_ = generators::CreateGenerator(value);
+    generator_ = temp;
     waveform_ = value;
+    // Process parameters!
+    update_ = true;
   }
 }
 
 float Vco::operator()(void) {
+  ProcessParameters();
   return volume_ * (*generator_)();
+}
+
+void Vco::ProcessParameters(void) {
+  if (update_) {
+    generator_->SetFrequency(frequency_);
+    update_ = false;
+  }
 }
 
 }  // namespace synthesizer

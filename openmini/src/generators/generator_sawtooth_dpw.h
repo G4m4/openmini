@@ -32,9 +32,7 @@ class SawtoothDPW : public TriangleDPW {
  public:
   SawtoothDPW();
   virtual float operator()(void);
-
- protected:
-  virtual void ProcessParameters(void);
+  virtual void SetFrequency(const float frequency);
 };
 
 }  // namespace generators

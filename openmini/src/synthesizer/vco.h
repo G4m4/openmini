@@ -28,7 +28,7 @@
 // Internal forward declarations
 namespace openmini {
 namespace generators {
-class Generator_Interface;
+class Generator_Base;
 }  // namespace generators
 }  // namespace openmini
 
@@ -66,14 +66,22 @@ class Vco {
   void SetWaveform(const Waveform::Type value);
   /// @brief Actual process function for one sample
   float operator()(void);
+  /// @brief Update internal generator parameters
+  ///
+  /// Allows asynchronous updates; to be called within an update loop.
+  void ProcessParameters(void);
 
  private:
   // No assignment operator for this class
   Vco& operator=(const Vco& right);
 
-  generators::Generator_Interface* generator_;  ///< Internal generator
-  float volume_;
-  Waveform::Type waveform_;
+  generators::Generator_Base* generator_;  ///< Internal generator
+  float volume_; ///< Volume of the generator (due to asynchronous update,
+                 ///< it may as well be the volume to be applied soon
+  float frequency_; ///< Frequency of the generator. Same as above.
+  Waveform::Type waveform_;  ///< Waveform of the generator. Same as above.
+  bool update_;  ///< True if any parameter was updated since the last call to
+                 ///< ProcessParameters()
 };
 
 }  // namespace synthesizer

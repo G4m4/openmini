@@ -28,7 +28,7 @@ namespace generators {
 
 /// @brief Triangle signal generator
 /// using Differentiated Parabolic Wave (DPW) algorithm
-class TriangleDPW : public Generator_Interface {
+class TriangleDPW : public Generator_Base {
  public:
   TriangleDPW();
   virtual ~TriangleDPW() {
@@ -37,15 +37,12 @@ class TriangleDPW : public Generator_Interface {
   virtual float operator()(void);
   virtual void SetPhase(const float phase);
   virtual void SetFrequency(const float frequency);
+  virtual float Phase(void) const;
 
  protected:
-  virtual void ProcessParameters(void);
-
   PhaseAccumulator sawtooth_gen_;  //< Internal basic sawtooth signal generator
   Differentiator differentiator_;  //< Internal basic differentiator
   float normalization_factor_;  //< To be applied on the signal after synthesis
-  float frequency_;  //< Frequency to be set, allows asynchronous update
-  bool update_;  //< True if internal values have to be changed
 };
 
 }  // namespace generators

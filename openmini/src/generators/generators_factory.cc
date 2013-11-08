@@ -26,7 +26,7 @@
 namespace openmini {
 namespace generators {
 
-Generator_Interface* CreateGenerator(const Waveform::Type waveform) {
+Generator_Base* CreateGenerator(const Waveform::Type waveform) {
   switch (waveform) {
     case(Waveform::kTriangle): {
       return new TriangleDPW();

@@ -36,8 +36,8 @@ PhaseAccumulator::PhaseAccumulator()
 }
 
 float PhaseAccumulator::operator()(void) {
-  const float out(current_);
-  current_ = IncrementAndWrap(current_, increment_);
+  const float out(phase_);
+  phase_ = IncrementAndWrap(phase_, increment_);
   return out;
 }
 
@@ -47,23 +47,18 @@ void PhaseAccumulator::SetPhase(const float phase) {
   ASSERT(phase >= -1.0f);
   // If we are not sure, we can use the following:
   // phase_ = Wrap(phase);
-  current_ = phase;
+  phase_ = phase;
 }
 
 void PhaseAccumulator::SetFrequency(const float frequency) {
   ASSERT(frequency > 0.0f);
   ASSERT(frequency < openmini::kSamplingRateHalf);
 
-  frequency_ = frequency;
-  update_ = true;
-  ProcessParameters();
+  increment_ = (2.0f * frequency) / openmini::kSamplingRate;
 }
 
-void PhaseAccumulator::ProcessParameters(void) {
-  if (update_) {
-    increment_ = (2.0f * frequency_) / openmini::kSamplingRate;
-    update_ = false;
-  }
+float PhaseAccumulator::Phase(void) const {
+  return phase_;
 }
 
 Differentiator::Differentiator()

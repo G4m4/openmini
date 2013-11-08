@@ -59,18 +59,12 @@ void TriangleDPW::SetFrequency(const float frequency) {
   ASSERT(frequency > 0.0f);
   ASSERT(frequency < openmini::kSamplingRateHalf);
 
-  frequency_ = frequency;
   sawtooth_gen_.SetFrequency(frequency);
-
-  update_ = true;
-  ProcessParameters();
+  normalization_factor_ = openmini::kSamplingRate / (2.0f * frequency);
 }
 
-void TriangleDPW::ProcessParameters(void) {
-  if (update_) {
-    normalization_factor_ = openmini::kSamplingRate / (2.0f * frequency_);
-    update_ = false;
-  }
+float TriangleDPW::Phase(void) const {
+  return sawtooth_gen_.Phase();
 }
 
 }  // namespace generators

@@ -25,28 +25,26 @@
 #include <algorithm>
 
 #include "openmini/src/common.h"
-#include "openmini/src/generators/generator_interface.h"
+#include "openmini/src/generators/generator_base.h"
 
 namespace openmini {
 namespace generators {
 
 /// @brief Basic sawtooth signal generator
 /// Generates a lot of aliasing, not to be used straight to audio
-class PhaseAccumulator : public Generator_Interface {
+class PhaseAccumulator : public Generator_Base {
  public:
   PhaseAccumulator();
   virtual float operator()(void);
   virtual void SetPhase(const float phase);
   virtual void SetFrequency(const float frequency);
+  virtual float Phase(void) const;
 
  protected:
-  virtual void ProcessParameters(void);
+  float phase_;  ///< Instantaneous phase of the generator
 
  private:
-  float increment_;  ///< Value to be added at the phase at each iteration
-  float current_;  ///< Current phase value
-  float frequency_;  ///< Frequency to be set, allows asynchronous update
-  bool update_;  ///< True if internal values have to be changed
+  float increment_;
 };
 
 /// @brief Basic differentiator

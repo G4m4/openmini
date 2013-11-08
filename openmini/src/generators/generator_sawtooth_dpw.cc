@@ -40,11 +40,9 @@ float SawtoothDPW::operator()(void) {
   return current;
 }
 
-void SawtoothDPW::ProcessParameters(void) {
-  if (update_) {
-    normalization_factor_ = openmini::kSamplingRate / (4.0f * frequency_);
-    update_ = false;
-  }
+void SawtoothDPW::SetFrequency(const float frequency) {
+  sawtooth_gen_.SetFrequency(frequency);
+  normalization_factor_ = openmini::kSamplingRate / (4.0f * frequency);
 }
 
 }  // namespace generators
