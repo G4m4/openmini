@@ -79,3 +79,28 @@ GeneratorNormFrequency::GeneratorNormFrequency(void)
     : GeneratorRangedFloat(0.0f, kMaxFundamentalNorm) {
   // Nothing to do here for now
 }
+
+bool ClickWasFound(const float* buffer,
+                   const unsigned int length,
+                   const float epsilon) {
+  ASSERT(buffer);
+  ASSERT(length > 0);
+  ASSERT(epsilon > 1.0f);
+
+  // Compute mean derivative
+  float mean_derivative(0.0f);
+  for (unsigned int i(0); i < length - 1; ++i) {
+    mean_derivative += std::fabs(buffer[i + 1] - buffer[i]);
+  }
+  mean_derivative /= length;
+  // This makes us do the derivative 2 times but does not require any memory
+  const float kThreshold(epsilon * mean_derivative);
+  for (unsigned int i(0); i < length - 1; ++i) {
+    const float derivative(buffer[i + 1] - buffer[i]);
+    if (derivative > kThreshold) {
+      return true;
+    }
+  }
+
+  return false;
+}

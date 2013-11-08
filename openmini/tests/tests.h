@@ -139,6 +139,22 @@ float ComputeMean(TypeGenerator generator, const unsigned int length) {
   return sum / static_cast<float>(length);
 }
 
+/// @brief Compute the mean power of a signal generator for the given length
+///
+/// @param[in]    generator      Generator to compute value from
+/// @param[in]    length         Sample length
+///
+/// @return the generator mean for such length
+template <typename TypeGenerator>
+float ComputePower(TypeGenerator generator, const unsigned int length) {
+  float power(0.0f);
+  for (unsigned int i(0); i < length; ++i) {
+    const float sample(generator());
+    power += sample * sample;
+  }
+  return power / static_cast<float>(length);
+}
+
 /// @brief Returns the sign of a given value - zero for zero input
 template <typename TypeValue>
 int sgn(const TypeValue val) {
@@ -164,5 +180,17 @@ int ComputeZeroCrossing(TypeGenerator generator, const unsigned int length) {
   }
   return zero_crossings;
 }
+
+/// @brief Basic click detection using derivative
+///
+/// @param[in]    buffer         Buffer to test
+/// @param[in]    length         Buffer length
+/// @param[in]    epsilon        Max allowed factor compared to derivative mean
+///                              (> 1.0)
+///
+/// @return true as soon as a click was found
+bool ClickWasFound(const float* buffer,
+                   const unsigned int length,
+                   const float epsilon);
 
 #endif  // OPENMINI_TESTS_TESTS_H_
