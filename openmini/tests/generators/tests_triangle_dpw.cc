@@ -51,6 +51,36 @@ TEST(Generators, TriangleDPWMean) {
 
     std::cout << "Frequency: " << kFrequency
               << "    Mean:" << kActual << std::endl;
+
+    EXPECT_NEAR(kExpected, kActual, kEpsilon);
+  }  // iterations?
+}
+
+/// @brief Generates a signal, check for signal power
+TEST(Generators, TriangleDPWPower) {
+  const GeneratorNormFrequency freq_generator;
+  for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
+    IGNORE(iterations);
+
+    // Random normalized frequency
+    const float kFrequency(freq_generator());
+
+    // We are generating complete periods to prevent false positive
+    const unsigned int kDataLength(static_cast<unsigned int>(
+                                     std::floor((1.0f / kFrequency)
+                                                * kSignalDataPeriodsCount)));
+
+    // Generating data
+    TriangleDPW generator;
+    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+
+    const float kExpected(1.0f / 3.0f);
+    const float kEpsilon(2e-2f);
+    const float kActual(ComputePower(generator, kDataLength));
+
+    std::cout << "Frequency: " << kFrequency
+              << "    Power:" << kActual << std::endl;
+
     EXPECT_NEAR(kExpected, kActual, kEpsilon);
   }  // iterations?
 }
