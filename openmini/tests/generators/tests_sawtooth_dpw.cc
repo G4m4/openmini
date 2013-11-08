@@ -145,3 +145,20 @@ TEST(Generators, SawtoothDPWNotes) {
     EXPECT_NEAR(kSignalDataPeriodsCount, kActual, kEpsilon);
   }
 }
+
+/// @brief Generates a signal (performance tests)
+TEST(Generators, SawtoothDPWPerf) {
+  const GeneratorNormFrequency freq_generator;
+  for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
+    IGNORE(iterations);
+
+    const float kFrequency(freq_generator());
+    SawtoothDPW generator;
+    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+
+    const float kActual(ComputeMean(generator, kDataPerfSetSize));
+
+    // No actual test!
+    EXPECT_LE(-1.0f, kActual);
+  }
+}
