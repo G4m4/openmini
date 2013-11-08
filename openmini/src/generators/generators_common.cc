@@ -50,10 +50,10 @@ void PhaseAccumulator::SetPhase(const float phase) {
 }
 
 void PhaseAccumulator::SetFrequency(const float frequency) {
-  ASSERT(frequency > 0.0f);
-  ASSERT(frequency < openmini::kSamplingRateHalf);
+  ASSERT(frequency >= 0.0f);
+  ASSERT(frequency <= 0.5f);
 
-  increment_ = (2.0f * frequency) / openmini::kSamplingRate;
+  increment_ = 2.0f * frequency;
 }
 
 float PhaseAccumulator::Phase(void) const {

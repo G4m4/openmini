@@ -38,12 +38,12 @@ TEST(Generators, TriangleDPWMean) {
 
     // We are generating complete periods to prevent false positive
     const unsigned int kDataLength(static_cast<unsigned int>(
-                                     std::floor((1.0f / kFrequency)
+                                     std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
 
     // Generating data
     TriangleDPW generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     const float kExpected(0.0f);
     const float kEpsilon(1e-2f);
@@ -67,12 +67,12 @@ TEST(Generators, TriangleDPWPower) {
 
     // We are generating complete periods to prevent false positive
     const unsigned int kDataLength(static_cast<unsigned int>(
-                                     std::floor((1.0f / kFrequency)
+                                     std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
 
     // Generating data
     TriangleDPW generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     const float kExpected(1.0f / 3.0f);
     const float kEpsilon(2e-2f);
@@ -94,7 +94,7 @@ TEST(Generators, TriangleDPWRange) {
     const float kFrequency(std::fmod(GeneratorNormFrequency()(),
                                      kMaxFundamentalNorm));
     TriangleDPW generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     for (unsigned int i(0); i < kDataTestSetSize; ++i) {
       const float sample(generator());
@@ -113,10 +113,10 @@ TEST(Generators, TriangleDPWZeroCrossings) {
     const float kFrequency(std::fmod(GeneratorNormFrequency()(),
                                      kMaxFundamentalNorm));
     const unsigned int kDataLength(static_cast<unsigned int>(
-                                     std::floor((1.0f / kFrequency)
+                                     std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
     TriangleDPW generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     // Due to rounding one or even two zero crossings may be lost/added
     const int kEpsilon(2);
@@ -134,11 +134,11 @@ TEST(Generators, TriangleDPWNotes) {
        ++key_note) {
     const float kFrequency(NoteToFrequency(key_note));
     const unsigned int kDataLength(
-       static_cast<unsigned int>(std::floor((1.0f / kFrequency)
+       static_cast<unsigned int>(std::floor((0.5f / kFrequency)
                                             * kSignalDataPeriodsCount
-                                            * openmini::kSamplingRateHalf)));
+                                            * openmini::kSamplingRate)));
     TriangleDPW generator;
-    generator.SetFrequency(kFrequency);
+    generator.SetFrequency(kFrequency / openmini::kSamplingRate);
 
     // Due to rounding one or even two zero crossings may be lost/added
     const int kEpsilon(2);
@@ -156,7 +156,7 @@ TEST(Generators, TriangleDPWPerf) {
 
     const float kFrequency(freq_generator());
     TriangleDPW generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     const float kActual(ComputeMean(generator, kDataPerfSetSize));
 

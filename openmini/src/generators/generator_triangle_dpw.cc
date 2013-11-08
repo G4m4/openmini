@@ -55,11 +55,11 @@ void TriangleDPW::SetPhase(const float phase) {
 }
 
 void TriangleDPW::SetFrequency(const float frequency) {
-  ASSERT(frequency > 0.0f);
-  ASSERT(frequency < openmini::kSamplingRateHalf);
+  ASSERT(frequency >= 0.0f);
+  ASSERT(frequency <= 0.5f);
 
   sawtooth_gen_.SetFrequency(frequency);
-  normalization_factor_ = openmini::kSamplingRate / (2.0f * frequency);
+  normalization_factor_ = 1.0f / (2.0f * frequency);
 }
 
 float TriangleDPW::Phase(void) const {

@@ -75,7 +75,8 @@ class Vco {
   generators::Generator_Base* generator_;  ///< Internal generator
   float volume_; ///< Volume of the generator (due to asynchronous update,
                  ///< it may as well be the volume to be applied soon
-  float frequency_; ///< Frequency of the generator. Same as above.
+  float frequency_; ///< Frequency of the generator (non-normalized, in Hz).
+                    ///< Same as above.
   Waveform::Type waveform_;  ///< Waveform of the generator. Same as above.
   bool update_;  ///< True if any parameter was updated since the last call to
                  ///< ProcessParameters()

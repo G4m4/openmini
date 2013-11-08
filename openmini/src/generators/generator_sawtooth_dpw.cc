@@ -42,8 +42,11 @@ float SawtoothDPW::operator()(void) {
 }
 
 void SawtoothDPW::SetFrequency(const float frequency) {
+  ASSERT(frequency >= 0.0f);
+  ASSERT(frequency <= 0.5f);
+
   sawtooth_gen_.SetFrequency(frequency);
-  normalization_factor_ = openmini::kSamplingRate / (4.0f * frequency);
+  normalization_factor_ = 1.0f / (4.0f * frequency);
 }
 
 }  // namespace generators

@@ -64,7 +64,11 @@ class Generator_Base {
   virtual void SetPhase(const float phase) = 0;
   /// @brief Set the generator to the given output frequency
   ///
-  /// Frequency is not normalized here - the unit is Hz
+  /// Frequency is normalized - the input value should be in [0.0f ; 0.5f]
+  /// 0.5 because:
+  /// f_{n} = \frac{f}{f_{s}}
+  /// and:
+  /// f_{max} = \frac{f_{s}}{2}
   ///
   /// @param[in]    frequency         Frequency to set the generator to
   virtual void SetFrequency(const float frequency) = 0;

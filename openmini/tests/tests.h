@@ -42,7 +42,7 @@ static const unsigned int kDataTestSetSize(32768);
 static const unsigned int kIterations(16);
 static const unsigned int kSignalDataPeriodsCount(32);
 /// @brief Arbitrary highest allowed fundamental
-static const float kMaxFundamentalNorm(10000.0f / openmini::kSamplingRateHalf);
+static const float kMaxFundamentalNorm(10000.0f / openmini::kSamplingRate);
 
 // Smaller performance test sets in debug
 #if (_BUILD_CONFIGURATION_DEBUG)

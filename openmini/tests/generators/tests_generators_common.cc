@@ -38,12 +38,12 @@ TEST(Generators, PhaseAccumulatorMean) {
 
     // We are generating complete periods to prevent false positive
     const unsigned int kDataLength(static_cast<unsigned int>(
-                                     std::floor((1.0f / kFrequency)
+                                     std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
 
     // Generating data
     PhaseAccumulator generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     const float kExpected(0.0f);
     // Epsilon is quite big here, this generator being very crude
@@ -68,12 +68,12 @@ TEST(Generators, PhaseAccumulatorPower) {
 
     // We are generating complete periods to prevent false positive
     const unsigned int kDataLength(static_cast<unsigned int>(
-                                     std::floor((1.0f / kFrequency)
+                                     std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
 
     // Generating data
     PhaseAccumulator generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     const float kExpected(1.0f / 3.0f);
     // Very low epsilon with this algorithm!
@@ -96,7 +96,7 @@ TEST(Generators, PhaseAccumulatorRange) {
 
     const float kFrequency(freq_generator());
     PhaseAccumulator generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     for (unsigned int i(0); i < kDataTestSetSize; ++i) {
       const float sample(generator());
@@ -115,10 +115,10 @@ TEST(Generators, PhaseAccumulatorZeroCrossings) {
 
     const float kFrequency(freq_generator());
     const unsigned int kDataLength(static_cast<unsigned int>(
-                                     std::floor((1.0f / kFrequency)
+                                     std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
     PhaseAccumulator generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     // Due to rounding one or even two zero crossings may be lost/added
     const int kEpsilon(2);
@@ -136,7 +136,7 @@ TEST(Generators, PhaseAccumulatorPerf) {
 
     const float kFrequency(freq_generator());
     PhaseAccumulator generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     const float kActual(ComputeMean(generator, kDataPerfSetSize));
 
@@ -164,15 +164,14 @@ TEST(Generators, DifferentiatedSawtooth) {
   const GeneratorNormFrequency freq_generator;
   const float kFrequency(freq_generator());
   PhaseAccumulator generator;
-  generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+  generator.SetFrequency(kFrequency);
   std::vector<float> data(kDataTestSetSize);
   std::generate(data.begin(),
                 data.end(),
                 generator);
 
   // This is the sawtooth period e.g. each time the discontinuity occurs
-  const int kPeriod(static_cast<int>(
-    std::floor(kFrequency * openmini::kSamplingRateHalf)));
+  const int kPeriod(static_cast<int>(std::floor(kFrequency * openmini::kSamplingRate)));
   // The sawtooth is not perfect:
   // there may be a small DC offset for its derivative
   const float kThreshold(0.15f);

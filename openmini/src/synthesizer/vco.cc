@@ -75,7 +75,8 @@ float Vco::operator()(void) {
 
 void Vco::ProcessParameters(void) {
   if (update_) {
-    generator_->SetFrequency(frequency_);
+    const float normalized_freq(frequency_ / openmini::kSamplingRate);
+    generator_->SetFrequency(normalized_freq);
     update_ = false;
   }
 }

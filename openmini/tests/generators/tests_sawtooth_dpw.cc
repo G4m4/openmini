@@ -36,12 +36,12 @@ TEST(Generators, SawtoothDPWMean) {
 
     // We are generating complete periods to prevent false positive
     const unsigned int kDataLength(static_cast<unsigned int>(
-                                     std::floor((1.0f / kFrequency)
+                                     std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
 
     // Generating data
     SawtoothDPW generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     const float kExpected(0.0f);
     const float kEpsilon(1e-2f);
@@ -65,12 +65,12 @@ TEST(Generators, SawtoothDPWPower) {
 
     // We are generating complete periods to prevent false positive
     const unsigned int kDataLength(static_cast<unsigned int>(
-                                     std::floor((1.0f / kFrequency)
+                                     std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
 
     // Generating data
     SawtoothDPW generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     const float kExpected(1.0f / 3.0f);
     // Sawtooth is less powerful than expected using this algorithm
@@ -92,7 +92,7 @@ TEST(Generators, SawtoothDPWRange) {
     const float kFrequency(std::fmod(GeneratorNormFrequency()(),
                                      kMaxFundamentalNorm));
     SawtoothDPW generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     for (unsigned int i(0); i < kDataTestSetSize; ++i) {
       const float sample(generator());
@@ -111,10 +111,10 @@ TEST(Generators, SawtoothDPWZeroCrossings) {
     const float kFrequency(std::fmod(GeneratorNormFrequency()(),
                                      kMaxFundamentalNorm));
     const unsigned int kDataLength(static_cast<unsigned int>(
-                                     std::floor((1.0f / kFrequency)
+                                     std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
     SawtoothDPW generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     // Due to rounding one or even two zero crossings may be lost/added
     const int kEpsilon(2);
@@ -132,11 +132,11 @@ TEST(Generators, SawtoothDPWNotes) {
        ++key_note) {
     const float kFrequency(NoteToFrequency(key_note));
     const unsigned int kDataLength(
-       static_cast<unsigned int>(std::floor((1.0f / kFrequency)
+       static_cast<unsigned int>(std::floor((0.5f / kFrequency)
                                             * kSignalDataPeriodsCount
-                                            * openmini::kSamplingRateHalf)));
+                                            * openmini::kSamplingRate)));
     SawtoothDPW generator;
-    generator.SetFrequency(kFrequency);
+    generator.SetFrequency(kFrequency / openmini::kSamplingRate);
 
     // Due to rounding one or even two zero crossings may be lost/added
     const int kEpsilon(2);
@@ -154,7 +154,7 @@ TEST(Generators, SawtoothDPWPerf) {
 
     const float kFrequency(freq_generator());
     SawtoothDPW generator;
-    generator.SetFrequency(kFrequency * openmini::kSamplingRateHalf);
+    generator.SetFrequency(kFrequency);
 
     const float kActual(ComputeMean(generator, kDataPerfSetSize));
 
