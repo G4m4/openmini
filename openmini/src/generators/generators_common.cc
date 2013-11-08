@@ -27,11 +27,10 @@ namespace generators {
 
 // PhaseAccumulator
 
-PhaseAccumulator::PhaseAccumulator()
-    : increment_(0.0f),
-      current_(0.0f),
-      frequency_(0.0f),
-      update_(false) {
+PhaseAccumulator::PhaseAccumulator(const float phase)
+    : Generator_Base(phase),
+      phase_(phase),
+      increment_(0.0f) {
   // Nothing to do here for now
 }
 
@@ -61,8 +60,8 @@ float PhaseAccumulator::Phase(void) const {
   return phase_;
 }
 
-Differentiator::Differentiator()
-    : last_(0.0f) {
+Differentiator::Differentiator(const float last)
+    : last_(last) {
   // Nothing to do here
 }
 

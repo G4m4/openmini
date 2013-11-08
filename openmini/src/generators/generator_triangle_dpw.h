@@ -30,7 +30,7 @@ namespace generators {
 /// using Differentiated Parabolic Wave (DPW) algorithm
 class TriangleDPW : public Generator_Base {
  public:
-  TriangleDPW();
+  explicit TriangleDPW(const float phase = 0.0f);
   virtual ~TriangleDPW() {
     // Nothing to do here for now
   };

@@ -25,7 +25,8 @@
 namespace openmini {
 namespace generators {
 
-SawtoothDPW::SawtoothDPW() {
+SawtoothDPW::SawtoothDPW(const float phase)
+    : TriangleDPW(phase) {
   // Nothing to do here for now
 }
 

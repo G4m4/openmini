@@ -25,12 +25,11 @@
 namespace openmini {
 namespace generators {
 
-TriangleDPW::TriangleDPW()
-  : sawtooth_gen_(),
-    differentiator_(),
-    normalization_factor_(0.0f),
-    frequency_(0.0f),
-    update_(false) {
+TriangleDPW::TriangleDPW(const float phase)
+    : Generator_Base(phase),
+      sawtooth_gen_(),
+      differentiator_(),
+      normalization_factor_(0.0f) {
   // Nothing to do here for now
 }
 

@@ -30,7 +30,7 @@ namespace generators {
 /// using Differentiated Parabolic Wave (DPW) algorithm
 class SawtoothDPW : public TriangleDPW {
  public:
-  SawtoothDPW();
+  explicit SawtoothDPW(const float phase = 0.0f);
   virtual float operator()(void);
   virtual void SetFrequency(const float frequency);
 };

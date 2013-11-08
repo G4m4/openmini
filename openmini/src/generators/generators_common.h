@@ -34,7 +34,7 @@ namespace generators {
 /// Generates a lot of aliasing, not to be used straight to audio
 class PhaseAccumulator : public Generator_Base {
  public:
-  PhaseAccumulator();
+  explicit PhaseAccumulator(const float phase = 0.0f);
   virtual float operator()(void);
   virtual void SetPhase(const float phase);
   virtual void SetFrequency(const float frequency);
@@ -51,7 +51,7 @@ class PhaseAccumulator : public Generator_Base {
 /// implementing a simple 1st-order differentiator, unitary gain
 class Differentiator {
  public:
-  Differentiator();
+  explicit Differentiator(const float last = 0.0f);
   float operator()(const float sample);
 
  private:
