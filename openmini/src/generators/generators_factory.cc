@@ -27,13 +27,18 @@
 namespace openmini {
 namespace generators {
 
-Generator_Base* CreateGenerator(const Waveform::Type waveform) {
+Generator_Base* CreateGenerator(const Waveform::Type waveform) {,
+                                const Generator_Base* previous) {
+  float phase(0.0f);
+  if (previous) {
+    phase = previous->Phase();
+  }
   switch (waveform) {
     case(Waveform::kTriangle): {
-      return new TriangleDPW();
+      return new TriangleDPW(phase);
     }
     case(Waveform::kSawtooth): {
-      return new SawtoothDPW();
+      return new SawtoothDPW(phase);
     }
     default: {
       // Should never happen

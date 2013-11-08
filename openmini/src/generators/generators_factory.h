@@ -34,9 +34,11 @@ class Generator_Base;
 /// The user is responsible for the destruction of the created object
 ///
 /// @param[in]  waveform    Waveform of the signal generator to be created
+/// @param[in]  previous    Previous generator to copy parameters from
 ///
 /// @return a pointer to the created generator
-Generator_Base* CreateGenerator(const Waveform::Type waveform);
+Generator_Base* CreateGenerator(const Waveform::Type waveform,
+                                const Generator_Base* previous = nullptr);
 
 }  // namespace generators
 }  // namespace openmini
