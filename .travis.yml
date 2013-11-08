@@ -14,4 +14,4 @@ script:
   - cmake -DOPENMINI_HAS_GTEST=ON ..
   - make clean
   - make
-  - valgrind --leak-check=full ./openmini/tests/openmini_tests
+  - valgrind --leak-check=full --track-origins=yes ./openmini/tests/openmini_tests
