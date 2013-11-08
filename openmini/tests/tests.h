@@ -38,18 +38,18 @@ using openmini::kMinKeyNote;
 using openmini::kMaxKeyNote;
 using openmini::synthesizer::NoteToFrequency;
 
-static const unsigned int kDataTestSetSize(64 * 1024);
-static const unsigned int kIterations(32);
+static const unsigned int kDataTestSetSize(32768);
+static const unsigned int kIterations(16);
 static const unsigned int kSignalDataPeriodsCount(32);
 /// @brief Arbitrary highest allowed fundamental
 static const float kMaxFundamentalNorm(10000.0f / openmini::kSamplingRateHalf);
 
 // Smaller performance test sets in debug
-#if (CHTZ_CONFIGURATION_DEBUG)
+#if (_BUILD_CONFIGURATION_DEBUG)
 static const int kDataPerfSetSize(64 * 1024);
-#else  // (CHTZ_CONFIGURATION_DEBUG)
-static const int kDataPerfSetSize(64 * 1024 * 1024);
-#endif  // (CHTZ_CONFIGURATION_DEBUG)
+#else  // (_BUILD_CONFIGURATION_DEBUG)
+static const int kDataPerfSetSize(64 * 1024 * 128);
+#endif  // (_BUILD_CONFIGURATION_DEBUG)
 
 /// @brief Generates normalized random floats from an uniform distribution
 class GeneratorNormFloatRand {
