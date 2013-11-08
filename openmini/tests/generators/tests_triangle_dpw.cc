@@ -49,6 +49,8 @@ TEST(Generators, TriangleDPWMean) {
     const float kEpsilon(1e-2f);
     const float kActual(ComputeMean(generator, kDataLength));
 
+    std::cout << "Frequency: " << kFrequency
+              << "    Mean:" << kActual << std::endl;
     EXPECT_NEAR(kExpected, kActual, kEpsilon);
   }  // iterations?
 }
