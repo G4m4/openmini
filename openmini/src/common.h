@@ -22,6 +22,7 @@
 #define OPENMINI_SRC_COMMON_H_
 
 #include <cassert>
+#include <malloc.h>
 
 #include <xmmintrin.h>
 
@@ -88,6 +89,14 @@ static const int SampleSizeBytes(sizeof(Sample));
 static const int SampleSize(sizeof(Sample) / sizeof(float));
 
 #define ALIGN __declspec(align(16))
+
+static inline void* AllocateAligned(const size_t size) {
+  return _aligned_malloc(size, SampleSizeBytes);
+}
+
+static inline void DeallocateAligned(void* memory) {
+  return _aligned_free(memory);
+}
 
 }  // namespace openmini
 
