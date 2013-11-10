@@ -28,6 +28,7 @@ set(OPENMINI_SRC
 set(OPENMINI_HDR
   configuration.h
   common.h
+  maths.h
   ${OPENMINI_GENERATORS_HDR}
   ${OPENMINI_SYNTHESIZER_HDR}
 )

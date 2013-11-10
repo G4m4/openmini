@@ -30,7 +30,60 @@
 
 #include "openmini/src/common.h"
 #include "openmini/src/configuration.h"
+#include "openmini/src/maths.h"
 #include "openmini/src/synthesizer/synthesizer_common.h"
+
+// Using declarations for openmini maths stuff
+using openmini::Sample;
+using openmini::Fill;
+using openmini::GetByIndex;
+using openmini::Add;
+using openmini::AddHorizontal;
+using openmini::Sub;
+using openmini::Mul;
+using openmini::MulConst;
+using openmini::Abs;
+using openmini::Sgn;
+using openmini::Store;
+
+// Tests-specific maths (comparson operators) stuff
+
+static inline bool IsMaskNull(const Sample value) {
+  return GetByIndex<0>(value)
+         + GetByIndex<1>(value)
+         + GetByIndex<2>(value)
+         + GetByIndex<3>(value) == 0.0f;
+}
+
+static inline bool operator>(const float threshold, const Sample value) {
+  const Sample test_result(_mm_cmpgt_ps(Fill(threshold), value));
+  return !IsMaskNull(test_result);
+}
+
+static inline bool operator>=(const float threshold, const Sample& value) {
+  const Sample test_result(_mm_cmpge_ps(Fill(threshold), value));
+  return !IsMaskNull(test_result);
+}
+
+static inline bool operator<(const float threshold, const Sample value) {
+  const Sample test_result(_mm_cmplt_ps(Fill(threshold), value));
+  return !IsMaskNull(test_result);
+}
+
+static inline bool operator<=(const float threshold, const Sample& value) {
+  const Sample test_result(_mm_cmple_ps(Fill(threshold), value));
+  return !IsMaskNull(test_result);
+}
+
+static inline bool operator==(const float threshold, const Sample value) {
+  const Sample test_result(_mm_cmpeq_ps(Fill(threshold), value));
+  return !IsMaskNull(test_result);
+}
+
+static inline bool operator==(const Sample left, const Sample right) {
+  const Sample test_result(_mm_cmpeq_ps(left, right));
+  return !IsMaskNull(test_result);
+}
 
 // Using declarations for openmini stuff
 using openmini::IGNORE;
