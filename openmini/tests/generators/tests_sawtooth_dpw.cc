@@ -95,9 +95,9 @@ TEST(Generators, SawtoothDPWRange) {
     generator.SetFrequency(kFrequency);
 
     for (unsigned int i(0); i < kDataTestSetSize; ++i) {
-      const float sample(generator());
-      EXPECT_GE(1.0f, sample);
-      EXPECT_LE(-1.0f, sample);
+      const Sample sample(generator());
+      EXPECT_TRUE(1.0f >= sample);
+      EXPECT_TRUE(-1.0f <= sample);
     }
   }
 }

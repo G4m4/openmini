@@ -99,9 +99,9 @@ TEST(Generators, PhaseAccumulatorRange) {
     generator.SetFrequency(kFrequency);
 
     for (unsigned int i(0); i < kDataTestSetSize; ++i) {
-      const float sample(generator());
-      EXPECT_GE(1.0f, sample);
-      EXPECT_LE(-1.0f, sample);
+      const Sample sample(generator());
+      EXPECT_TRUE(1.0f >= sample);
+      EXPECT_TRUE(-1.0f <= sample);
     }
   }
 }
@@ -147,14 +147,14 @@ TEST(Generators, PhaseAccumulatorPerf) {
 
 /// @brief Differentiate a constant, check for null derivative
 TEST(Generators, DifferentiatedConstant) {
-  // Filling a vector with one random value in [0.0f ; 1.0f]
-  std::vector<float> data(kDataTestSetSize, GeneratorNormFrequency()());
+  // Filling a vector with one random value in [-1.0f ; 1.0f]
+  const Sample kValue(Fill(GeneratorNormFloatRand()()));
+  std::vector<Sample> data(kDataTestSetSize, kValue);
 
   Differentiator differentiator;
   // Not checking the first value!
-  differentiator(data[0]);
   for (unsigned int i(1); i < kDataTestSetSize; ++i) {
-    EXPECT_FLOAT_EQ(0.0f, differentiator(data[i]));
+    EXPECT_TRUE(0.0f == differentiator(data[i]));
   }
 }
 
@@ -165,10 +165,12 @@ TEST(Generators, DifferentiatedSawtooth) {
   const float kFrequency(freq_generator());
   PhaseAccumulator generator;
   generator.SetFrequency(kFrequency);
-  std::vector<float> data(kDataTestSetSize);
-  std::generate(data.begin(),
-                data.end(),
-                generator);
+  std::vector<Sample> data(kDataTestSetSize);
+  for (std::vector<Sample>::iterator iter(data.begin());
+       iter != data.end();
+       ++iter) {
+    *iter = generator();
+  }
 
   // This is the sawtooth period e.g. each time the discontinuity occurs
   const int kPeriod(static_cast<int>(std::floor(kFrequency * openmini::kSamplingRate)));
@@ -178,9 +180,9 @@ TEST(Generators, DifferentiatedSawtooth) {
 
   Differentiator differentiator;
   for (unsigned int i(0); i < kDataTestSetSize; ++i) {
-    const float diff(differentiator(data[i]));
+    const Sample diff(differentiator(data[i]));
     if (i % kPeriod != 0) {
-      EXPECT_GT(kThreshold, diff);
+      EXPECT_TRUE(kThreshold > diff);
     }
   }
 }

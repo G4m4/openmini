@@ -184,12 +184,12 @@ class GeneratorNormFrequency : public GeneratorRangedFloat {
 ///
 /// @return the generator mean for such length
 template <typename TypeGenerator>
-float ComputeMean(TypeGenerator generator, const unsigned int length) {
-  float sum(0.0f);
+float ComputeMean(TypeGenerator& generator, const unsigned int length) {
+  Sample sum(Fill(0.0f));
   for (unsigned int i(0); i < length; ++i) {
-    sum += generator();
+    sum = Add(sum, generator());
   }
-  return sum / static_cast<float>(length);
+  return AddHorizontal(sum) / static_cast<float>(length);
 }
 
 /// @brief Compute the mean power of a signal generator for the given length
@@ -199,13 +199,14 @@ float ComputeMean(TypeGenerator generator, const unsigned int length) {
 ///
 /// @return the generator mean for such length
 template <typename TypeGenerator>
-float ComputePower(TypeGenerator generator, const unsigned int length) {
-  float power(0.0f);
+float ComputePower(TypeGenerator& generator, const unsigned int length) {
+  Sample power(Fill(0.0f));
   for (unsigned int i(0); i < length; ++i) {
-    const float sample(generator());
-    power += sample * sample;
+    const Sample sample(generator());
+    const Sample squared(Mul(sample, sample));
+    power = Add(power, squared);
   }
-  return power / static_cast<float>(length);
+  return GetByIndex<0>(power) / static_cast<float>(length);
 }
 
 /// @brief Returns the sign of a given value - zero for zero input
@@ -221,15 +222,34 @@ int sgn(const TypeValue val) {
 ///
 /// @return zero crossings occurence for such length
 template <typename TypeGenerator>
-int ComputeZeroCrossing(TypeGenerator generator, const unsigned int length) {
+int ComputeZeroCrossing(TypeGenerator& generator, const unsigned int length) {
   int zero_crossings(0);
-  float previous(generator());
-  for (unsigned int i(1); i < length; ++i) {
-    const float current(generator());
-    if (sgn<float>(previous) != sgn<float>(current)) {
+  float previous_sgn(0.0f);
+  for (unsigned int i(0); i < length; i += 4) {
+    const Sample current_sgn_v(Sgn(generator()));
+    float current_sgn = GetByIndex<0>(current_sgn_v);
+    if (previous_sgn != current_sgn) {
       zero_crossings += 1;
     }
-    previous = current;
+    previous_sgn = current_sgn;
+
+    current_sgn = GetByIndex<1>(current_sgn_v);
+    if (previous_sgn != current_sgn) {
+      zero_crossings += 1;
+    }
+    previous_sgn = current_sgn;
+
+    current_sgn = GetByIndex<2>(current_sgn_v);
+    if (previous_sgn != current_sgn) {
+      zero_crossings += 1;
+    }
+    previous_sgn = current_sgn;
+
+    current_sgn = GetByIndex<3>(current_sgn_v);
+    if (previous_sgn != current_sgn) {
+      zero_crossings += 1;
+    }
+    previous_sgn = current_sgn;
   }
   return zero_crossings;
 }
