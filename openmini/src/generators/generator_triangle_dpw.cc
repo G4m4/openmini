@@ -21,6 +21,7 @@
 #include <cmath>
 
 #include "openmini/src/generators/generator_triangle_dpw.h"
+#include "openmini/src/maths.h"
 
 namespace openmini {
 namespace generators {
@@ -33,16 +34,16 @@ TriangleDPW::TriangleDPW(const float phase)
   // Nothing to do here for now
 }
 
-float TriangleDPW::operator()(void) {
+Sample TriangleDPW::operator()(void) {
   // Raw sawtooth signal
-  float current(sawtooth_gen_());
-  const float current_abs(std::abs(current));
+  Sample current(sawtooth_gen_());
+  const Sample current_abs(Abs(current));
   // Parabolization
-  current -= current * current_abs;
+  const Sample squared(Mul(current, current_abs));
+  const Sample minus(Sub(current, squared));
   // Differentiation & Normalization
-  current = differentiator_(current);
-  current *= normalization_factor_;
-  return current;
+  const Sample diff(differentiator_(minus));
+  return MulConst(normalization_factor_, diff);
 }
 
 void TriangleDPW::SetPhase(const float phase) {

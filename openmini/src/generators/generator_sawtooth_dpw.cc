@@ -21,6 +21,7 @@
 #include <cmath>
 
 #include "openmini/src/generators/generator_sawtooth_dpw.h"
+#include "openmini/src/maths.h"
 
 namespace openmini {
 namespace generators {
@@ -30,15 +31,14 @@ SawtoothDPW::SawtoothDPW(const float phase)
   // Nothing to do here for now
 }
 
-float SawtoothDPW::operator()(void) {
+Sample SawtoothDPW::operator()(void) {
   // Raw sawtooth signal
-  float current(sawtooth_gen_());
+  const Sample current(sawtooth_gen_());
   // Parabolization
-  current *= current;
+  const Sample squared(Mul(current, current));
   // Differentiation & Normalization
-  current = differentiator_(current);
-  current *= normalization_factor_;
-  return current;
+  const Sample diff(differentiator_(squared));
+  return MulConst(normalization_factor_, diff);
 }
 
 void SawtoothDPW::SetFrequency(const float frequency) {

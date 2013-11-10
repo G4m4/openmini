@@ -21,6 +21,7 @@
 #include <cmath>
 
 #include "openmini/src/generators/generators_common.h"
+#include "openmini/src/maths.h"
 
 namespace openmini {
 namespace generators {
@@ -29,13 +30,13 @@ namespace generators {
 
 PhaseAccumulator::PhaseAccumulator(const float phase)
     : Generator_Base(phase),
-      phase_(phase),
-      increment_(0.0f) {
+      phase_(Fill(0.0f)),
+      increment_(Fill(0.0f)) {
   // Nothing to do here for now
 }
 
-float PhaseAccumulator::operator()(void) {
-  const float out(phase_);
+Sample PhaseAccumulator::operator()(void) {
+  const Sample out(phase_);
   phase_ = IncrementAndWrap(phase_, increment_);
   return out;
 }
@@ -46,18 +47,20 @@ void PhaseAccumulator::SetPhase(const float phase) {
   ASSERT(phase >= -1.0f);
   // If we are not sure, we can use the following:
   // phase_ = Wrap(phase);
-  phase_ = phase;
+  phase_ = Fill(phase);
 }
 
 void PhaseAccumulator::SetFrequency(const float frequency) {
   ASSERT(frequency >= 0.0f);
   ASSERT(frequency <= 0.5f);
 
-  increment_ = 2.0f * frequency;
+  const float base_increment(2.0f * frequency);
+  increment_ = Fill(base_increment * 4.0f);
+  phase_ = FillIncremental(0.0f, base_increment);
 }
 
 float PhaseAccumulator::Phase(void) const {
-  return phase_;
+  return GetByIndex<0>(phase_);
 }
 
 Differentiator::Differentiator(const float last)
@@ -65,9 +68,11 @@ Differentiator::Differentiator(const float last)
   // Nothing to do here
 }
 
-float Differentiator::operator()(const float sample) {
-  const float before_diff(sample);
-  const float after_diff(sample - last_);
+Sample Differentiator::operator()(const Sample sample) {
+  const float before_diff(GetByIndex<3>(sample));
+  const Sample prev(RotateOnRight(sample,
+                                  last_));
+  const Sample after_diff(Sub(sample, prev));
   last_ = before_diff;
   return after_diff;
 }
@@ -117,12 +122,13 @@ float ErfTabulated(const float input) {
   }
 }
 
-float IncrementAndWrap(const float input, const float increment) {
-  float output(input + increment);
-  if (output > 1.0f) {
-    output -= 2.0f;
-  }
-  return output;
+Sample IncrementAndWrap(const Sample& input, const Sample& increment) {
+  const Sample output(Add(input, increment));
+  const Sample constant(Fill(-2.0f));
+  const Sample threshold(Fill(1.0f));
+  const Sample addition_mask(_mm_cmpgt_ps(output, threshold));
+  const Sample add(_mm_and_ps(addition_mask, constant));
+  return Add(output, add);
 }
 
 float LinearInterpolation(
