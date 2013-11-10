@@ -23,8 +23,10 @@
 #ifndef OPENMINI_SRC_SYNTHESIZER_PARAMETERS_MANAGER_H_
 #define OPENMINI_SRC_SYNTHESIZER_PARAMETERS_MANAGER_H_
 
+#include <array>
 #include <set>
 
+#include "openmini/src/synthesizer/parameters.h"
 #include "openmini/src/synthesizer/parameter_meta.h"
 
 namespace openmini {
@@ -81,11 +83,7 @@ class ParametersManager {
   /// @brief Default constructor:
   /// initialization done with static parameter descriptors data,
   /// but parameter values memory is dynamically allocated
-  ///
-  /// @param[in]   param_meta_begin    First parameter descriptor to handle
-  /// @param[in]   count               Descriptors count
-  ParametersManager(const ParameterMeta* param_meta_begin,
-                    const int count);
+  ParametersManager();
   /// @brief Default destructor
   virtual ~ParametersManager();
 
@@ -183,9 +181,8 @@ class ParametersManager {
 
   std::set<int> updated_parameters_;  ///< Parameters updated since last call
                                       ///< to ProcessParameters()
-  float* const values_;  ///< Parameters value data
-  const ParameterMeta* param_meta_begin_;  ///< Parameters metadata
-  const int count_;  ///< Parameters count
+  std::array<float, Parameters::kCount> values_;  ///< Parameters value data
+  const std::array<ParameterMeta, Parameters::kCount>& metadatas_;  ///< Parameters metadata
 
   friend class UpdatedParametersIterator;
 };

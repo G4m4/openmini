@@ -21,16 +21,30 @@
 #ifndef OPENMINI_SRC_SYNTHESIZER_PARAMETERS_H_
 #define OPENMINI_SRC_SYNTHESIZER_PARAMETERS_H_
 
-#include "openmini/src/synthesizer/parameter_meta.h"
+#include <array>
 
 #include "openmini/src/common.h"
+#include "openmini/src/synthesizer/parameter_meta.h"
 
 namespace openmini {
 namespace synthesizer {
 
+/// @brief Allowed parameters
+// Implementation detail: ordered from the most probable to the least
+namespace Parameters {
+enum Type {
+  kOsc1Volume = 0,
+  kOsc2Volume,
+  kOsc3Volume,
+  kOsc1Waveform,
+  kOsc2Waveform,
+  kOsc3Waveform,
+  kCount
+};
+
 /// @brief Parameters metadata
 // Implementation detail: ordered from the most probable to the least
-static const ParameterMeta kParameters[] = {
+const std::array<ParameterMeta, Parameters::kCount> kParametersMeta = {
   ParameterMeta(0.0f,
                 1.0f,
                 1.0f,
@@ -81,23 +95,7 @@ static const ParameterMeta kParameters[] = {
                 "Waveform for oscillator 3")
 };
 
-static const int kParametersCount(sizeof(kParameters) / sizeof(ParameterMeta));
-
-// (Using the "enum in its own namespace" trick)
-/// @brief Allowed parameters
-// Implementation detail: ordered from the most probable to the least
-namespace Parameters {
-enum Type {
-  kOsc1Volume = 0,
-  kOsc2Volume,
-  kOsc3Volume,
-  kOsc1Waveform,
-  kOsc2Waveform,
-  kOsc3Waveform,
-  kMaxCount
-};
 }  // namespace Parameters
-
 }  // namespace synthesizer
 }  // namespace openmini
 

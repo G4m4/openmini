@@ -30,9 +30,8 @@ namespace openmini {
 namespace synthesizer {
 
 Synthesizer::Synthesizer()
-    : ParametersManager(&kParameters[0], kParametersCount) {
+    : ParametersManager() {
   // Nothing to do here for now
-  ASSERT(kParametersCount == Parameters::kMaxCount);
 }
 
 void Synthesizer::ProcessAudio(float* const output,

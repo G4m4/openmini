@@ -62,39 +62,33 @@ int UnnormalizedToInt(const float unnormalized) {
   return ConvertFloorAsInteger(unnormalized);
 }
 
-ParametersManager::ParametersManager(const ParameterMeta* param_meta_begin,
-                                     const int count)
+ParametersManager::ParametersManager()
     : updated_parameters_(),
-      values_(new float[count]),
-      param_meta_begin_(param_meta_begin),
-      count_(count) {
-  ASSERT(param_meta_begin != nullptr);
-  ASSERT(count > 0);
+      metadatas_(Parameters::kParametersMeta) {
   AssignDefault();
 }
 
 ParametersManager::~ParametersManager() {
-  delete[] values_;
+  // Nothing to do here for now
 }
 
 void ParametersManager::SetValue(const int parameter_id, const float value) {
   ASSERT(parameter_id >= 0);
-  ASSERT(parameter_id < count_);
+  ASSERT(parameter_id < values_.size());
 
-  float* const value_adress(values_ + parameter_id);
   const ParameterMeta& metadata(GetMetadata(parameter_id));
   // If the parameter is normalized, then we have to pass through normalization
   if (metadata.is_normalized()) {
-    *value_adress = NormalizedToStored(value, metadata);
+    values_[parameter_id] = NormalizedToStored(value, metadata);
   } else {
-    *value_adress = value;
+    values_[parameter_id] = value;
   }
   updated_parameters_.insert(parameter_id);
 }
 
 float ParametersManager::GetValue(const int parameter_id) const {
   ASSERT(parameter_id >= 0);
-  ASSERT(parameter_id < count_);
+  ASSERT(parameter_id < values_.size());
 
   const float value(values_[parameter_id]);
   const ParameterMeta& metadata(GetMetadata(parameter_id));
@@ -108,11 +102,12 @@ float ParametersManager::GetValue(const int parameter_id) const {
 
 const ParameterMeta& ParametersManager::GetMetadata(
     const int parameter_id) const {
-  return *(param_meta_begin_ + parameter_id);
+  ASSERT(parameter_id < metadatas_.size());
+  return metadatas_[parameter_id];
 }
 
 int ParametersManager::ParametersCount(void) const {
-  return count_;
+  return values_.size();
 }
 
 bool ParametersManager::ParametersChanged(void) {
@@ -124,7 +119,7 @@ void ParametersManager::ParametersProcessed(void) {
 }
 
 void ParametersManager::AssignDefault(void) {
-  for (int i(0); i < count_; ++i) {
+  for (unsigned int i(0); i < values_.size(); ++i) {
     SetValue(i, GetMetadata(i).default_value());
   }
 }
