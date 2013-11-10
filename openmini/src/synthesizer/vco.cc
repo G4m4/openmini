@@ -37,7 +37,8 @@ Vco::Vco()
 }
 
 Vco::~Vco() {
-  delete generator_;
+  generator_->~Generator_Base();
+  DeallocateAligned(generator_);
 }
 
 void Vco::SetFrequency(const float frequency) {
