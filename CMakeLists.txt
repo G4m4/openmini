@@ -102,6 +102,36 @@ function(add_compiler_flags _TARGET_NAME _FLAGS)
                )
 endfunction(add_compiler_flags)
 
+# @brief For the whole project, append debug compiler flags
+#
+# @param _FLAGS                 flags to set
+function(add_debug_flags _FLAGS)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${_FLAGS}"
+      PARENT_SCOPE)
+endfunction(add_debug_flags)
+
+# @brief For the whole project, append release compiler flags
+#
+# @param _FLAGS                 flags to set
+function(add_release_flags _FLAGS)
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${_FLAGS}"
+      PARENT_SCOPE)
+  # Same for the "symbol" configuration
+  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${_FLAGS}"
+      PARENT_SCOPE)
+endfunction(add_release_flags)
+
+# @brief For the whole project, append release linker flags
+#
+# @param _FLAGS                 flags to set
+function(add_release_linker_flags _FLAGS)
+  set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} ${_FLAGS}"
+      PARENT_SCOPE)
+  # Same for the "symbol" configuration
+  set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO} ${_FLAGS}"
+      PARENT_SCOPE)
+endfunction(add_release_linker_flags)
+
 # @brief For the given list of targets, disable all warnings
 #
 # @param _TARGETS      List of targets
