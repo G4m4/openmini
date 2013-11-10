@@ -60,7 +60,7 @@ static const ParameterMeta kParameters[] = {
                 0.0f,
                 true,
                 1,
-                Waveform::kMaxCount,
+                Waveform::kCount,
                 "Osc1 Waveform",
                 "Waveform for oscillator 1"),
   ParameterMeta(0.0f,
@@ -68,7 +68,7 @@ static const ParameterMeta kParameters[] = {
                 0.0f,
                 true,
                 1,
-                Waveform::kMaxCount,
+                Waveform::kCount,
                 "Osc2 Waveform",
                 "Waveform for oscillator 2"),
   ParameterMeta(0.0f,
@@ -76,7 +76,7 @@ static const ParameterMeta kParameters[] = {
                 0.0f,
                 true,
                 1,
-                Waveform::kMaxCount,
+                Waveform::kCount,
                 "Osc3 Waveform",
                 "Waveform for oscillator 3")
 };

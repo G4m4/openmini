@@ -72,7 +72,7 @@ namespace Waveform {
 enum Type {
   kTriangle = 0,
   kSawtooth,
-  kMaxCount
+  kCount
 };
 }  // namespace Waveform
 
