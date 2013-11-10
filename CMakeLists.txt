@@ -60,36 +60,6 @@ else()
   message("System detected as Linux")
 endif()
 
-# Project-wide warning options
-if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
-  add_definitions(-pedantic)
-  add_definitions(-Wall)
-  add_definitions(-Wextra)
-  add_definitions(-Wpointer-arith)
-  add_definitions(-Wcast-qual)
-  add_definitions(-ggdb)
-elseif(${COMPILER_IS_MSVC})
-  add_definitions(-W4)
-  # This disable useless msvc warnings about checked iterators
-  add_definitions(-D_SCL_SECURE_NO_WARNINGS)
-endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
-
-# C++11 related options:
-# If using Clang we have to add the flag "std=c++11"
-# if using gcc, the c++11 flag change depending on the version
-# Nothing special with msvc
-if (${COMPILER_IS_CLANG})
-  add_definitions(-std=c++11)
-elseif (${COMPILER_IS_GCC})
-  execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
-                  OUTPUT_VARIABLE GCC_VERSION)
-  if ((GCC_VERSION VERSION_LESS 4.6) OR (GCC_VERSION VERSION_EQUAL 4.6))
-    add_definitions(-std=c++0x)
-  else()
-    add_definitions(-std=c++11)
-  endif()
-endif()
-
 # Functions
 
 # @brief For the specified target, append compiler flags to the existing ones
@@ -154,13 +124,11 @@ endfunction(disable_warnings_list)
 # @param _TARGET_NAME           target name
 function(set_target_mt _TARGET_NAME)
   if(${COMPILER_IS_MSVC})
-    # Debug is the default when anything else than "Release" is set
-    if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-      set(FLAG "/MT")
-    else()
-      set(FLAG "/MTd")
-    endif()
-    add_compiler_flags(${_TARGET_NAME} ${FLAG})
+    # Cannot use "add_CONFIG_flags" function here due to variable scoping
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd"
+        PARENT_SCOPE)
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT"
+        PARENT_SCOPE)
   endif(${COMPILER_IS_MSVC})
 endfunction(set_target_mt)
 
@@ -172,6 +140,63 @@ message(STATUS "Juce framework: ${OPENMINI_HAS_JUCE}")
 
 option(OPENMINI_ENABLE_COVERAGE "Enables coverage build (using gcov)." OFF)
 message(STATUS "Coverage: ${OPENMINI_ENABLE_COVERAGE}")
+
+# Project-wide warning options
+if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+  add_definitions(-pedantic)
+  add_definitions(-Wall)
+  add_definitions(-Wextra)
+  add_definitions(-Wpointer-arith)
+  add_definitions(-Wcast-qual)
+  add_definitions(-ggdb)
+elseif(${COMPILER_IS_MSVC})
+  add_definitions(-W4)
+  # This disable useless msvc warnings about checked iterators
+  add_definitions(-D_SCL_SECURE_NO_WARNINGS)
+endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+
+# Debug-only options
+if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+  add_debug_flags("-ggdb")
+elseif(${COMPILER_IS_MSVC})
+  add_debug_flags("/Zi")
+endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+
+# Release-only options
+if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+  add_release_flags("-Ofast")
+  add_release_flags("-msse2")
+  add_release_flags("-march=native")
+  add_release_flags("-mfpmath=sse")
+  add_release_flags("-Ofast")
+  # More informations about vectorization
+  add_release_flags("-ftree-vectorizer-verbose=10")
+elseif(${COMPILER_IS_MSVC})
+  add_release_linker_flags("/LTCG")
+  add_release_flags("/Ox")
+  add_release_flags("/Ob2")
+  add_release_flags("/Oi")
+  add_release_flags("/Ot")
+  add_release_flags("/GL")
+  add_release_flags("/arch:SSE2")
+  add_release_flags("/fp:fast")
+endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+
+# C++11 related options:
+# If using Clang we have to add the flag "std=c++11"
+# if using gcc, the c++11 flag change depending on the version
+# Nothing special with msvc
+if (${COMPILER_IS_CLANG})
+  add_definitions(-std=c++11)
+elseif (${COMPILER_IS_GCC})
+  execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
+                  OUTPUT_VARIABLE GCC_VERSION)
+  if ((GCC_VERSION VERSION_LESS 4.6) OR (GCC_VERSION VERSION_EQUAL 4.6))
+    add_definitions(-std=c++0x)
+  else()
+    add_definitions(-std=c++11)
+  endif()
+endif()
 
 # Coverage only available on Linux, with debug configuration
 if (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
