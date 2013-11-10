@@ -24,6 +24,7 @@
 #define OPENMINI_SRC_SYNTHESIZER_VCO_H_
 
 #include "openmini/src/common.h"
+#include "openmini/src/maths.h"
 
 // Internal forward declarations
 namespace openmini {
@@ -62,7 +63,7 @@ class Vco {
   /// @param[in]    value          Waveform type to set the VCO to
   void SetWaveform(const Waveform::Type value);
   /// @brief Actual process function for one sample
-  float operator()(void);
+  Sample operator()(void);
   /// @brief Update internal generator parameters
   ///
   /// Allows asynchronous updates; to be called within an update loop.

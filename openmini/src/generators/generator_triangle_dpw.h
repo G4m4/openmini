@@ -21,6 +21,7 @@
 #ifndef OPENMINI_SRC_GENERATORS_GENERATOR_TRIANGLE_DPW_H_
 #define OPENMINI_SRC_GENERATORS_GENERATOR_TRIANGLE_DPW_H_
 
+#include "openmini/src/common.h"
 #include "openmini/src/generators/generators_common.h"
 
 namespace openmini {
@@ -28,13 +29,13 @@ namespace generators {
 
 /// @brief Triangle signal generator
 /// using Differentiated Parabolic Wave (DPW) algorithm
-class TriangleDPW : public Generator_Base {
+ALIGN class TriangleDPW : public Generator_Base {
  public:
   explicit TriangleDPW(const float phase = 0.0f);
   virtual ~TriangleDPW() {
     // Nothing to do here for now
   };
-  virtual float operator()(void);
+  virtual Sample operator()(void);
   virtual void SetPhase(const float phase);
   virtual void SetFrequency(const float frequency);
   virtual float Phase(void) const;

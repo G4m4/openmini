@@ -21,6 +21,7 @@
 #ifndef OPENMINI_SRC_GENERATORS_GENERATOR_SAWTOOTH_DPW_H_
 #define OPENMINI_SRC_GENERATORS_GENERATOR_SAWTOOTH_DPW_H_
 
+#include "openmini/src/common.h"
 #include "openmini/src/generators/generator_triangle_dpw.h"
 
 namespace openmini {
@@ -28,10 +29,10 @@ namespace generators {
 
 /// @brief Sawtooth signal generator
 /// using Differentiated Parabolic Wave (DPW) algorithm
-class SawtoothDPW : public TriangleDPW {
+ALIGN class SawtoothDPW : public TriangleDPW {
  public:
   explicit SawtoothDPW(const float phase = 0.0f);
-  virtual float operator()(void);
+  virtual Sample operator()(void);
   virtual void SetFrequency(const float frequency);
 };
 

@@ -23,6 +23,8 @@
 
 #include <cassert>
 
+#include <xmmintrin.h>
+
 #include "openmini/src/configuration.h"
 
 namespace openmini {
@@ -75,6 +77,17 @@ enum Type {
   kCount
 };
 }  // namespace Waveform
+
+/// @brief "Sample" type - actually, this is the data computed at each "tick";
+/// If using vectorization it may longer than 1 audio sample
+typedef __m128 Sample;
+/// @brief "Sample" type size in bytes
+static const int SampleSizeBytes(sizeof(Sample));
+/// @brief "Sample" type size compared to audio samples
+/// (e.g., if Sample == float, SampleSize = 1)
+static const int SampleSize(sizeof(Sample) / sizeof(float));
+
+#define ALIGN __declspec(align(16))
 
 }  // namespace openmini
 

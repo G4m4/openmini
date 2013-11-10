@@ -23,6 +23,8 @@
 
 // std::min, std::max
 #include <algorithm>
+// simd stuff
+#include <xmmintrin.h>
 
 #include "openmini/src/common.h"
 #include "openmini/src/generators/generator_base.h"
@@ -32,19 +34,19 @@ namespace generators {
 
 /// @brief Basic sawtooth signal generator
 /// Generates a lot of aliasing, not to be used straight to audio
-class PhaseAccumulator : public Generator_Base {
+ALIGN class PhaseAccumulator : public Generator_Base {
  public:
   explicit PhaseAccumulator(const float phase = 0.0f);
-  virtual float operator()(void);
+  virtual Sample operator()(void);
   virtual void SetPhase(const float phase);
   virtual void SetFrequency(const float frequency);
   virtual float Phase(void) const;
 
  protected:
-  float phase_;  ///< Instantaneous phase of the generator
+  Sample phase_;  ///< Instantaneous phase of the generator
 
  private:
-  float increment_;
+  Sample increment_;
 };
 
 /// @brief Basic differentiator
@@ -52,7 +54,7 @@ class PhaseAccumulator : public Generator_Base {
 class Differentiator {
  public:
   explicit Differentiator(const float last = 0.0f);
-  float operator()(const float sample);
+  Sample operator()(const Sample sample);
 
  private:
   float last_;  ///< Last synthesized sample value
@@ -1120,7 +1122,7 @@ float ErfTabulated(const float input);
 /// @param[in]  input         Input to be wrapped - supposed not to be < 1.0
 /// @param[in]  increment     Increment to add to the input
 ///@return the incremented output in [-1.0 ; 1.0[
-float IncrementAndWrap(const float input, const float increment);
+Sample IncrementAndWrap(const Sample& input, const Sample& increment);
 
 /// @brief Helper function: Clamp input into [min ; max]
 template <typename TypeInput>
