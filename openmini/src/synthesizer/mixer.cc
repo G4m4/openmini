@@ -19,6 +19,7 @@
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "openmini/src/common.h"
+#include "openmini/src/maths.h"
 #include "openmini/src/synthesizer/mixer.h"
 #include "openmini/src/synthesizer/synthesizer_common.h"
 #include "openmini/src/synthesizer/vco.h"
@@ -38,12 +39,15 @@ Mixer::~Mixer() {
 void Mixer::ProcessAudio(float* const output, const int length) {
   if (active_) {
     float* current_sample(output);
-    for (int sample_idx(0); sample_idx < length; ++sample_idx) {
+    const float* end_sample(output + length - 1);
+    while(current_sample < end_sample) {
       VcoIterator iter(this);
+      Sample temp(openmini::Fill(0.0f));
       do {
-        *current_sample += iter.GetVco()();
+        temp = Add(temp, iter.GetVco()());
       } while (iter.Next());
-      current_sample += 1;
+      Store(current_sample, temp);
+      current_sample += openmini::SampleSize;
     }
   }
 }

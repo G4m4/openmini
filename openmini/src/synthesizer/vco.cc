@@ -68,9 +68,9 @@ void Vco::SetWaveform(const Waveform::Type value) {
   }
 }
 
-float Vco::operator()(void) {
+Sample Vco::operator()(void) {
   ProcessParameters();
-  return volume_ * (*generator_)();
+  return openmini::MulConst(volume_, (*generator_)());
 }
 
 void Vco::ProcessParameters(void) {
