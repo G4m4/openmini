@@ -77,7 +77,7 @@ TEST(Generators, PhaseAccumulatorPower) {
 
     const float kExpected(1.0f / 3.0f);
     // Very low epsilon with this algorithm!
-    const float kEpsilon(2e-3f);
+    const float kEpsilon(3e-3f);
     const float kActual(ComputePower(generator, kDataLength));
 
     std::cout << "Frequency: " << kFrequency
