@@ -104,12 +104,11 @@ static const int SampleSizeBytes(sizeof(Sample));
 /// (e.g., if Sample == float, SampleSize = 1)
 static const int SampleSize(sizeof(Sample) / sizeof(float));
 
-
-static inline void* AllocateAligned(const size_t size) {
+static inline void* Allocate(const size_t size) {
   return _aligned_malloc(size, SampleSizeBytes);
 }
 
-static inline void DeallocateAligned(void* memory) {
+static inline void Deallocate(void* memory) {
   return _aligned_free(memory);
 }
 
