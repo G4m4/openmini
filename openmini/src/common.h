@@ -105,7 +105,12 @@ static const int SampleSize(sizeof(Sample) / sizeof(float));
 ///
 /// @param  size    Size of the memory to allocate, in bytes
 static inline void* Allocate(const size_t size) {
+#if _COMPILER_MSVC
   return _aligned_malloc(size, SampleSizeBytes);
+#else
+  // C11
+  return aligned_alloc(SampleSizeBytes, size);
+#endif
 }
 
 /// @brief Deallocation function wrapper
@@ -114,7 +119,12 @@ static inline void* Allocate(const size_t size) {
 ///
 /// @param  memory    Pointer to the memory to be deallocated
 static inline void Deallocate(void* memory) {
+#if _COMPILER_MSVC
   return _aligned_free(memory);
+#else
+  // C11
+  return free(memory);
+#endif
 }
 
 }  // namespace openmini
