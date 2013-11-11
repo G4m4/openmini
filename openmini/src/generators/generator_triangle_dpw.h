@@ -29,7 +29,7 @@ namespace generators {
 
 /// @brief Triangle signal generator
 /// using Differentiated Parabolic Wave (DPW) algorithm
-ALIGN class TriangleDPW : public Generator_Base {
+class ALIGN TriangleDPW : public Generator_Base {
  public:
   explicit TriangleDPW(const float phase = 0.0f);
   virtual ~TriangleDPW() {

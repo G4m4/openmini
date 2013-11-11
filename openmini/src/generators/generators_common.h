@@ -32,7 +32,7 @@ namespace generators {
 
 /// @brief Basic sawtooth signal generator
 /// Generates a lot of aliasing, not to be used straight to audio
-ALIGN class PhaseAccumulator : public Generator_Base {
+class ALIGN PhaseAccumulator : public Generator_Base {
  public:
   explicit PhaseAccumulator(const float phase = 0.0f);
   virtual Sample operator()(void);

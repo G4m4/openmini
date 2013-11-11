@@ -29,7 +29,7 @@ namespace generators {
 
 /// @brief Sawtooth signal generator
 /// using Differentiated Parabolic Wave (DPW) algorithm
-ALIGN class SawtoothDPW : public TriangleDPW {
+class ALIGN SawtoothDPW : public TriangleDPW {
  public:
   explicit SawtoothDPW(const float phase = 0.0f);
   virtual Sample operator()(void);
