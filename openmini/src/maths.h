@@ -69,10 +69,11 @@ static inline Sample Fill(const float a,
 
 static inline Sample FillIncremental(const float base,
                                      const float increment) {
-  return _mm_set_ps(base + increment * 3.0f,
-                    base + increment * 2.0f,
-                    base + increment,
-                    base);
+  return Fill(base + increment * 3.0f,
+              base + increment * 2.0f,
+              base + increment,
+              base);
+}
 
 static inline Sample FillOnLength(const float value) {
   const float actual_value(value * openmini::SampleSize);
