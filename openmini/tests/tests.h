@@ -48,14 +48,14 @@ using openmini::Store;
 
 // Tests-specific maths (comparison operators) stuff
 #if (_USE_SSE)
-static inline bool IsMaskNull(const Sample value) {
+static inline bool IsMaskNull(const Sample& value) {
   return GetByIndex<0>(value)
          + GetByIndex<1>(value)
          + GetByIndex<2>(value)
          + GetByIndex<3>(value) == 0.0f;
 }
 
-static inline bool operator>(const float threshold, const Sample value) {
+static inline bool operator>(const float threshold, const Sample& value) {
   const Sample test_result(_mm_cmpgt_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);
 }
@@ -65,7 +65,7 @@ static inline bool operator>=(const float threshold, const Sample& value) {
   return !IsMaskNull(test_result);
 }
 
-static inline bool operator<(const float threshold, const Sample value) {
+static inline bool operator<(const float threshold, const Sample& value) {
   const Sample test_result(_mm_cmplt_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);
 }
@@ -75,12 +75,12 @@ static inline bool operator<=(const float threshold, const Sample& value) {
   return !IsMaskNull(test_result);
 }
 
-static inline bool operator==(const float threshold, const Sample value) {
+static inline bool operator==(const float threshold, const Sample& value) {
   const Sample test_result(_mm_cmpeq_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);
 }
 
-static inline bool operator==(const Sample left, const Sample right) {
+static inline bool operator==(const Sample& left, const Sample& right) {
   const Sample test_result(_mm_cmpeq_ps(left, right));
   return !IsMaskNull(test_result);
 }
