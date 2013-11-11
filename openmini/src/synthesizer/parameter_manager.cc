@@ -74,7 +74,7 @@ ParametersManager::~ParametersManager() {
 
 void ParametersManager::SetValue(const int parameter_id, const float value) {
   ASSERT(parameter_id >= 0);
-  ASSERT(parameter_id < values_.size());
+  ASSERT(parameter_id < static_cast<int>(values_.size()));
 
   const ParameterMeta& metadata(GetMetadata(parameter_id));
   // If the parameter is normalized, then we have to pass through normalization
@@ -88,7 +88,7 @@ void ParametersManager::SetValue(const int parameter_id, const float value) {
 
 float ParametersManager::GetValue(const int parameter_id) const {
   ASSERT(parameter_id >= 0);
-  ASSERT(parameter_id < values_.size());
+  ASSERT(parameter_id < static_cast<int>(values_.size()));
 
   const float value(values_[parameter_id]);
   const ParameterMeta& metadata(GetMetadata(parameter_id));
@@ -102,7 +102,7 @@ float ParametersManager::GetValue(const int parameter_id) const {
 
 const ParameterMeta& ParametersManager::GetMetadata(
     const int parameter_id) const {
-  ASSERT(parameter_id < metadatas_.size());
+  ASSERT(parameter_id < static_cast<int>(values_.size()));
   return metadatas_[parameter_id];
 }
 
