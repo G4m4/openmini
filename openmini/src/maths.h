@@ -53,6 +53,14 @@ static inline Sample Fill(const float value) {
 #endif  // (_USE_SSE)
 }
 
+static inline Sample Fill(const float* value) {
+#if (_USE_SSE)
+  return _mm_loadu_ps(value);
+#else
+  return *value;
+#endif  // (_USE_SSE)
+}
+
 static inline Sample Fill(const float a,
                           const float b,
                           const float c,
