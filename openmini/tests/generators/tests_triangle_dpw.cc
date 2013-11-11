@@ -98,8 +98,8 @@ TEST(Generators, TriangleDPWRange) {
 
     for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
       const Sample sample(generator());
-      EXPECT_TRUE(1.0f >= sample);
-      EXPECT_TRUE(-1.0f <= sample);
+      EXPECT_TRUE(GreaterEqual(1.0f, sample));
+      EXPECT_TRUE(LessEqual(-1.0f, sample));
     }
   }
 }
@@ -163,7 +163,7 @@ TEST(Generators, TriangleDPWPerf) {
       const Sample kCurrent(generator());
       sample_idx += openmini::SampleSize;
       // No actual test!
-      EXPECT_TRUE(-1.0f <= kCurrent);
+      EXPECT_TRUE(LessEqual(-1.0f, kCurrent));
     }
   }
 }

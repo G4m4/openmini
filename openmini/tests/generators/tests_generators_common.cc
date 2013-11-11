@@ -100,8 +100,8 @@ TEST(Generators, PhaseAccumulatorRange) {
 
     for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
       const Sample sample(generator());
-      EXPECT_TRUE(1.0f >= sample);
-      EXPECT_TRUE(-1.0f <= sample);
+      EXPECT_TRUE(GreaterEqual(1.0f, sample));
+      EXPECT_TRUE(LessEqual(-1.0f, sample));
     }
   }
 }
@@ -143,7 +143,7 @@ TEST(Generators, PhaseAccumulatorPerf) {
       const Sample kCurrent(generator());
       sample_idx += openmini::SampleSize;
       // No actual test!
-      EXPECT_TRUE(-1.0f <= kCurrent);
+      EXPECT_TRUE(LessEqual(-1.0f, kCurrent));
     }
   }
 }
@@ -159,7 +159,7 @@ TEST(Generators, DifferentiatedConstant) {
   for (unsigned int i(openmini::SampleSize);
        i < kDataTestSetSize;
        i += openmini::SampleSize) {
-    EXPECT_TRUE(0.0f == differentiator(Fill(&data[i])));
+    EXPECT_TRUE(Equal(0.0f, differentiator(Fill(&data[i]))));
   }
 }
 
@@ -188,7 +188,7 @@ TEST(Generators, DifferentiatedSawtooth) {
   for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
     const Sample diff(differentiator(Fill(&data[0])));
     if (i % kPeriod != 0) {
-      EXPECT_TRUE(kThreshold > diff);
+      EXPECT_TRUE(GreaterThan(kThreshold, diff));
     }
   }
 }

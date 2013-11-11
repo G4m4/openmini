@@ -55,32 +55,32 @@ static inline bool IsMaskNull(const Sample& value) {
          + GetByIndex<3>(value) == 0.0f;
 }
 
-static inline bool operator>(const float threshold, const Sample& value) {
+static inline bool GreaterThan(const float threshold, const Sample& value) {
   const Sample test_result(_mm_cmpgt_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);
 }
 
-static inline bool operator>=(const float threshold, const Sample& value) {
+static inline bool GreaterEqual(const float threshold, const Sample& value) {
   const Sample test_result(_mm_cmpge_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);
 }
 
-static inline bool operator<(const float threshold, const Sample& value) {
+static inline bool LessThan(const float threshold, const Sample& value) {
   const Sample test_result(_mm_cmplt_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);
 }
 
-static inline bool operator<=(const float threshold, const Sample& value) {
+static inline bool LessEqual(const float threshold, const Sample& value) {
   const Sample test_result(_mm_cmple_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);
 }
 
-static inline bool operator==(const float threshold, const Sample& value) {
+static inline bool Equal(const float threshold, const Sample& value) {
   const Sample test_result(_mm_cmpeq_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);
 }
 
-static inline bool operator==(const Sample& left, const Sample& right) {
+static inline bool Equal(const Sample& left, const Sample& right) {
   const Sample test_result(_mm_cmpeq_ps(left, right));
   return !IsMaskNull(test_result);
 }
