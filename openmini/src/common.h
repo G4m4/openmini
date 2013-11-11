@@ -94,10 +94,10 @@ enum Type {
 #endif  // (_USE_SSE)
 
 /// @brief "Sample" type size in bytes
-static const int SampleSizeBytes(sizeof(Sample));
+static const unsigned int SampleSizeBytes(sizeof(Sample));
 /// @brief "Sample" type size compared to audio samples
 /// (e.g., if Sample == float, SampleSize = 1)
-static const int SampleSize(sizeof(Sample) / sizeof(float));
+static const unsigned int SampleSize(sizeof(Sample) / sizeof(float));
 
 /// @brief Allocation function wrapper
 ///
