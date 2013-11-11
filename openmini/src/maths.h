@@ -21,6 +21,8 @@
 #ifndef OPENMINI_SRC_MATHS_H_
 #define OPENMINI_SRC_MATHS_H_
 
+#include <cmath>
+
 extern "C"
 {
 #include <emmintrin.h>
@@ -30,7 +32,8 @@ extern "C"
 #include "openmini/src/common.h"
 
 namespace openmini {
-  
+
+#if (_USE_SSE)
 typedef union {
   Sample sample_v;
   __m128i integer_v;
@@ -40,16 +43,28 @@ typedef union {
   Sample sample_v;
   float sample[4];
 } ConverterFloatScalarVector;
+#endif  // (_USE_SSE)
 
 static inline Sample Fill(const float value) {
+#if (_USE_SSE)
   return _mm_set1_ps(value);
+#else
+  return value;
+#endif  // (_USE_SSE)
 }
 
 static inline Sample Fill(const float a,
                           const float b,
                           const float c,
                           const float d) {
+#if (_USE_SSE)
   return _mm_set_ps(a, b, c, d);
+#else
+  IGNORE(a);
+  IGNORE(b);
+  IGNORE(c);
+  return d;
+#endif  // (_USE_SSE)
 }
 
 static inline Sample FillIncremental(const float base,
@@ -60,42 +75,78 @@ static inline Sample FillIncremental(const float base,
                     base);
 }
 
+#if (_USE_SSE)
 template<unsigned i>
 float GetByIndex(const Sample value) {
   ConverterFloatScalarVector converter;
   converter.sample_v = value;
   return converter.sample[i];
 }
+#else
+template<unsigned i>
+float GetByIndex(const Sample value) {
+  return value;
+}
+#endif  // (_USE_SSE)
+  ConverterFloatScalarVector converter;
+  converter.sample_v = value;
+  return converter.sample[i];
+}
 
 static inline Sample Add(const Sample left, const Sample right) {
+#if (_USE_SSE)
   return _mm_add_ps(left, right);
+#else
+  return left + right;
+#endif  // (_USE_SSE)
 }
 
 static inline float AddHorizontal(const Sample value) {
+#if (_USE_SSE)
   return GetByIndex<0>(value)
          + GetByIndex<1>(value)
          + GetByIndex<2>(value)
          + GetByIndex<3>(value);
+#else
+  return value;
+#endif  // (_USE_SSE)
 }
 
 static inline Sample Sub(const Sample left, const Sample right) {
+#if (_USE_SSE)
   return _mm_sub_ps(left, right);
+#else
+  return left - right;
+#endif  // (_USE_SSE)
 }
 
 static inline Sample Mul(const Sample left, const Sample right) {
+#if (_USE_SSE)
   return _mm_mul_ps(left, right);
+#else
+  return left * right;
+#endif  // (_USE_SSE)
 }
 
 static inline Sample MulConst(const float constant, const Sample right) {
+#if (_USE_SSE)
   return _mm_mul_ps(Fill(constant), right);
+#else
+  return constant * right;
+#endif  // (_USE_SSE)
 }
 
 static inline Sample Abs(const Sample value) {
+#if (_USE_SSE)
   return _mm_max_ps(_mm_sub_ps(_mm_setzero_ps(), value), value);
+#else
+  return std::fabs(value);
+#endif  // (_USE_SSE)
 }
 
 static inline Sample RotateOnRight(const Sample vector,
                                    const float value) {
+#if (_USE_SSE)
   ConverterFloatIntVector converter;
   converter.sample_v = vector;
   const __m128i tmp(converter.integer_v);
@@ -106,6 +157,10 @@ static inline Sample RotateOnRight(const Sample vector,
               GetByIndex<2>(converter_back.sample_v),
               GetByIndex<1>(converter_back.sample_v),
               value);
+#else
+  IGNORE(vector);
+  return value;
+#endif  // (_USE_SSE)
 }
 
 static inline Sample Sgn(const Sample value) {
@@ -118,7 +173,11 @@ static inline Sample Sgn(const Sample value) {
 }
 
 static inline void Store(float* const buffer, const Sample value) {
+#if (_USE_SSE)
   _mm_storeu_ps(buffer, value);
+#else
+  *buffer = value;
+#endif  // (_USE_SSE)
 }
 
 }  // namespace openmini

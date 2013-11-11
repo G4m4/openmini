@@ -90,14 +90,20 @@ enum Type {
 
 /// @brief "Sample" type - actually, this is the data computed at each "tick";
 /// If using vectorization it may longer than 1 audio sample
-typedef __m128 Sample;
+#if (_USE_SSE)
+  typedef __m128 Sample;
+  #define ALIGN __declspec(align(16))
+#else
+  typedef float Sample;
+  #define ALIGN
+#endif  // (_USE_SSE)
+
 /// @brief "Sample" type size in bytes
 static const int SampleSizeBytes(sizeof(Sample));
 /// @brief "Sample" type size compared to audio samples
 /// (e.g., if Sample == float, SampleSize = 1)
 static const int SampleSize(sizeof(Sample) / sizeof(float));
 
-#define ALIGN __declspec(align(16))
 
 static inline void* AllocateAligned(const size_t size) {
   return _aligned_malloc(size, SampleSizeBytes);

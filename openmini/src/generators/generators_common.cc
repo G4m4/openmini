@@ -123,12 +123,21 @@ float ErfTabulated(const float input) {
 }
 
 Sample IncrementAndWrap(const Sample& input, const Sample& increment) {
+#if (_USE_SIMD)
   const Sample output(Add(input, increment));
   const Sample constant(Fill(-2.0f));
   const Sample threshold(Fill(1.0f));
   const Sample addition_mask(_mm_cmpgt_ps(output, threshold));
   const Sample add(_mm_and_ps(addition_mask, constant));
   return Add(output, add);
+#else
+  Sample output(Add(input, increment));
+  if (output > 1.0f) {
+    const float constant(-2.0f);
+    output = Add(output, constant);
+  }
+  return output;
+#endif  // (_USE_SIMD)
 }
 
 float LinearInterpolation(
