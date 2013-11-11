@@ -39,7 +39,7 @@ namespace generators {
 /// and nothing else: they do not do any fancy parameter management.
 /// It means that any asynchronous parameter update has to be managed upstream,
 /// because the setters here are "instantaneous".
-class Generator_Base {
+class ALIGN Generator_Base {
  public:
   /// @brief Default constructor - generator phase may be defined here,
   /// allowing gapless instantiation from another generator
