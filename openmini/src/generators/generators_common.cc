@@ -123,7 +123,7 @@ float ErfTabulated(const float input) {
 }
 
 Sample IncrementAndWrap(const Sample& input, const Sample& increment) {
-#if (_USE_SIMD)
+#if (_USE_SSE)
   const Sample output(Add(input, increment));
   const Sample constant(Fill(-2.0f));
   const Sample threshold(Fill(1.0f));
@@ -137,7 +137,7 @@ Sample IncrementAndWrap(const Sample& input, const Sample& increment) {
     output = Add(output, constant);
   }
   return output;
-#endif  // (_USE_SIMD)
+#endif  // (_USE_SSE)
 }
 
 float LinearInterpolation(
