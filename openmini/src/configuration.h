@@ -53,4 +53,14 @@
     #define _ARCH_X86 1
   #endif
 #endif
+
+/// @brief SIMD enabling, based on platform
+#if defined(_DISABLE_SIMD)
+  #define _USE_SSE 0
+#else
+  #if (_ARCH_X86)
+    #define _USE_SSE 1
+  #endif
+#endif
+
 #endif  // OPENMINI_SRC_CONFIGURATION_H_

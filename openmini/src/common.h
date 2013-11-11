@@ -51,15 +51,6 @@ template<typename Type> void IGNORE(const Type&) {}
   #define ASSERT(_condition_) ASSUME(_condition_)
 #endif
 
-/// @brief Asserts _condition_ == true
-#if defined(_FORBID_SIMD)
-  #define _USE_SSE 0
-#else
-  #if ((_COMPILER_MSVC) || (_COMPILER_GCC))
-    #define _USE_SSE 1
-  #endif
-#endif
-
 // Fixed globals for synthesis
 
 /// @brief Block size used for internal sound synthesis
