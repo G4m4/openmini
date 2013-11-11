@@ -27,7 +27,14 @@
 
 /// @brief Compiler detection
 #if(defined(__GNUC__))
-  #define _COMPILER_GCC 1
+  // Special case of gcc <= 4.6 (in the hope that nobody will try
+  // to compile using gcc < 4.0)
+  #if ((__GNUC__ == 4) && (__GNUC_MINOR__ <= 6))
+    #define _COMPILER_GCC 1
+    #define _COMPILER_GCC_OLD 1
+  #else
+    #define _COMPILER_GCC 1
+  #endif
 #elif(defined(_MSC_VER))
   #define _COMPILER_MSVC 1
 #else
