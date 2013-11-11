@@ -108,8 +108,14 @@ static inline void* Allocate(const size_t size) {
 #if _COMPILER_MSVC
   return _aligned_malloc(size, SampleSizeBytes);
 #else
-  // C11
-  return aligned_alloc(SampleSizeBytes, size);
+  #if _COMPILER_GCC_OLD
+    // Posix stuff
+    void* memory(nullptr);
+    posix_memalign(&memory, SampleSizeBytes, size);
+    return memory;
+  #else
+    return aligned_alloc(SampleSizeBytes, size);
+  #endif
 #endif
 }
 
