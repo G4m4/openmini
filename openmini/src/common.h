@@ -95,10 +95,20 @@ static const int SampleSizeBytes(sizeof(Sample));
 /// (e.g., if Sample == float, SampleSize = 1)
 static const int SampleSize(sizeof(Sample) / sizeof(float));
 
+/// @brief Allocation function wrapper
+///
+/// Allow aligned memory allocation
+///
+/// @param  size    Size of the memory to allocate, in bytes
 static inline void* Allocate(const size_t size) {
   return _aligned_malloc(size, SampleSizeBytes);
 }
 
+/// @brief Deallocation function wrapper
+///
+/// Has to be called for each allocation performed with the above function
+///
+/// @param  memory    Pointer to the memory to be deallocated
 static inline void Deallocate(void* memory) {
   return _aligned_free(memory);
 }
