@@ -44,7 +44,7 @@ enum Type {
 
 /// @brief Parameters metadata
 // Implementation detail: ordered from the most probable to the least
-const std::array<ParameterMeta, Parameters::kCount> kParametersMeta = {
+const std::array<ParameterMeta, Parameters::kCount> kParametersMeta = {{
   ParameterMeta(0.0f,
                 1.0f,
                 1.0f,
@@ -93,7 +93,7 @@ const std::array<ParameterMeta, Parameters::kCount> kParametersMeta = {
                 Waveform::kCount,
                 "Osc3 Waveform",
                 "Waveform for oscillator 3")
-};
+}};
 
 }  // namespace Parameters
 }  // namespace synthesizer
