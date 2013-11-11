@@ -43,4 +43,14 @@
   #define _BUILD_CONFIGURATION_DEBUG 1
 #endif  // defined(NDEBUG) ?
 
+/// @brief Architecture detection - compiler specific preprocessor macros
+#if _COMPILER_MSVC
+  #if defined(_M_IX86)
+    #define _ARCH_X86 1
+  #endif
+#elif _COMPILER_GCC
+  #if defined(__i386__)
+    #define _ARCH_X86 1
+  #endif
+#endif
 #endif  // OPENMINI_SRC_CONFIGURATION_H_
