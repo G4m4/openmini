@@ -141,10 +141,19 @@ message(STATUS "Juce framework: ${OPENMINI_HAS_JUCE}")
 option(OPENMINI_ENABLE_COVERAGE "Enables coverage build (using gcov)." OFF)
 message(STATUS "Coverage: ${OPENMINI_ENABLE_COVERAGE}")
 
+option(OPENMINI_ENABLE_SIMD "Allowing to use SIMD instructions: SSE on x86, etc." OFF)
+message(STATUS "Simd instructions use: ${OPENMINI_ENABLE_SIMD}")
+
 # Project-wide options
-if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
-  add_definitions("-msse2")
-endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+if (${OPENMINI_ENABLE_SIMD} STREQUAL "ON")
+  if (${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+    add_definitions("-msse2")
+  else()
+    add_release_flags("/arch:SSE2")
+  endif (${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+else()
+  add_definitions("-D_DISABLE_SIMD")
+endif (${OPENMINI_ENABLE_SIMD} STREQUAL "ON")
 
 # Project-wide warning options
 if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
@@ -182,7 +191,6 @@ elseif(${COMPILER_IS_MSVC})
   add_release_flags("/Oi")
   add_release_flags("/Ot")
   add_release_flags("/GL")
-  add_release_flags("/arch:SSE2")
   add_release_flags("/fp:fast")
 endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
 
