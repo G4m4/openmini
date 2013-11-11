@@ -141,6 +141,11 @@ message(STATUS "Juce framework: ${OPENMINI_HAS_JUCE}")
 option(OPENMINI_ENABLE_COVERAGE "Enables coverage build (using gcov)." OFF)
 message(STATUS "Coverage: ${OPENMINI_ENABLE_COVERAGE}")
 
+# Project-wide options
+if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+  add_definitions("-msse2")
+endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+
 # Project-wide warning options
 if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
   add_definitions(-pedantic)
@@ -165,7 +170,6 @@ endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
 # Release-only options
 if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
   add_release_flags("-Ofast")
-  add_release_flags("-msse2")
   add_release_flags("-march=native")
   add_release_flags("-mfpmath=sse")
   add_release_flags("-Ofast")
