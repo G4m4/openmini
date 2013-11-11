@@ -90,32 +90,32 @@ static inline Sample FillOnLength(const float value) {
 
 #if (_USE_SSE)
 template<unsigned i>
-float GetByIndex(const Sample value) {
+float GetByIndex(const Sample& value) {
   ConverterFloatScalarVector converter;
   converter.sample_v = value;
   return converter.sample[i];
 }
 #else
 template<unsigned i>
-float GetByIndex(const Sample value) {
+float GetByIndex(const Sample& value) {
   return value;
 }
 #endif  // (_USE_SSE)
 
 #if (_USE_SSE)
-static inline float GetByIndex(const Sample value, const unsigned i) {
+static inline float GetByIndex(const Sample& value, const unsigned i) {
   ConverterFloatScalarVector converter;
   converter.sample_v = value;
   return converter.sample[i];
 }
 #else
-static inline float GetByIndex(const Sample value, const unsigned i) {
+static inline float GetByIndex(const Sample& value, const unsigned i) {
   IGNORE(i);
   return value;
 }
 #endif  // (_USE_SSE)
 
-static inline Sample Add(const Sample left, const Sample right) {
+static inline Sample Add(const Sample& left, const Sample& right) {
 #if (_USE_SSE)
   return _mm_add_ps(left, right);
 #else
@@ -123,7 +123,7 @@ static inline Sample Add(const Sample left, const Sample right) {
 #endif  // (_USE_SSE)
 }
 
-static inline float AddHorizontal(const Sample value) {
+static inline float AddHorizontal(const Sample& value) {
 #if (_USE_SSE)
   return GetByIndex<0>(value)
          + GetByIndex<1>(value)
@@ -134,7 +134,7 @@ static inline float AddHorizontal(const Sample value) {
 #endif  // (_USE_SSE)
 }
 
-static inline Sample Sub(const Sample left, const Sample right) {
+static inline Sample Sub(const Sample& left, const Sample& right) {
 #if (_USE_SSE)
   return _mm_sub_ps(left, right);
 #else
@@ -142,7 +142,7 @@ static inline Sample Sub(const Sample left, const Sample right) {
 #endif  // (_USE_SSE)
 }
 
-static inline Sample Mul(const Sample left, const Sample right) {
+static inline Sample Mul(const Sample& left, const Sample& right) {
 #if (_USE_SSE)
   return _mm_mul_ps(left, right);
 #else
@@ -150,7 +150,7 @@ static inline Sample Mul(const Sample left, const Sample right) {
 #endif  // (_USE_SSE)
 }
 
-static inline Sample MulConst(const float constant, const Sample right) {
+static inline Sample MulConst(const float constant, const Sample& right) {
 #if (_USE_SSE)
   return _mm_mul_ps(Fill(constant), right);
 #else
@@ -158,7 +158,7 @@ static inline Sample MulConst(const float constant, const Sample right) {
 #endif  // (_USE_SSE)
 }
 
-static inline Sample Abs(const Sample value) {
+static inline Sample Abs(const Sample& value) {
 #if (_USE_SSE)
   return _mm_max_ps(_mm_sub_ps(_mm_setzero_ps(), value), value);
 #else
@@ -166,7 +166,7 @@ static inline Sample Abs(const Sample value) {
 #endif  // (_USE_SSE)
 }
 
-static inline Sample RotateOnRight(const Sample vector,
+static inline Sample RotateOnRight(const Sample& vector,
                                    const float value) {
 #if (_USE_SSE)
   ConverterFloatIntVector converter;
@@ -185,7 +185,7 @@ static inline Sample RotateOnRight(const Sample vector,
 #endif  // (_USE_SSE)
 }
 
-static inline Sample Sgn(const Sample value) {
+static inline Sample Sgn(const Sample& value) {
 #if (_USE_SSE)
   const Sample kZero(_mm_setzero_ps());
   const Sample kOne(Fill(1.0f));
@@ -198,7 +198,7 @@ static inline Sample Sgn(const Sample value) {
 #endif  // (_USE_SSE)
 }
 
-static inline void Store(float* const buffer, const Sample value) {
+static inline void Store(float* const buffer, const Sample& value) {
 #if (_USE_SSE)
   _mm_storeu_ps(buffer, value);
 #else

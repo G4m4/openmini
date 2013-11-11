@@ -52,7 +52,7 @@ ALIGN class PhaseAccumulator : public Generator_Base {
 class Differentiator {
  public:
   explicit Differentiator(const float last = 0.0f);
-  Sample operator()(const Sample sample);
+  Sample operator()(const Sample& sample);
 
  private:
   float last_;  ///< Last synthesized sample value
