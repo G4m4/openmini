@@ -11,7 +11,7 @@ before_script:
 script:
   - mkdir build
   - cd build
-  - cmake -DOPENMINI_HAS_GTEST=ON ..
+  - cmake -DOPENMINI_HAS_GTEST=ON -DOPENMINI_ENABLE_SIMD=OFF ..
   - make clean
   - make
   - valgrind --leak-check=full --track-origins=yes ./openmini/tests/openmini_tests
