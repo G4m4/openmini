@@ -80,12 +80,6 @@ static inline bool Equal(const float threshold, const Sample& value) {
   return !IsMaskNull(test_result);
 }
 
-static inline bool Equal(const Sample& left, const Sample& right) {
-  const Sample test_result(_mm_cmpeq_ps(left, right));
-  return !IsMaskNull(test_result);
-}
-#endif  // (_USE_SSE)
-
 // Using declarations for openmini stuff
 using openmini::IGNORE;
 using openmini::kMinKeyNote;
