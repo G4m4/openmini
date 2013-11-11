@@ -96,7 +96,7 @@ TEST(Generators, TriangleDPWRange) {
     TriangleDPW generator;
     generator.SetFrequency(kFrequency);
 
-    for (unsigned int i(0); i < kDataTestSetSize; ++i) {
+    for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
       const Sample sample(generator());
       EXPECT_TRUE(1.0f >= sample);
       EXPECT_TRUE(-1.0f <= sample);

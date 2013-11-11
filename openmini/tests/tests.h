@@ -187,8 +187,11 @@ class GeneratorNormFrequency : public GeneratorRangedFloat {
 template <typename TypeGenerator>
 float ComputeMean(TypeGenerator& generator, const unsigned int length) {
   Sample sum(Fill(0.0f));
-  for (unsigned int i(0); i < length; ++i) {
-    sum = Add(sum, generator());
+  unsigned int sample_idx(0);
+  while (sample_idx < length) {
+    const Sample sample(generator());
+    sum = Add(sum, sample);
+    sample_idx += openmini::SampleSize;
   }
   return AddHorizontal(sum) / static_cast<float>(length);
 }
@@ -202,12 +205,14 @@ float ComputeMean(TypeGenerator& generator, const unsigned int length) {
 template <typename TypeGenerator>
 float ComputePower(TypeGenerator& generator, const unsigned int length) {
   Sample power(Fill(0.0f));
-  for (unsigned int i(0); i < length; ++i) {
+  unsigned int sample_idx(0);
+  while (sample_idx < length) {
     const Sample sample(generator());
     const Sample squared(Mul(sample, sample));
     power = Add(power, squared);
+    sample_idx += openmini::SampleSize;
   }
-  return GetByIndex<0>(power) / static_cast<float>(length);
+  return AddHorizontal(power) / static_cast<float>(length);
 }
 
 /// @brief Compute zero crossings of a signal generator for the given length

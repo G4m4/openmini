@@ -98,7 +98,7 @@ TEST(Generators, PhaseAccumulatorRange) {
     PhaseAccumulator generator;
     generator.SetFrequency(kFrequency);
 
-    for (unsigned int i(0); i < kDataTestSetSize; ++i) {
+    for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
       const Sample sample(generator());
       EXPECT_TRUE(1.0f >= sample);
       EXPECT_TRUE(-1.0f <= sample);
@@ -148,13 +148,15 @@ TEST(Generators, PhaseAccumulatorPerf) {
 /// @brief Differentiate a constant, check for null derivative
 TEST(Generators, DifferentiatedConstant) {
   // Filling a vector with one random value in [-1.0f ; 1.0f]
-  const Sample kValue(Fill(GeneratorNormFloatRand()()));
-  std::vector<Sample> data(kDataTestSetSize, kValue);
+  std::vector<float> data(kDataTestSetSize, GeneratorNormFloatRand()());
 
   Differentiator differentiator;
   // Not checking the first value!
-  for (unsigned int i(1); i < kDataTestSetSize; ++i) {
-    EXPECT_TRUE(0.0f == differentiator(data[i]));
+  differentiator(Fill(&data[0]));
+  for (unsigned int i(openmini::SampleSize);
+       i < kDataTestSetSize;
+       i += openmini::SampleSize) {
+    EXPECT_TRUE(0.0f == differentiator(Fill(&data[i])));
   }
 }
 
@@ -165,11 +167,11 @@ TEST(Generators, DifferentiatedSawtooth) {
   const float kFrequency(freq_generator());
   PhaseAccumulator generator;
   generator.SetFrequency(kFrequency);
-  std::vector<Sample> data(kDataTestSetSize);
-  for (std::vector<Sample>::iterator iter(data.begin());
+  std::vector<float> data(kDataTestSetSize);
+  for (std::vector<float>::iterator iter(data.begin());
        iter != data.end();
-       ++iter) {
-    *iter = generator();
+       iter += openmini::SampleSize) {
+    Store(&(*iter), generator());
   }
 
   // This is the sawtooth period e.g. each time the discontinuity occurs
@@ -179,8 +181,8 @@ TEST(Generators, DifferentiatedSawtooth) {
   const float kThreshold(0.15f);
 
   Differentiator differentiator;
-  for (unsigned int i(0); i < kDataTestSetSize; ++i) {
-    const Sample diff(differentiator(data[i]));
+  for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
+    const Sample diff(differentiator(Fill(&data[0])));
     if (i % kPeriod != 0) {
       EXPECT_TRUE(kThreshold > diff);
     }
