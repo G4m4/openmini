@@ -23,8 +23,6 @@
 
 // std::min, std::max
 #include <algorithm>
-// simd stuff
-#include <xmmintrin.h>
 
 #include "openmini/src/common.h"
 #include "openmini/src/generators/generator_base.h"

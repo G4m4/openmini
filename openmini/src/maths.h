@@ -21,13 +21,13 @@
 #ifndef OPENMINI_SRC_MATHS_H_
 #define OPENMINI_SRC_MATHS_H_
 
-#include <cmath>
-
 extern "C"
 {
 #include <emmintrin.h>
 #include <mmintrin.h>
 }
+
+#include <cmath>
 
 #include "openmini/src/common.h"
 

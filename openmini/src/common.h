@@ -21,10 +21,10 @@
 #ifndef OPENMINI_SRC_COMMON_H_
 #define OPENMINI_SRC_COMMON_H_
 
-#include <cassert>
 #include <malloc.h>
-
 #include <xmmintrin.h>
+
+#include <cassert>
 
 #include "openmini/src/configuration.h"
 

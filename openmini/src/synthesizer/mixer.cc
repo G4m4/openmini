@@ -40,7 +40,7 @@ void Mixer::ProcessAudio(float* const output, const int length) {
   if (active_) {
     float* current_sample(output);
     const float* end_sample(output + length);
-    while(current_sample < end_sample) {
+    while (current_sample < end_sample) {
       VcoIterator iter(this);
       Sample temp(openmini::Fill(0.0f));
       do {

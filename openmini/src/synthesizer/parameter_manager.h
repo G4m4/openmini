@@ -182,7 +182,8 @@ class ParametersManager {
   std::set<int> updated_parameters_;  ///< Parameters updated since last call
                                       ///< to ProcessParameters()
   std::array<float, Parameters::kCount> values_;  ///< Parameters value data
-  const std::array<ParameterMeta, Parameters::kCount>& metadatas_;  ///< Parameters metadata
+  const std::array<ParameterMeta,
+                   Parameters::kCount>& metadatas_;  ///< Parameters metadata
 
   friend class UpdatedParametersIterator;
 };
