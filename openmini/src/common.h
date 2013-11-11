@@ -83,7 +83,11 @@ enum Type {
 /// If using vectorization it may longer than 1 audio sample
 #if (_USE_SSE)
   typedef __m128 Sample;
-  #define ALIGN __declspec(align(16))
+  #if (_COMPILER_MSVC)
+    #define ALIGN __declspec(align(16))
+  #else
+    #define ALIGN __attribute__((aligned(16)))
+  #endif
 #else
   typedef float Sample;
   #define ALIGN
