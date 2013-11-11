@@ -40,6 +40,8 @@ class Generator_Base;
 Generator_Base* CreateGenerator(const Waveform::Type waveform,
                                 const Generator_Base* previous = nullptr);
 
+void DestroyGenerator(Generator_Base* generator);
+
 }  // namespace generators
 }  // namespace openmini
 
