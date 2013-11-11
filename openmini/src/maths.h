@@ -73,6 +73,10 @@ static inline Sample FillIncremental(const float base,
                     base + increment * 2.0f,
                     base + increment,
                     base);
+
+static inline Sample FillOnLength(const float value) {
+  const float actual_value(value * openmini::SampleSize);
+  return Fill(actual_value);
 }
 
 #if (_USE_SSE)

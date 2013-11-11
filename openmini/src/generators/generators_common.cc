@@ -55,7 +55,7 @@ void PhaseAccumulator::SetFrequency(const float frequency) {
   ASSERT(frequency <= 0.5f);
 
   const float base_increment(2.0f * frequency);
-  increment_ = Fill(base_increment * 4.0f);
+  increment_ = FillOnLength(base_increment);
   phase_ = FillIncremental(0.0f, base_increment);
 }
 
