@@ -102,7 +102,7 @@ static const float kMaxFundamentalNorm(10000.0f / openmini::kSamplingRate);
 #if (_BUILD_CONFIGURATION_DEBUG)
 static const int kDataPerfSetSize(64 * 1024);
 #else  // (_BUILD_CONFIGURATION_DEBUG)
-static const int kDataPerfSetSize(64 * 1024 * 128);
+static const int kDataPerfSetSize(64 * 1024 * 64);
 #endif  // (_BUILD_CONFIGURATION_DEBUG)
 
 /// @brief Generates normalized random floats from an uniform distribution
