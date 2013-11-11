@@ -93,10 +93,19 @@ float GetByIndex(const Sample value) {
   return value;
 }
 #endif  // (_USE_SSE)
+
+#if (_USE_SSE)
+static inline float GetByIndex(const Sample value, const unsigned i) {
   ConverterFloatScalarVector converter;
   converter.sample_v = value;
   return converter.sample[i];
 }
+#else
+static inline float GetByIndex(const Sample value, const unsigned i) {
+  IGNORE(i);
+  return value;
+}
+#endif  // (_USE_SSE)
 
 static inline Sample Add(const Sample left, const Sample right) {
 #if (_USE_SSE)

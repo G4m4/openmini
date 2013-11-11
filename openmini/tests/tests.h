@@ -220,31 +220,15 @@ template <typename TypeGenerator>
 int ComputeZeroCrossing(TypeGenerator& generator, const unsigned int length) {
   int zero_crossings(0);
   float previous_sgn(0.0f);
-  for (unsigned int i(0); i < length; i += 4) {
+  for (unsigned int i(0); i < length; i += openmini::SampleSize) {
     const Sample current_sgn_v(Sgn(generator()));
-    float current_sgn = GetByIndex<0>(current_sgn_v);
-    if (previous_sgn != current_sgn) {
-      zero_crossings += 1;
+    for (unsigned int index(0); index < openmini::SampleSize; index += 1) {
+      const float current_sgn = GetByIndex(current_sgn_v, index);
+      if (previous_sgn != current_sgn) {
+        zero_crossings += 1;
+      }
+      previous_sgn = current_sgn;
     }
-    previous_sgn = current_sgn;
-
-    current_sgn = GetByIndex<1>(current_sgn_v);
-    if (previous_sgn != current_sgn) {
-      zero_crossings += 1;
-    }
-    previous_sgn = current_sgn;
-
-    current_sgn = GetByIndex<2>(current_sgn_v);
-    if (previous_sgn != current_sgn) {
-      zero_crossings += 1;
-    }
-    previous_sgn = current_sgn;
-
-    current_sgn = GetByIndex<3>(current_sgn_v);
-    if (previous_sgn != current_sgn) {
-      zero_crossings += 1;
-    }
-    previous_sgn = current_sgn;
   }
   return zero_crossings;
 }
