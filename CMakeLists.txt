@@ -190,15 +190,19 @@ endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
 # If using Clang we have to add the flag "std=c++11"
 # if using gcc, the c++11 flag change depending on the version
 # Nothing special with msvc
+# Same for C11
 if (${COMPILER_IS_CLANG})
+  add_definitions(-std=c11)
   add_definitions(-std=c++11)
 elseif (${COMPILER_IS_GCC})
   execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
                   OUTPUT_VARIABLE GCC_VERSION)
   if ((GCC_VERSION VERSION_LESS 4.6) OR (GCC_VERSION VERSION_EQUAL 4.6))
     add_definitions(-std=c++0x)
+    add_definitions(-std=c1x)
   else()
     add_definitions(-std=c++11)
+    add_definitions(-std=c11)
   endif()
 endif()
 
