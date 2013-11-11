@@ -138,10 +138,13 @@ TEST(Generators, PhaseAccumulatorPerf) {
     PhaseAccumulator generator;
     generator.SetFrequency(kFrequency);
 
-    const float kActual(ComputeMean(generator, kDataPerfSetSize));
-
-    // No actual test!
-    EXPECT_LE(-1.0f, kActual);
+    unsigned int sample_idx(0);
+    while (sample_idx < kDataPerfSetSize) {
+      const Sample kCurrent(generator());
+      sample_idx += openmini::SampleSize;
+      // No actual test!
+      EXPECT_TRUE(-1.0f <= kCurrent);
+    }
   }
 }
 
