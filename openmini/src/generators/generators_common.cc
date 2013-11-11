@@ -95,33 +95,6 @@ float OnePoleFilter::operator()(const float input) {
 
 // Miscellaneous
 
-float ErfTabulated(const float input) {
-  if (input < -3.0f) {
-    // TODO(gm): interpolation for the special case
-    // of being just before first table value
-    return -1.0f;
-  } else if (input > 3.0f) {
-      return 1.0f;
-  } else {
-    // Finding "left" index
-    const float indexf = (input + 3.0f)
-                          * (static_cast<float>(kErfTableSize) / 6.0f);
-    const int index = static_cast<int>(indexf);
-    // This is how far we are after left value (0.0f < ratio < 1.0f)
-    const float ratio = static_cast<float>(indexf - index);
-    // Computation of the "right" value, with the special case
-    // of being just after last table value
-    float next_value = 1.0f;
-    if (index < kErfTableSize - 1) {
-        next_value = kErfTable[index + 1];
-    }
-    // A linear interpolation should be OK here
-    return LinearInterpolation(kErfTable[index],
-                                next_value,
-                                ratio);
-  }
-}
-
 Sample IncrementAndWrap(const Sample& input, const Sample& increment) {
 #if (_USE_SSE)
   const Sample output(Add(input, increment));
