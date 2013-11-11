@@ -56,7 +56,7 @@
     #define _ARCH_X86 1
   #endif
 #elif _COMPILER_GCC
-  #if defined(__i386__)
+  #if (defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__))
     #define _ARCH_X86 1
   #endif
 #endif
