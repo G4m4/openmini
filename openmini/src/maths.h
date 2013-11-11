@@ -164,12 +164,16 @@ static inline Sample RotateOnRight(const Sample vector,
 }
 
 static inline Sample Sgn(const Sample value) {
+#if (_USE_SSE)
   const Sample kZero(_mm_setzero_ps());
   const Sample kOne(Fill(1.0f));
   const Sample kMinus(Fill(-1.0f));
   const Sample kPlusMask(_mm_and_ps(_mm_cmpgt_ps(value, kZero), kOne));
   const Sample kMinusMask(_mm_and_ps(_mm_cmplt_ps(value, kZero), kMinus));
   return Add(kPlusMask, kMinusMask);
+#else
+  return Sub((0.0f < value), (value < 0.0f));
+#endif  // (_USE_SSE)
 }
 
 static inline void Store(float* const buffer, const Sample value) {

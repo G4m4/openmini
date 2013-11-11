@@ -210,12 +210,6 @@ float ComputePower(TypeGenerator& generator, const unsigned int length) {
   return GetByIndex<0>(power) / static_cast<float>(length);
 }
 
-/// @brief Returns the sign of a given value - zero for zero input
-template <typename TypeValue>
-int sgn(const TypeValue val) {
-  return (static_cast<TypeValue>(0) < val) - (val < static_cast<TypeValue>(0));
-}
-
 /// @brief Compute zero crossings of a signal generator for the given length
 ///
 /// @param[in]    generator      Generator to compute value from
