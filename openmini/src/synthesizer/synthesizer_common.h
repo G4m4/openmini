@@ -38,6 +38,12 @@ int ConvertFloorAsInteger(const float value);
 /// @return True if the value is an integer
 bool IsInteger(const float value);
 
+/// @brief Check if the input value is a multiple of another
+///
+/// @param[in]  value       Value to test
+/// @param[in]  multiple    Multiple to check for
+bool IsMultipleOf(const unsigned int value, const unsigned int multiple);
+
 /// @brief Compute the frequency of a given piano key (A4 = 440Hz)
 float NoteToFrequency(const unsigned int key_number);
 

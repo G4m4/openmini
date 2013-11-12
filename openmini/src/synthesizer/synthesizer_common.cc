@@ -34,6 +34,13 @@ bool IsInteger(const float value) {
   return std::floor(value) == value;
 }
 
+bool IsMultipleOf(const unsigned int value, const unsigned int multiple) {
+  ASSERT(value > 0);
+  ASSERT(multiple > 0);
+
+  return value % multiple == 0;
+}
+
 float NoteToFrequency(const unsigned int key_number) {
   const float exponent((static_cast<float>(key_number) - 49.0f) / 12.0f);
   return std::pow(2.0f, exponent) * 440.0f;
