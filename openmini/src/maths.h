@@ -22,8 +22,7 @@
 #define OPENMINI_SRC_MATHS_H_
 
 #if (_USE_SSE)
-extern "C"
-{
+extern "C" {
 #include <emmintrin.h>
 #include <mmintrin.h>
 }

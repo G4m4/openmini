@@ -106,7 +106,7 @@ class Mixer {
     VcoIterator& operator=(const VcoIterator& right);
 
     Mixer* mixer_;
-    std::array<Vco,kVCOsCount>::iterator iterator_;
+    std::array<Vco, kVCOsCount>::iterator iterator_;
   };
 
  private:

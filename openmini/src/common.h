@@ -33,8 +33,7 @@
 #include "openmini/src/configuration.h"
 
 #if (_USE_SSE)
-extern "C"
-{
+extern "C" {
 #include <xmmintrin.h>
 }
 #endif  // (_USE_SSE)
@@ -135,7 +134,6 @@ static inline void* Allocate(const size_t size) {
 #else  // _USE_SSE
 
   return malloc(size);
-
 #endif  // _USE_SSE
 }
 
@@ -145,7 +143,6 @@ static inline void* Allocate(const size_t size) {
 ///
 /// @param  memory    Pointer to the memory to be deallocated
 static inline void Deallocate(void* memory) {
-
 #if _USE_SSE
 
 #if _COMPILER_MSVC
@@ -160,7 +157,6 @@ static inline void Deallocate(void* memory) {
   free(memory);
 
 #endif  // _USE_SSE
-
 }
 
 }  // namespace openmini
