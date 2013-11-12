@@ -145,10 +145,13 @@ void RingBuffer::Clear(void) {
 void RingBuffer::Resize(const unsigned int capacity) {
   ASSERT(capacity > 0);
 
-  const unsigned int max_fill_count(std::min(size_, capacity));
-  float* temp(static_cast<float*>(Allocate(capacity * sizeof(*data_))));
+  const unsigned int actual_capacity(FindImmediateNextMultiple(capacity,
+                                       openmini::SampleSize));
+  const unsigned int max_fill_count(std::min(size_, actual_capacity));
+  float* temp(static_cast<float*>(Allocate(actual_capacity * sizeof(*data_))));
+  ASSERT(temp != nullptr);
   std::fill(&temp[0],
-            &temp[capacity],
+            &temp[actual_capacity],
             0.0f);
   if (IsGood()) {
     // The current "interesting" part, between both position,
@@ -159,7 +162,7 @@ void RingBuffer::Resize(const unsigned int capacity) {
     Deallocate(data_);
   }
   data_ = temp;
-  capacity_ = capacity;
+  capacity_ = actual_capacity;
   // Remember that the "interesting" part on the previous buffer
   // has been moved to the beginning of the new one !
   writing_position_ = max_fill_count;
