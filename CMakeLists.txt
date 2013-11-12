@@ -152,7 +152,7 @@ if (${OPENMINI_ENABLE_SIMD} STREQUAL "ON")
     add_release_flags("/arch:SSE2")
   endif (${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
 else()
-  add_definitions("-D_DISABLE_SIMD")
+  add_definitions(-D_DISABLE_SIMD)
 endif (${OPENMINI_ENABLE_SIMD} STREQUAL "ON")
 
 # Project-wide warning options
