@@ -129,6 +129,8 @@ function(set_target_mt _TARGET_NAME)
         PARENT_SCOPE)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT"
         PARENT_SCOPE)
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /MT"
+        PARENT_SCOPE)
   endif(${COMPILER_IS_MSVC})
 endfunction(set_target_mt)
 
