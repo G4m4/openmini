@@ -50,10 +50,7 @@ using openmini::Store;
 
 static inline bool IsMaskNull(const Sample& value) {
 #if (_USE_SSE)
-  return GetByIndex<0>(value)
-         + GetByIndex<1>(value)
-         + GetByIndex<2>(value)
-         + GetByIndex<3>(value) == 0.0f;
+  return 0 == _mm_movemask_ps(value);
 #else
   return value == 0.0f;
 #endif
