@@ -111,3 +111,22 @@ TEST(Synthesizer, SynthesizerSmallBlockSize) {
   // Not testing the first sample!
   EXPECT_FALSE(ClickWasFound(&data[1], data.size(), kEpsilon));
 }
+
+/// @brief Process a fixed amount of data without changing anything
+/// to default parameters, only setting a note on
+TEST(Synthesizer, SynthesizerPerf) {
+  std::vector<float> data(openmini::kBlockSize);
+  Synthesizer synth;
+
+  unsigned int sample_idx(0);
+  synth.NoteOn(kMinKeyNote);
+
+  while (sample_idx < kSynthesizerPerfSetSize) {
+    // not storing everything, only creating an "history"
+    synth.ProcessAudio(&data[0], openmini::kBlockSize);
+    sample_idx += openmini::kBlockSize;
+  }
+
+  // No actual test!
+  EXPECT_TRUE(true);
+}
