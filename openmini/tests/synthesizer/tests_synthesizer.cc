@@ -86,6 +86,6 @@ TEST(Synthesizer, SynthesizerReupdate) {
   synth.ProcessAudio(&data[openmini::kBlockSize], openmini::kBlockSize);
 
   // Check for clicks
-  const float kEpsilon(1.05f);
+  const float kEpsilon(1.06f);
   EXPECT_FALSE(ClickWasFound(&data[0], data.size(), kEpsilon));
 }
