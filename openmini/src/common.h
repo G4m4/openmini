@@ -22,11 +22,17 @@
 #define OPENMINI_SRC_COMMON_H_
 
 #include <malloc.h>
-#include <xmmintrin.h>
 
 #include <cassert>
 
 #include "openmini/src/configuration.h"
+
+#if (_USE_SSE)
+extern "C"
+{
+#include <xmmintrin.h>
+}
+#endif  // (_USE_SSE)
 
 namespace openmini {
 
