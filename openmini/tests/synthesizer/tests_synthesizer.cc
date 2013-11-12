@@ -89,3 +89,25 @@ TEST(Synthesizer, SynthesizerReupdate) {
   const float kEpsilon(1.06f);
   EXPECT_FALSE(ClickWasFound(&data[0], data.size(), kEpsilon));
 }
+
+/// @brief Asking the synthesizer for small block size
+/// (not being a multiple of a sample size)
+/// The generated sound should stay OK
+TEST(Synthesizer, SynthesizerSmallBlockSize) {
+  std::vector<float> data(kDataTestSetSize);
+  const unsigned int kBlockSize(openmini::SampleSize * 2 - 1);
+  Synthesizer synth;
+
+  unsigned int sample_idx(0);
+  synth.NoteOn(kMinKeyNote);
+
+  while (sample_idx < kDataTestSetSize - kBlockSize) {
+    synth.ProcessAudio(&data[sample_idx], kBlockSize);
+    sample_idx += kBlockSize;
+  }
+
+  // Check for clicks
+  const float kEpsilon(1.06f);
+  // Not testing the first sample!
+  EXPECT_FALSE(ClickWasFound(&data[1], data.size(), kEpsilon));
+}
