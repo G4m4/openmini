@@ -113,12 +113,27 @@ TEST(Synthesizer, SynthesizerSmallBlockSize) {
   // Not testing the first sample!
   EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
 }
+
+/// @brief Asking the synthesizer for various block size over time
+/// The generated sound should stay OK
+TEST(Synthesizer, SynthesizerVaryingBlockSize) {
+  std::vector<float> data(kDataTestSetSize);
+  Synthesizer synth;
+
+  synth.NoteOn(kMinKeyNote);
+
+  unsigned int data_idx(0);
+  while (data_idx < data.size()) {
+    const unsigned int kBlockSize(GeneratorRangedInteger(1,
+                                    data.size() - data_idx)());
+    synth.ProcessAudio(&data[data_idx], kBlockSize);
+    data_idx += kBlockSize;
   }
 
   // Check for clicks
   const float kEpsilon(1.06f);
   // Not testing the first sample!
-  EXPECT_FALSE(ClickWasFound(&data[1], data.size(), kEpsilon));
+  EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
 }
 
 /// @brief Process a fixed amount of data without changing anything
