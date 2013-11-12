@@ -60,7 +60,7 @@ void Vco::SetWaveform(const Waveform::Type value) {
   if (value != waveform_) {
     generators::Generator_Base* temp = generators::CreateGenerator(value,
                                                                    generator_);
-    delete generator_;
+    generators::DestroyGenerator(generator_);
     generator_ = temp;
     waveform_ = value;
     // Process parameters!
