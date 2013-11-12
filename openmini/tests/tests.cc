@@ -104,14 +104,3 @@ bool ClickWasFound(const float* buffer,
 
   return false;
 }
-
-int FindImmediateNextMultiple(const int input,
-                              const int multiple) {
-  ASSERT(multiple != 0);
-  ASSERT(input != 0);
-  const int remainder(input % multiple);
-  if (0 == remainder) {
-    return input;
-  }
-  return input + multiple - remainder;
-}

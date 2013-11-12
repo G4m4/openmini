@@ -106,6 +106,7 @@ using openmini::IGNORE;
 using openmini::kMinKeyNote;
 using openmini::kMaxKeyNote;
 using openmini::synthesizer::NoteToFrequency;
+using openmini::synthesizer::FindImmediateNextMultiple;
 
 static const unsigned int kDataTestSetSize(32768);
 static const unsigned int kIterations(16);
@@ -264,12 +265,5 @@ int ComputeZeroCrossing(TypeGenerator& generator, const unsigned int length) {
 bool ClickWasFound(const float* buffer,
                    const unsigned int length,
                    const float epsilon);
-
-/// @brief Find the smallest multiple bigger than the given number
-///
-/// @param[in]   input     Number to be rounded from
-/// @param[in]   multiple  Multiple to be rounded to
-int FindImmediateNextMultiple(const int input,
-                              const int multiple);
 
 #endif  // OPENMINI_TESTS_TESTS_H_

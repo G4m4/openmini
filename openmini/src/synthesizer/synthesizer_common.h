@@ -47,6 +47,13 @@ bool IsMultipleOf(const unsigned int value, const unsigned int multiple);
 /// @brief Compute the frequency of a given piano key (A4 = 440Hz)
 float NoteToFrequency(const unsigned int key_number);
 
+/// @brief Find the smallest multiple bigger than the given number
+///
+/// @param[in]   input     Number to be rounded from
+/// @param[in]   multiple  Multiple to be rounded to
+unsigned int FindImmediateNextMultiple(const unsigned int input,
+                                       const unsigned int multiple);
+
 }  // namespace synthesizer
 }  // namespace openmini
 
