@@ -25,12 +25,17 @@
 
 #include "openmini/src/synthesizer/mixer.h"
 #include "openmini/src/synthesizer/parameters.h"
+#include "openmini/src/synthesizer/synthesizer_common.h"
 
 namespace openmini {
 namespace synthesizer {
 
+/// @brief Default (on startup) expected block size
+static const unsigned int kDefaultBlockSize(512);
+
 Synthesizer::Synthesizer()
-    : ParametersManager() {
+    : ParametersManager(),
+      buffer_(kDefaultBlockSize) {
   // Nothing to do here for now
 }
 
@@ -42,7 +47,18 @@ void Synthesizer::ProcessAudio(float* const output,
   // First, zeroing the output
   std::fill(&output[0], &output[length], 0.0f);
   ProcessParameters();
-  mixer_.ProcessAudio(output, length);
+
+  // Resizing the buffer if need be
+  if (buffer_.capacity() < length) {
+    buffer_.Resize(length);
+  }
+
+  // Actual amount of data to synthesize:
+  // closest multiple of SampleSize >= (required - existing)
+  while (buffer_.size() < length) {
+    buffer_.Push(mixer_());
+  }
+  buffer_.Pop(output, length);
 }
 
 void Synthesizer::NoteOn(const unsigned int note) {

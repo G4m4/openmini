@@ -23,6 +23,7 @@
 
 #include "openmini/src/synthesizer/mixer.h"
 #include "openmini/src/synthesizer/parameter_manager.h"
+#include "openmini/src/synthesizer/ringbuffer.h"
 
 namespace openmini {
 namespace synthesizer {
@@ -61,6 +62,7 @@ class Synthesizer : public ParametersManager {
 
  private:
   Mixer mixer_;  ///< Mixer object for VCOs management
+  RingBuffer buffer_;  ///< RingBuffer object for generated audio bufferization
 };
 
 }  // namespace synthesizer
