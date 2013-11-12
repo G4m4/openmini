@@ -21,11 +21,13 @@
 #ifndef OPENMINI_SRC_MATHS_H_
 #define OPENMINI_SRC_MATHS_H_
 
+#if (_USE_SSE)
 extern "C"
 {
 #include <emmintrin.h>
 #include <mmintrin.h>
 }
+#endif  // (_USE_SSE)
 
 #include <cmath>
 
