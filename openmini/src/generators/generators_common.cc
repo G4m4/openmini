@@ -30,7 +30,7 @@ namespace generators {
 
 PhaseAccumulator::PhaseAccumulator(const float phase)
     : Generator_Base(phase),
-      phase_(Fill(0.0f)),
+      phase_(Fill(phase)),
       increment_(Fill(0.0f)) {
   ASSERT(phase <= 1.0f);
   ASSERT(phase >= -1.0f);
@@ -48,7 +48,7 @@ void PhaseAccumulator::SetPhase(const float phase) {
   ASSERT(phase >= -1.0f);
   // If we are not sure, we can use the following:
   // phase_ = Wrap(phase);
-  phase_ = Fill(phase);
+  phase_ = FillIncremental(phase, GetByIndex<0>(increment_));
 }
 
 void PhaseAccumulator::SetFrequency(const float frequency) {
@@ -57,7 +57,7 @@ void PhaseAccumulator::SetFrequency(const float frequency) {
 
   const float base_increment(2.0f * frequency);
   increment_ = FillOnLength(base_increment);
-  phase_ = FillIncremental(0.0f, base_increment);
+  phase_ = FillIncremental(Phase(), base_increment);
 }
 
 float PhaseAccumulator::Phase(void) const {
