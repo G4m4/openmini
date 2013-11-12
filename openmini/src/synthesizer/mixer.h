@@ -21,6 +21,8 @@
 #ifndef OPENMINI_SRC_SYNTHESIZER_MIXER_H_
 #define OPENMINI_SRC_SYNTHESIZER_MIXER_H_
 
+#include <array>
+
 #include "openmini/src/common.h"
 #include "openmini/src/synthesizer/vco.h"
 
@@ -104,11 +106,11 @@ class Mixer {
     VcoIterator& operator=(const VcoIterator& right);
 
     Mixer* mixer_;
-    int index_;
+    std::array<Vco,kVCOsCount>::iterator iterator_;
   };
 
  private:
-  Vco vcos_[kVCOsCount];  ///< List of VCOs
+  std::array<Vco, kVCOsCount> vcos_;  ///< List of VCOs
   bool active_;
   friend class VcoIterator;
 };

@@ -83,21 +83,21 @@ void Mixer::SetWaveform(const int vco_id, const Waveform::Type value) {
 
 Mixer::VcoIterator::VcoIterator(Mixer* mixer_to_iterate)
     : mixer_(mixer_to_iterate),
-      index_(0) {
+      iterator_(mixer_to_iterate->vcos_.begin()) {
   // Nothing to do here
 }
 
 bool Mixer::VcoIterator::Next() {
-  if (index_ >= kVCOsCount - 1) {
-    return false;
-  } else {
-    index_ += 1;
+  ++iterator_;
+  if (iterator_ != mixer_->vcos_.end()) {
     return true;
+  } else {
+    return false;
   }
 }
 
 Vco& Mixer::VcoIterator::GetVco() const {
-  return mixer_->vcos_[index_];
+  return *iterator_;
 }
 
 }  // namespace synthesizer
