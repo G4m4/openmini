@@ -1,0 +1,185 @@
+/// @filename ringbuffer.cc
+/// @brief Implementation of a simple resizable ringbuffer
+/// @author gm
+/// @copyright gm 2013
+///
+/// This file is part of OpenMini
+///
+/// OpenMini is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// OpenMini is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
+
+// std::fill, std::copy, std::min, std::max
+#include <algorithm>
+
+#include "openmini/src/maths.h"
+#include "openmini/src/synthesizer/ringbuffer.h"
+#include "openmini/src/synthesizer/synthesizer_common.h"
+
+namespace openmini {
+namespace synthesizer {
+
+RingBuffer::RingBuffer(const unsigned int capacity)
+    : data_(nullptr),
+      capacity_(FindImmediateNextMultiple(capacity, openmini::SampleSize)),
+      size_(0),
+      writing_position_(0),
+      reading_position_(0) {
+  ASSERT(capacity >= 0);
+  if (capacity > 0) {
+    data_ = static_cast<float*>(Allocate(capacity_ * sizeof(*data_)));
+    std::fill(&data_[0],
+              &data_[capacity_],
+              0.0f);
+  }
+}
+
+RingBuffer::~RingBuffer() {
+  Deallocate(data_);
+}
+
+void RingBuffer::Pop(float* dest, const unsigned int count) {
+  ASSERT(IsGood());
+  ASSERT(count > 0);
+
+  // Is zero padding required ?
+  // Using "ints" here cause count may be < size, or the opposite
+  const unsigned int zeropadding_count(static_cast<unsigned int>(
+    (std::max(static_cast<int>(count - size_), 0))));
+  // Actual elements count to be copied
+  const unsigned int copy_count(count - zeropadding_count);
+  // If data needs to be copied...(e.g. ringbuffer size > 0)
+  if (copy_count > 0) {
+    // Length of the "right" part: from reading cursor to the buffer end
+    const unsigned int right_part_size(std::min(capacity_ - reading_position_,
+                                       copy_count));
+    // Length of the "left" part: from the buffer beginning
+    // to the last element to be copied
+    const unsigned int left_part_size(copy_count - right_part_size);
+
+    //  Copying the first part
+    std::copy(&data_[reading_position_],
+              &data_[reading_position_ + right_part_size],
+              &dest[0]);
+    if (0 != left_part_size) {
+      //  copy the second part (if there is one)
+      std::copy(&data_[0],
+                &data_[left_part_size],
+                &dest[right_part_size]);
+    }
+
+    reading_position_ += copy_count;
+    reading_position_ = reading_position_ % capacity_;
+
+    size_ -= copy_count;
+  }  // If data needs to be copied...
+  // Zero-padding
+  if (zeropadding_count) {
+    std::fill(&dest[copy_count],
+              &dest[copy_count + zeropadding_count],
+              0.0f);
+  }
+}
+
+void RingBuffer::Push(const float* const src, const unsigned int count) {
+  ASSERT(IsGood());
+  ASSERT(count > 0);
+
+  ASSERT(count <= capacity() - size());
+  // Length of the "right" part: from writing cursor to the buffer end
+  const unsigned int right_part_size(std::min(capacity_ - writing_position_,
+                                              count));
+  // Length of the "left" part: from the buffer beginning
+  // to the last element to be pushed
+  const unsigned int left_part_size(count - right_part_size);
+
+  //  Copying the first part
+  std::copy(&src[0],
+            &src[right_part_size],
+            &data_[writing_position_]);
+  if (0 != left_part_size) {
+    //  copy the second part (if there is one)
+    std::copy(&src[right_part_size],
+              &src[right_part_size + left_part_size],
+              &data_[0]);
+  }
+
+  writing_position_ += count;
+  writing_position_ = writing_position_ % capacity_;
+
+  size_ += count;
+}
+
+void RingBuffer::Push(const Sample& value) {
+  ASSERT(IsGood());
+  ASSERT(capacity_ - writing_position_ >= openmini::SampleSize);
+  ASSERT(IsMultipleOf(writing_position_, openmini::SampleSize));
+
+  Store(&data_[writing_position_], value);
+
+  writing_position_ += openmini::SampleSize;
+  writing_position_ = writing_position_ % capacity_;
+  size_ += openmini::SampleSize;
+}
+
+void RingBuffer::Clear(void) {
+  writing_position_ = 0;
+  reading_position_ = 0;
+  size_ = 0;
+  if (IsGood()) {
+    std::fill(&data_[0],
+              &data_[capacity_],
+              0.0f);
+  }
+}
+
+void RingBuffer::Resize(const unsigned int capacity) {
+  ASSERT(capacity > 0);
+
+  const unsigned int max_fill_count(std::min(size_, capacity));
+  float* temp(static_cast<float*>(Allocate(capacity * sizeof(*data_))));
+  std::fill(&temp[0],
+            &temp[capacity],
+            0.0f);
+  if (IsGood()) {
+    // The current "interesting" part, between both position,
+    // is copied to the new buffer beginning
+    std::copy(&data_[reading_position_],
+              &data_[reading_position_ + max_fill_count],
+              &temp[0]);
+    Deallocate(data_);
+  }
+  data_ = temp;
+  capacity_ = capacity;
+  // Remember that the "interesting" part on the previous buffer
+  // has been moved to the beginning of the new one !
+  writing_position_ = max_fill_count;
+  reading_position_ = 0;
+  size_ = max_fill_count;
+}
+
+bool RingBuffer::IsGood(void) const {
+  return (data_ != nullptr);
+}
+
+unsigned int RingBuffer::capacity(void) const {
+  ASSERT(IsGood());
+  return capacity_;
+}
+
+unsigned int RingBuffer::size(void) const {
+  ASSERT(IsGood());
+  return size_;
+}
+
+}  // namespace synthesizer
+}  // namespace openmini
