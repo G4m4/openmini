@@ -32,7 +32,8 @@ PhaseAccumulator::PhaseAccumulator(const float phase)
     : Generator_Base(phase),
       phase_(Fill(0.0f)),
       increment_(Fill(0.0f)) {
-  // Nothing to do here for now
+  ASSERT(phase <= 1.0f);
+  ASSERT(phase >= -1.0f);
 }
 
 Sample PhaseAccumulator::operator()(void) {
@@ -83,7 +84,8 @@ OnePoleFilter::OnePoleFilter(const double b0, const double b1)
     : b0_(b0),
       b1_(b1),
       last_(0.0f) {
-  // Nothing to do here
+  // Check for filter stability
+  ASSERT(std::fabs(b1) < 1.0f);
 }
 
 float OnePoleFilter::operator()(const float input) {

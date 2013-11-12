@@ -33,14 +33,18 @@ Vco::Vco()
     frequency_(0.0f),
     waveform_(Waveform::kTriangle),
     update_(false) {
-  // Nothing to do here for now
+  ASSERT(generator_ != nullptr);
 }
 
 Vco::~Vco() {
+  ASSERT(generator_ != nullptr);
   generators::DestroyGenerator(generator_);
 }
 
 void Vco::SetFrequency(const float frequency) {
+  ASSERT(frequency > 0.0f);
+  ASSERT(frequency < openmini::kSamplingRateHalf);
+
   if (frequency != frequency_) {
     frequency_ = frequency;
     update_ = true;
@@ -60,6 +64,7 @@ void Vco::SetWaveform(const Waveform::Type value) {
   if (value != waveform_) {
     generators::Generator_Base* temp = generators::CreateGenerator(value,
                                                                    generator_);
+    ASSERT(temp != nullptr);
     generators::DestroyGenerator(generator_);
     generator_ = temp;
     waveform_ = value;
@@ -69,11 +74,13 @@ void Vco::SetWaveform(const Waveform::Type value) {
 }
 
 Sample Vco::operator()(void) {
+  ASSERT(generator_ != nullptr);
   ProcessParameters();
   return openmini::MulConst(volume_, (*generator_)());
 }
 
 void Vco::ProcessParameters(void) {
+  ASSERT(generator_ != nullptr);
   if (update_) {
     const float normalized_freq(frequency_ / openmini::kSamplingRate);
     generator_->SetFrequency(normalized_freq);

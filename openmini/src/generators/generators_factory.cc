@@ -32,6 +32,8 @@ Generator_Base* CreateGenerator(const Waveform::Type waveform,
   float phase(0.0f);
   if (previous) {
     phase = previous->Phase();
+    ASSERT(phase <= 1.0f);
+    ASSERT(phase >= -1.0f);
   }
   switch (waveform) {
     case(Waveform::kTriangle): {
@@ -50,6 +52,8 @@ Generator_Base* CreateGenerator(const Waveform::Type waveform,
 }
 
 void DestroyGenerator(Generator_Base* generator) {
+  ASSERT(generator != nullptr);
+
   generator->~Generator_Base();
   Deallocate(generator);
 }

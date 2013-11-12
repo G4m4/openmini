@@ -37,6 +37,10 @@ Mixer::~Mixer() {
 }
 
 void Mixer::ProcessAudio(float* const output, const int length) {
+  ASSERT(output != nullptr);
+  ASSERT(length > 0);
+  ASSERT(IsMultipleOf(length, openmini::SampleSize));
+
   if (active_) {
     float* current_sample(output);
     const float* end_sample(output + length);
@@ -53,6 +57,9 @@ void Mixer::ProcessAudio(float* const output, const int length) {
 }
 
 void Mixer::NoteOn(const int note) {
+  ASSERT(note >= openmini::kMinKeyNote);
+  ASSERT(note <= openmini::kMaxKeyNote);
+
   const float frequency(NoteToFrequency(note));
   VcoIterator iter(this);
   do {
@@ -62,6 +69,9 @@ void Mixer::NoteOn(const int note) {
 }
 
 void Mixer::NoteOff(const int note) {
+  ASSERT(note >= openmini::kMinKeyNote);
+  ASSERT(note <= openmini::kMaxKeyNote);
+
   active_ = false;
 }
 
@@ -84,7 +94,7 @@ void Mixer::SetWaveform(const int vco_id, const Waveform::Type value) {
 Mixer::VcoIterator::VcoIterator(Mixer* mixer_to_iterate)
     : mixer_(mixer_to_iterate),
       iterator_(mixer_to_iterate->vcos_.begin()) {
-  // Nothing to do here
+  ASSERT(mixer_ != nullptr);
 }
 
 bool Mixer::VcoIterator::Next() {

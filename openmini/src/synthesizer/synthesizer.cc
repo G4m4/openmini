@@ -36,6 +36,9 @@ Synthesizer::Synthesizer()
 
 void Synthesizer::ProcessAudio(float* const output,
                                const unsigned int length) {
+  ASSERT(output != nullptr);
+  ASSERT(length > 0);
+
   // First, zeroing the output
   std::fill(&output[0], &output[length], 0.0f);
   ProcessParameters();
@@ -43,10 +46,16 @@ void Synthesizer::ProcessAudio(float* const output,
 }
 
 void Synthesizer::NoteOn(const int note) {
+  ASSERT(note >= openmini::kMinKeyNote);
+  ASSERT(note <= openmini::kMaxKeyNote);
+
   mixer_.NoteOn(note);
 }
 
 void Synthesizer::NoteOff(const int note) {
+  ASSERT(note >= openmini::kMinKeyNote);
+  ASSERT(note <= openmini::kMaxKeyNote);
+
   mixer_.NoteOff(note);
 }
 

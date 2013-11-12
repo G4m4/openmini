@@ -31,7 +31,8 @@ TriangleDPW::TriangleDPW(const float phase)
       sawtooth_gen_(),
       differentiator_(),
       normalization_factor_(0.0f) {
-  // Nothing to do here for now
+  ASSERT(phase <= 1.0f);
+  ASSERT(phase >= -1.0f);
 }
 
 Sample TriangleDPW::operator()(void) {

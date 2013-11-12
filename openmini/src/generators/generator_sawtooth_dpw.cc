@@ -28,7 +28,8 @@ namespace generators {
 
 SawtoothDPW::SawtoothDPW(const float phase)
     : TriangleDPW(phase) {
-  // Nothing to do here for now
+  ASSERT(phase <= 1.0f);
+  ASSERT(phase >= -1.0f);
 }
 
 Sample SawtoothDPW::operator()(void) {
