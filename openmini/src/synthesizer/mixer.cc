@@ -36,7 +36,7 @@ Mixer::~Mixer() {
   // Nothing to do here for now
 }
 
-void Mixer::ProcessAudio(float* const output, const int length) {
+void Mixer::ProcessAudio(float* const output, const unsigned int length) {
   ASSERT(output != nullptr);
   ASSERT(length > 0);
   ASSERT(IsMultipleOf(length, openmini::SampleSize));
@@ -56,7 +56,7 @@ void Mixer::ProcessAudio(float* const output, const int length) {
   }
 }
 
-void Mixer::NoteOn(const int note) {
+void Mixer::NoteOn(const unsigned int note) {
   ASSERT(note >= openmini::kMinKeyNote);
   ASSERT(note <= openmini::kMaxKeyNote);
 
@@ -68,7 +68,7 @@ void Mixer::NoteOn(const int note) {
   active_ = true;
 }
 
-void Mixer::NoteOff(const int note) {
+void Mixer::NoteOff(const unsigned int note) {
   ASSERT(note >= openmini::kMinKeyNote);
   ASSERT(note <= openmini::kMaxKeyNote);
 

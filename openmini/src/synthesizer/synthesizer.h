@@ -44,14 +44,14 @@ class Synthesizer : public ParametersManager {
   /// The note must be within the allowed range [kMinKeyNote ; kMaxKeyNote]
   ///
   /// @param[in]    note      Note to trig
-  void NoteOn(const int note);
+  void NoteOn(const unsigned int note);
 
   /// @brief Stop the given note ID
   ///
   /// The note must be within the allowed range [kMinKeyNote ; kMaxKeyNote]
   ///
   /// @param[in]    note      Note to stop
-  void NoteOff(const int note);
+  void NoteOff(const unsigned int note);
 
  protected:
   /// @brief Asynchronous parameters update

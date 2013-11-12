@@ -50,21 +50,21 @@ class Mixer {
   /// Note that the buffer size is fixed: @see kBlockSize
   ///
   /// @param[out]    output    Output buffer to write into
-  void ProcessAudio(float* const output, const int length);
+  void ProcessAudio(float* const output, const unsigned int length);
 
   /// @brief Trigger the given note ID on
   ///
   /// The note must be within the allowed range [kMinKeyNote ; kMaxKeyNote]
   ///
   /// @param[in]    note      Note to trig
-  void NoteOn(const int note);
+  void NoteOn(const unsigned int note);
 
   /// @brief Stop the given note ID
   ///
   /// The note must be within the allowed range [kMinKeyNote ; kMaxKeyNote]
   ///
   /// @param[in]    note      Note to stop
-  void NoteOff(const int note);
+  void NoteOff(const unsigned int note);
 
   /// @brief Set the VCO whose ID is given to the given volume
   ///

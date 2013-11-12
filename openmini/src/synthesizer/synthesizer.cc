@@ -45,14 +45,14 @@ void Synthesizer::ProcessAudio(float* const output,
   mixer_.ProcessAudio(output, length);
 }
 
-void Synthesizer::NoteOn(const int note) {
+void Synthesizer::NoteOn(const unsigned int note) {
   ASSERT(note >= openmini::kMinKeyNote);
   ASSERT(note <= openmini::kMaxKeyNote);
 
   mixer_.NoteOn(note);
 }
 
-void Synthesizer::NoteOff(const int note) {
+void Synthesizer::NoteOff(const unsigned int note) {
   ASSERT(note >= openmini::kMinKeyNote);
   ASSERT(note <= openmini::kMaxKeyNote);
 
