@@ -35,7 +35,6 @@ bool IsInteger(const float value) {
 }
 
 bool IsMultipleOf(const unsigned int value, const unsigned int multiple) {
-  ASSERT(value > 0);
   ASSERT(multiple > 0);
 
   return value % multiple == 0;
