@@ -123,6 +123,7 @@ static inline void* Allocate(const size_t size) {
     // Posix stuff
     void* memory(nullptr);
     posix_memalign(&memory, SampleSizeBytes, size);
+    ASSERT(memory != nullptr);
     return memory;
   #else
     return aligned_alloc(SampleSizeBytes, size);

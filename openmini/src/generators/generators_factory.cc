@@ -38,10 +38,12 @@ Generator_Base* CreateGenerator(const Waveform::Type waveform,
   switch (waveform) {
     case(Waveform::kTriangle): {
       void* ptr(Allocate(sizeof(TriangleDPW)));
+      ASSERT(ptr != nullptr);
       return new (ptr) TriangleDPW(phase);
     }
     case(Waveform::kSawtooth): {
       void* ptr(Allocate(sizeof(SawtoothDPW)));
+      ASSERT(ptr != nullptr);
       return new (ptr) SawtoothDPW(phase);
     }
     default: {
