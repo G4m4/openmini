@@ -36,24 +36,15 @@ Mixer::~Mixer() {
   // Nothing to do here for now
 }
 
-void Mixer::ProcessAudio(float* const output, const unsigned int length) {
-  ASSERT(output != nullptr);
-  ASSERT(length > 0);
-  ASSERT(IsMultipleOf(length, openmini::SampleSize));
-
+Sample Mixer::operator()(void) {
+  Sample output(Fill(0.0f));
   if (active_) {
-    float* current_sample(output);
-    const float* end_sample(output + length);
-    while (current_sample < end_sample) {
-      VcoIterator iter(this);
-      Sample temp(openmini::Fill(0.0f));
-      do {
-        temp = Add(temp, iter.GetVco()());
-      } while (iter.Next());
-      Store(current_sample, temp);
-      current_sample += openmini::SampleSize;
-    }
+    VcoIterator iter(this);
+    do {
+      output = Add(output, iter.GetVco()());
+    } while (iter.Next());
   }
+  return output;
 }
 
 void Mixer::NoteOn(const unsigned int note) {

@@ -50,7 +50,7 @@ class Mixer {
   /// Note that the buffer size is fixed: @see kBlockSize
   ///
   /// @param[out]    output    Output buffer to write into
-  void ProcessAudio(float* const output, const unsigned int length);
+  Sample operator()(void);
 
   /// @brief Trigger the given note ID on
   ///
