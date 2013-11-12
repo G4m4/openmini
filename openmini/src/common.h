@@ -149,15 +149,15 @@ static inline void Deallocate(void* memory) {
 #if _USE_SSE
 
 #if _COMPILER_MSVC
-  return _aligned_free(memory);
+  _aligned_free(memory);
 #else
   // C11
-  return free(memory);
+  free(memory);
 #endif
 
 #else  // _USE_SSE
 
-  return free(memory);
+  free(memory);
 
 #endif  // _USE_SSE
 
