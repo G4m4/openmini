@@ -31,7 +31,8 @@
 /// @brief Plugin "processor" class
 ///
 /// Contains all audio, presets and Midi stuff
-class OpenMiniAudioProcessor  : public AudioProcessor {
+class OpenMiniAudioProcessor  : public AudioProcessor,
+                                public juce::ChangeBroadcaster {
  public:
   OpenMiniAudioProcessor();
   ~OpenMiniAudioProcessor();
@@ -72,6 +73,9 @@ class OpenMiniAudioProcessor  : public AudioProcessor {
 
   void getStateInformation(MemoryBlock& destData);
   void setStateInformation(const void* data, int sizeInBytes);
+
+  // Overrides from inherited classes
+  void addChangeListener(juce::ChangeListener* listener);
 
   void triggerNoteOn(const int midi_note);
   void triggerNoteOff(const int midi_note);

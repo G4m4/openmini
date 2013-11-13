@@ -36,6 +36,7 @@ static const int kMainWindowSizeY(768);
 ///
 /// Contains all UI and user control stuff
 class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
+                                     public juce::ChangeListener,
                                      public juce::Slider::Listener {
  public:
   explicit OpenMiniAudioProcessorEditor(OpenMiniAudioProcessor* owner);
@@ -45,6 +46,7 @@ class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
 
   // Overrides from inherited classes
   void sliderValueChanged(juce::Slider* slider);
+  void changeListenerCallback(juce::ChangeBroadcaster *source);
 
  private:
   /// @brief Retrieve an access to the audio processor

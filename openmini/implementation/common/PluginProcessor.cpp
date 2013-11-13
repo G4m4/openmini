@@ -47,6 +47,8 @@ float OpenMiniAudioProcessor::getParameter(int index) {
 
 void OpenMiniAudioProcessor::setParameter(int index, float newValue) {
   synth_.SetValue(index, newValue);
+  // Inform UI of any change
+  sendChangeMessage();
 }
 
 const juce::String OpenMiniAudioProcessor::getParameterName(int index) {
@@ -120,8 +122,8 @@ void OpenMiniAudioProcessor::changeProgramName(int index,
 
 void OpenMiniAudioProcessor::prepareToPlay(double sampleRate,
                                            int samplesPerBlock) {
-  // Use this method as the place to do any pre-playback
-  // initialisation that you need..
+  // Notify UI of the last changes
+  sendChangeMessage();
 }
 
 void OpenMiniAudioProcessor::releaseResources() {
@@ -174,6 +176,14 @@ void OpenMiniAudioProcessor::getStateInformation(juce::MemoryBlock& destData) {
 
 void OpenMiniAudioProcessor::setStateInformation(const void* data,
                                                  int sizeInBytes) {
+}
+
+void OpenMiniAudioProcessor::addChangeListener(
+    juce::ChangeListener* listener) {
+  // Call parent method
+  ChangeBroadcaster::addChangeListener(listener);
+  // Update newly added listener
+  sendChangeMessage();
 }
 
 void OpenMiniAudioProcessor::triggerNoteOn(const int midi_note) {

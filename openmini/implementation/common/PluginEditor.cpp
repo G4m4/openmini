@@ -77,11 +77,14 @@ OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
   osc1_volume_.addListener(this);
   osc2_volume_.addListener(this);
   osc3_volume_.addListener(this);
+
+  getProcessor()->addChangeListener(this);
   // This is where our plugin's editor size is set.
   setSize(kMainWindowSizeX, kMainWindowSizeY);
 }
 
 OpenMiniAudioProcessorEditor::~OpenMiniAudioProcessorEditor() {
+  getProcessor()->removeChangeListener(this);
 }
 
 void OpenMiniAudioProcessorEditor::paint(juce::Graphics& g) {
@@ -112,6 +115,28 @@ void OpenMiniAudioProcessorEditor::sliderValueChanged(juce::Slider* slider) {
   } else if (slider == &osc3_volume_) {
     getProcessor()->setParameterNotifyingHost(kOsc3Volume, value);
   }
+}
+
+void OpenMiniAudioProcessorEditor::changeListenerCallback(
+    juce::ChangeBroadcaster *source) {
+  OpenMiniAudioProcessor* proc(getProcessor());
+  // No other change broacaster than the processor for now!
+  ASSERT(source == proc);
+  // Update UI components without sending back
+  // notifications to the processor
+  // TODO: Make this generic
+  osc1_waveform_.setValue(proc->getParameter(kOsc1Waveform),
+                          juce::dontSendNotification);
+  osc2_waveform_.setValue(proc->getParameter(kOsc2Waveform),
+                          juce::dontSendNotification);
+  osc3_waveform_.setValue(proc->getParameter(kOsc3Waveform),
+                          juce::dontSendNotification);
+  osc1_volume_.setValue(proc->getParameter(kOsc1Volume),
+                        juce::dontSendNotification);
+  osc2_volume_.setValue(proc->getParameter(kOsc2Volume),
+                        juce::dontSendNotification);
+  osc3_volume_.setValue(proc->getParameter(kOsc3Volume),
+                        juce::dontSendNotification);
 }
 
 OpenMiniAudioProcessor* OpenMiniAudioProcessorEditor::getProcessor() const {
