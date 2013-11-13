@@ -5,10 +5,16 @@ include_directories(
 )
 
 # Retrieve source files from subdirectories
+add_subdirectory(filters)
 add_subdirectory(generators)
 add_subdirectory(synthesizer)
 
 # Group sources
+source_group("filters"
+  FILES
+  ${OPENMINI_FILTERS_SRC}
+  ${OPENMINI_FILTERS_HDR}
+)
 source_group("generators"
   FILES
   ${OPENMINI_GENERATORS_SRC}
@@ -22,6 +28,7 @@ source_group("synthesizer"
 
 # Sources
 set(OPENMINI_SRC
+  ${OPENMINI_FILTERS_SRC}
   ${OPENMINI_GENERATORS_SRC}
   ${OPENMINI_SYNTHESIZER_SRC}
 )
@@ -29,6 +36,7 @@ set(OPENMINI_HDR
   configuration.h
   common.h
   maths.h
+  ${OPENMINI_FILTERS_HDR}
   ${OPENMINI_GENERATORS_HDR}
   ${OPENMINI_SYNTHESIZER_HDR}
 )
