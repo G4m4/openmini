@@ -21,7 +21,7 @@
 #include "openmini/src/synthesizer/vco.h"
 
 #include "openmini/src/generators/generator_base.h"
-#include "openmini/src/generators/generators_factory.h"
+#include "openmini/src/generators/factory.h"
 
 namespace openmini {
 namespace synthesizer {
