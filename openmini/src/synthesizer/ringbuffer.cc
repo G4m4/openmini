@@ -122,7 +122,6 @@ void RingBuffer::Push(const float* const src, const unsigned int count) {
 void RingBuffer::Push(const Sample& value) {
   ASSERT(IsGood());
   ASSERT(capacity_ - writing_position_ >= openmini::SampleSize);
-  ASSERT(IsMultipleOf(writing_position_, openmini::SampleSize));
 
   Store(&data_[writing_position_], value);
 
@@ -146,7 +145,11 @@ void RingBuffer::Resize(const unsigned int capacity) {
   ASSERT(capacity > 0);
 
   const unsigned int actual_capacity(FindImmediateNextMultiple(capacity,
-                                       openmini::SampleSize));
+                                     openmini::SampleSize)
+  // This is the offset required in order to make future left space
+  // a multiple of SampleSize.
+  // E.g., IsMultiple(future capacity - currently filled data, SampleSize)
+    + GetOffsetFromNextMultiple(size_, openmini::SampleSize));
   const unsigned int max_fill_count(std::min(size_, actual_capacity));
   float* temp(static_cast<float*>(Allocate(actual_capacity * sizeof(*data_))));
   ASSERT(temp != nullptr);
