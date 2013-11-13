@@ -56,5 +56,10 @@ unsigned int FindImmediateNextMultiple(const unsigned int input,
   return input + multiple - remainder;
 }
 
+unsigned int GetOffsetFromNextMultiple(const unsigned int input,
+                                       const unsigned int multiple) {
+  return input % multiple;
+}
+
 }  // namespace synthesizer
 }  // namespace openmini

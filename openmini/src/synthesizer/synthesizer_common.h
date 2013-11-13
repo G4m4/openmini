@@ -54,6 +54,14 @@ float NoteToFrequency(const unsigned int key_number);
 unsigned int FindImmediateNextMultiple(const unsigned int input,
                                        const unsigned int multiple);
 
+/// @brief Find the offset to add to the number to get it to the next
+/// immediate multiple
+///
+/// @param[in]   input     Number to be rounded from
+/// @param[in]   multiple  Multiple to be rounded to
+unsigned int GetOffsetFromNextMultiple(const unsigned int input,
+                                       const unsigned int multiple);
+
 }  // namespace synthesizer
 }  // namespace openmini
 
