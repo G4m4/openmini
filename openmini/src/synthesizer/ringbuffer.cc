@@ -34,13 +34,11 @@ RingBuffer::RingBuffer(const unsigned int capacity)
       size_(0),
       writing_position_(0),
       reading_position_(0) {
-  ASSERT(capacity >= 0);
-  if (capacity > 0) {
-    data_ = static_cast<float*>(Allocate(capacity_ * sizeof(*data_)));
-    std::fill(&data_[0],
-              &data_[capacity_],
-              0.0f);
-  }
+  ASSERT(capacity > 0);
+  data_ = static_cast<float*>(Allocate(capacity_ * sizeof(*data_)));
+  std::fill(&data_[0],
+            &data_[capacity_],
+            0.0f);
 }
 
 RingBuffer::~RingBuffer() {
