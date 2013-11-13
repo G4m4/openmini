@@ -1,5 +1,5 @@
-/// @filename tests_triangle_dpw.cc
-/// @brief Triangle DPW generator specific tests
+/// @filename tests_sawtooth_dpw.cc
+/// @brief Sawtooth DPW generator specific tests
 /// @author gm
 /// @copyright gm 2013
 ///
@@ -22,13 +22,13 @@
 
 #include "openmini/tests/tests.h"
 
-#include "openmini/src/generators/generator_triangle_dpw.h"
+#include "openmini/src/generators/sawtooth_dpw.h"
 
 // Using declarations for tested generator
-using openmini::generators::TriangleDPW;
+using openmini::generators::SawtoothDPW;
 
 /// @brief Generates a signal, check for null mean (no DC offset)
-TEST(Generators, TriangleDPWMean) {
+TEST(Generators, SawtoothDPWMean) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
@@ -41,7 +41,7 @@ TEST(Generators, TriangleDPWMean) {
                                                 * kSignalDataPeriodsCount)));
 
     // Generating data
-    TriangleDPW generator;
+    SawtoothDPW generator;
     generator.SetFrequency(kFrequency);
 
     const float kExpected(0.0f);
@@ -55,8 +55,8 @@ TEST(Generators, TriangleDPWMean) {
   }  // iterations?
 }
 
-/// @brief Generates a signal, check for signal power
-TEST(Generators, TriangleDPWPower) {
+/// @brief Generates a signal, check for its mean power
+TEST(Generators, SawtoothDPWPower) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
@@ -69,29 +69,29 @@ TEST(Generators, TriangleDPWPower) {
                                                 * kSignalDataPeriodsCount)));
 
     // Generating data
-    TriangleDPW generator;
+    SawtoothDPW generator;
     generator.SetFrequency(kFrequency);
 
     const float kExpected(1.0f / 3.0f);
-    const float kEpsilon(2e-2f);
+    // Sawtooth is less powerful than expected using this algorithm
+    const float kEpsilon(1e-1f);
     const float kActual(ComputePower(generator, kDataLength));
 
     std::cout << "Frequency: " << kFrequency
               << "    Power:" << kActual << std::endl;
-
     EXPECT_NEAR(kExpected, kActual, kEpsilon);
   }  // iterations?
 }
 
 /// @brief Generates a signal,
 /// check for normalized range (within [-1.0f ; 1.0f])
-TEST(Generators, TriangleDPWRange) {
+TEST(Generators, SawtoothDPWRange) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
-  const float kFrequency(kFreqDistribution(kRandomGenerator));
+    const float kFrequency(kFreqDistribution(kRandomGenerator));
 
-    TriangleDPW generator;
+    SawtoothDPW generator;
     generator.SetFrequency(kFrequency);
 
     for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
@@ -104,16 +104,16 @@ TEST(Generators, TriangleDPWRange) {
 
 /// @brief Generates a signal and check for expected zero crossing
 /// according parameterized frequency (1 expected zero crossings per period)
-TEST(Generators, TriangleDPWZeroCrossings) {
+TEST(Generators, SawtoothDPWZeroCrossings) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
-    const float kFrequency(kFreqDistribution(kRandomGenerator));
+  const float kFrequency(kFreqDistribution(kRandomGenerator));
 
     const unsigned int kDataLength(static_cast<unsigned int>(
                                      std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
-    TriangleDPW generator;
+    SawtoothDPW generator;
     generator.SetFrequency(kFrequency);
 
     // Due to rounding one or even two zero crossings may be lost/added
@@ -126,7 +126,7 @@ TEST(Generators, TriangleDPWZeroCrossings) {
 
 /// @brief Generates a signal at each frequency corresponding
 /// to key notes from C1 to C8, check for expected zero crossing
-TEST(Generators, TriangleDPWNotes) {
+TEST(Generators, SawtoothDPWNotes) {
   for (unsigned int key_note(kMinKeyNote);
        key_note < kMaxKeyNote;
        ++key_note) {
@@ -135,7 +135,7 @@ TEST(Generators, TriangleDPWNotes) {
        static_cast<unsigned int>(std::floor((0.5f / kFrequency)
                                             * kSignalDataPeriodsCount
                                             * openmini::kSamplingRate)));
-    TriangleDPW generator;
+    SawtoothDPW generator;
     generator.SetFrequency(kFrequency / openmini::kSamplingRate);
 
     // Due to rounding one or even two zero crossings may be lost/added
@@ -147,12 +147,12 @@ TEST(Generators, TriangleDPWNotes) {
 }
 
 /// @brief Generates a signal (performance tests)
-TEST(Generators, TriangleDPWPerf) {
+TEST(Generators, SawtoothDPWPerf) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
     const float kFrequency(kFreqDistribution(kRandomGenerator));
-    TriangleDPW generator;
+    SawtoothDPW generator;
     generator.SetFrequency(kFrequency);
 
     unsigned int sample_idx(0);
