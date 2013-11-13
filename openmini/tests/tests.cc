@@ -23,60 +23,8 @@
 
 #include "openmini/tests/tests.h"
 
-/// @brief Random generator seed
-// It is prime, and mutually prime with the LCG multiplicator
-static int rng_seed = 317;
-
-float GeneratorNormFloatRand::operator()(void) const {
-  rng_seed *= 16807;
-  return static_cast<float>(rng_seed) * 4.6566129e-010f;
-}
-
-GeneratorRangedFloat::GeneratorRangedFloat(const GeneratorRangedFloat& other)
-    : GeneratorNormFloatRand(),
-      min_(other.min()),
-      max_(other.max()) {
-  // Nothing to do here for now
-}
-
-GeneratorRangedFloat::~GeneratorRangedFloat() {
-  // Nothing to do here for now
-}
-
-GeneratorRangedFloat::GeneratorRangedFloat(const float min, const float max)
-    : GeneratorNormFloatRand(),
-      min_(min),
-      max_(max) {
-  // Positive values only
-  ASSERT(min >= 0.0f);
-  ASSERT(max >= min);
-}
-
-float GeneratorRangedFloat::operator()(void) const {
-  const float normalized_positive((GeneratorNormFloatRand::operator()() + 1.0f)
-                                  * 0.5f);
-  return normalized_positive * (max_ - min_) + min_;
-}
-
-float GeneratorRangedFloat::min(void) const {
-  return min_;
-}
-
-float GeneratorRangedFloat::max(void) const {
-  return max_;
-}
-
-GeneratorRangedInteger::GeneratorRangedInteger(const int min, const int max)
-    : generator_(static_cast<float>(min), static_cast<float>(max)) {
-  // Nothing to do here for now
-}
-
-int GeneratorRangedInteger::operator()(void) const {
-  return static_cast<int>(generator_());
-}
-
-GeneratorNormFrequency::GeneratorNormFrequency(void)
-    : GeneratorRangedFloat(0.0f, kMaxFundamentalNorm) {
+NormFrequencyDistribution::NormFrequencyDistribution(void)
+  : uniform_real_distribution(0.0f, kMaxFundamentalNorm) {
   // Nothing to do here for now
 }
 

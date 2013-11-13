@@ -28,21 +28,22 @@ using openmini::synthesizer::RingBuffer;
 /// @brief Push and pop random data of random length,
 /// and check that no data gets corrupted
 TEST(Synthesizer, RingBufferRandomPushPop) {
-  const unsigned int kRingbufferLength(GeneratorRangedInteger(1,
-                                         kDataTestSetSize)());
+  std::uniform_int_distribution<int> kLengthDistribution(1, kDataTestSetSize);
+  const unsigned int kRingbufferLength(kLengthDistribution(kRandomGenerator));
   RingBuffer ringbuf(kRingbufferLength);
   // Creating random data
   std::vector<float> data(kRingbufferLength);
   std::vector<float> data_out(kRingbufferLength);
   std::generate(data.begin(),
                 data.end(),
-                GeneratorNormFloatRand());
+                std::bind(kNormDistribution, kRandomGenerator));
 
   unsigned int data_index(0);
   // First, we push the data with various random block sizes
   while (ringbuf.size() < data.size()) {
-    const unsigned int kBlockSize(
-        GeneratorRangedInteger(1, ringbuf.capacity() - ringbuf.size())());
+    std::uniform_int_distribution<int> kBlockSizeDistribution(1,
+      ringbuf.capacity() - ringbuf.size());
+    const unsigned int kBlockSize(kBlockSizeDistribution(kRandomGenerator));
     ringbuf.Push(&data[data_index], kBlockSize);
     data_index += kBlockSize;
   }
@@ -51,7 +52,8 @@ TEST(Synthesizer, RingBufferRandomPushPop) {
   // (not the same as before)
   data_index = 0;
   while (data_index < data_out.size()) {
-    const unsigned int kBlockSize(GeneratorRangedInteger(1, ringbuf.size())());
+    std::uniform_int_distribution<int> kBlockSizeDistribution(1, ringbuf.size());
+    const unsigned int kBlockSize(kBlockSizeDistribution(kRandomGenerator));
     ringbuf.Pop(&data_out[data_index], kBlockSize);
     data_index += kBlockSize;
   }
@@ -64,8 +66,9 @@ TEST(Synthesizer, RingBufferRandomPushPop) {
 
 /// @brief Simultaneous push and pop: this allows to test "wrapping"
 TEST(Synthesizer, RingBufferCircularCheck) {
+  std::uniform_int_distribution<int> kLengthDistribution(1, kDataTestSetSize);
   const unsigned int kRingbufferLength(FindImmediateNextMultiple(
-    GeneratorRangedInteger(1, kDataTestSetSize)(),
+    kLengthDistribution(kRandomGenerator),
     openmini::SampleSize));
   RingBuffer ringbuf(kRingbufferLength);
   // Creating random data
@@ -73,14 +76,15 @@ TEST(Synthesizer, RingBufferCircularCheck) {
   std::vector<float> data_out(kRingbufferLength);
   std::generate(data.begin(),
                 data.end(),
-                GeneratorNormFloatRand());
+                std::bind(kNormDistribution, kRandomGenerator));
 
   unsigned int data_in_index(0);
   unsigned int data_out_index(0);
   // Since we push more than we pop the ringbuffer will soon be filled
   while (data_out_index < ringbuf.capacity()) {
-    const unsigned int kInBlockSize(
-        GeneratorRangedInteger(1, ringbuf.capacity() - ringbuf.size())());
+    std::uniform_int_distribution<int> kBlockSizeDistribution(1,
+      ringbuf.capacity() - ringbuf.size());
+    const unsigned int kInBlockSize(kBlockSizeDistribution(kRandomGenerator));
     const unsigned int kOutBlockSize(std::max(static_cast<unsigned int>(1),
                                               kInBlockSize / 2));
     ringbuf.Push(&data[data_in_index], kInBlockSize);

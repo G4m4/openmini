@@ -30,11 +30,10 @@ using openmini::generators::Differentiator;
 
 /// @brief Generates a signal, check for null mean (no DC offset)
 TEST(Generators, PhaseAccumulatorMean) {
-  const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
     // Random normalized frequency
-    const float kFrequency(freq_generator());
+    const float kFrequency(kFreqDistribution(kRandomGenerator));
 
     // We are generating complete periods to prevent false positive
     const unsigned int kDataLength(static_cast<unsigned int>(
@@ -59,12 +58,11 @@ TEST(Generators, PhaseAccumulatorMean) {
 
 /// @brief Generates a signal, check for signal power
 TEST(Generators, PhaseAccumulatorPower) {
-  const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
     // Random normalized frequency
-    const float kFrequency(freq_generator());
+    const float kFrequency(kFreqDistribution(kRandomGenerator));
 
     // We are generating complete periods to prevent false positive
     const unsigned int kDataLength(static_cast<unsigned int>(
@@ -77,7 +75,7 @@ TEST(Generators, PhaseAccumulatorPower) {
 
     const float kExpected(1.0f / 3.0f);
     // Very low epsilon with this algorithm!
-    const float kEpsilon(3e-3f);
+    const float kEpsilon(6e-3f);
     const float kActual(ComputePower(generator, kDataLength));
 
     std::cout << "Frequency: " << kFrequency
@@ -90,16 +88,15 @@ TEST(Generators, PhaseAccumulatorPower) {
 /// @brief Generates a signal,
 /// check for normalized range (within [-1.0f ; 1.0f])
 TEST(Generators, PhaseAccumulatorRange) {
-  const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
-    const float kFrequency(freq_generator());
+    const float kFrequency(kFreqDistribution(kRandomGenerator));
     PhaseAccumulator generator;
     generator.SetFrequency(kFrequency);
 
     for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
-      const Sample sample(generator());
+      const Sample sample(Fill(kFreqDistribution(kRandomGenerator)));
       EXPECT_TRUE(GreaterEqual(1.0f, sample));
       EXPECT_TRUE(LessEqual(-1.0f, sample));
     }
@@ -109,11 +106,10 @@ TEST(Generators, PhaseAccumulatorRange) {
 /// @brief Generates a signal and check for expected zero crossing
 /// according parameterized frequency (1 expected zero crossings per period)
 TEST(Generators, PhaseAccumulatorZeroCrossings) {
-  const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
-    const float kFrequency(freq_generator());
+    const float kFrequency(kFreqDistribution(kRandomGenerator));
     const unsigned int kDataLength(static_cast<unsigned int>(
                                      std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
@@ -130,17 +126,16 @@ TEST(Generators, PhaseAccumulatorZeroCrossings) {
 
 /// @brief Generates a signal (performance tests)
 TEST(Generators, PhaseAccumulatorPerf) {
-  const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
-    const float kFrequency(freq_generator());
+    const float kFrequency(kFreqDistribution(kRandomGenerator));
     PhaseAccumulator generator;
     generator.SetFrequency(kFrequency);
 
     unsigned int sample_idx(0);
     while (sample_idx < kDataPerfSetSize) {
-      const Sample kCurrent(generator());
+      const Sample kCurrent(Fill(kFreqDistribution(kRandomGenerator)));
       sample_idx += openmini::SampleSize;
       // No actual test!
       EXPECT_TRUE(LessEqual(-1.0f, kCurrent));
@@ -151,7 +146,8 @@ TEST(Generators, PhaseAccumulatorPerf) {
 /// @brief Differentiate a constant, check for null derivative
 TEST(Generators, DifferentiatedConstant) {
   // Filling a vector with one random value in [-1.0f ; 1.0f]
-  std::vector<float> data(kDataTestSetSize, GeneratorNormFloatRand()());
+  std::vector<float> data(kDataTestSetSize,
+                          kNormDistribution(kRandomGenerator));
 
   Differentiator differentiator;
   // Not checking the first value!
@@ -166,8 +162,7 @@ TEST(Generators, DifferentiatedConstant) {
 /// @brief Generates a triangle, check for its differentiated output:
 /// it is supposed to be almost null everywhere except at discontinuities
 TEST(Generators, DifferentiatedSawtooth) {
-  const GeneratorNormFrequency freq_generator;
-  const float kFrequency(freq_generator());
+  const float kFrequency(kFreqDistribution(kRandomGenerator));
   PhaseAccumulator generator;
   generator.SetFrequency(kFrequency);
   std::vector<float> data(kDataTestSetSize);

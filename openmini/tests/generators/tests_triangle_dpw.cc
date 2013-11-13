@@ -29,12 +29,11 @@ using openmini::generators::TriangleDPW;
 
 /// @brief Generates a signal, check for null mean (no DC offset)
 TEST(Generators, TriangleDPWMean) {
-  const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
     // Random normalized frequency
-    const float kFrequency(freq_generator());
+    const float kFrequency(kFreqDistribution(kRandomGenerator));
 
     // We are generating complete periods to prevent false positive
     const unsigned int kDataLength(static_cast<unsigned int>(
@@ -58,12 +57,11 @@ TEST(Generators, TriangleDPWMean) {
 
 /// @brief Generates a signal, check for signal power
 TEST(Generators, TriangleDPWPower) {
-  const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
     // Random normalized frequency
-    const float kFrequency(freq_generator());
+    const float kFrequency(kFreqDistribution(kRandomGenerator));
 
     // We are generating complete periods to prevent false positive
     const unsigned int kDataLength(static_cast<unsigned int>(
@@ -91,8 +89,8 @@ TEST(Generators, TriangleDPWRange) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
-    const float kFrequency(std::fmod(GeneratorNormFrequency()(),
-                                     kMaxFundamentalNorm));
+  const float kFrequency(kFreqDistribution(kRandomGenerator));
+
     TriangleDPW generator;
     generator.SetFrequency(kFrequency);
 
@@ -110,8 +108,8 @@ TEST(Generators, TriangleDPWZeroCrossings) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
-    const float kFrequency(std::fmod(GeneratorNormFrequency()(),
-                                     kMaxFundamentalNorm));
+    const float kFrequency(kFreqDistribution(kRandomGenerator));
+
     const unsigned int kDataLength(static_cast<unsigned int>(
                                      std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
@@ -150,11 +148,10 @@ TEST(Generators, TriangleDPWNotes) {
 
 /// @brief Generates a signal (performance tests)
 TEST(Generators, TriangleDPWPerf) {
-  const GeneratorNormFrequency freq_generator;
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
-    const float kFrequency(freq_generator());
+    const float kFrequency(kFreqDistribution(kRandomGenerator));
     TriangleDPW generator;
     generator.SetFrequency(kFrequency);
 

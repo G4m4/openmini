@@ -33,7 +33,7 @@ using openmini::synthesizer::Synthesizer;
 TEST(Synthesizer, SynthesizerNoteOnNoteOff) {
   // Random, weird block size
   const unsigned int kBlockSize(FindImmediateNextMultiple(
-    GeneratorRangedInteger(32, 1024)(),
+    std::uniform_int_distribution<int>(32, 1024)(kRandomGenerator),
     4));
   std::vector<float> block(kBlockSize);
   Synthesizer synth;
@@ -124,8 +124,8 @@ TEST(Synthesizer, SynthesizerVaryingBlockSize) {
 
   unsigned int data_idx(0);
   while (data_idx < data.size()) {
-    const unsigned int kBlockSize(GeneratorRangedInteger(1,
-                                    data.size() - data_idx)());
+    const unsigned int kBlockSize(std::uniform_int_distribution<int>(1,
+                                    data.size() - data_idx)(kRandomGenerator));
     synth.ProcessAudio(&data[data_idx], kBlockSize);
     data_idx += kBlockSize;
   }

@@ -23,7 +23,8 @@
 
 // std::generate
 #include <algorithm>
-// std::vector
+#include <functional>
+#include <random>
 #include <vector>
 
 #include "gtest/gtest.h"
@@ -125,78 +126,18 @@ static const unsigned int kSynthesizerPerfSetSize(
   static_cast<unsigned int>(openmini::kSamplingRate * 10.0f));
 #endif  // (_BUILD_CONFIGURATION_DEBUG)
 
-/// @brief Generates normalized random floats from an uniform distribution
-class GeneratorNormFloatRand {
+/// @brief Uniform distribution of normalized frequencies
+/// in ] 0.0f ; kMaxFundamentalNorm [
+class NormFrequencyDistribution : public std::uniform_real_distribution<float> {
  public:
-  GeneratorNormFloatRand() {
-    // Nothing to do here for now
-  }
-  virtual ~GeneratorNormFloatRand() {
-    // Nothing to do here for now
-  };
-  /// @brief Actual generation functor
-  ///
-  /// @return a random number in ] -1.0f ; 1.0f [
-  float operator()(void) const;
-};
-
-/// @brief Generates a positive normalized floating point value
-/// on a given interval > 0.0
-class GeneratorRangedFloat : public GeneratorNormFloatRand {
- public:
-  // Class is non assignable but copyable
-  GeneratorRangedFloat(const GeneratorRangedFloat& other);
-  virtual ~GeneratorRangedFloat();
-
-  /// @brief Constructor: parameterizes the generator output range
-  ///
-  /// @param[in]     min     Output range lower bound
-  /// @param[out]    max     Output range upper bound
-  GeneratorRangedFloat(const float min, const float max);
-  /// @brief Actual generation functor
-  ///
-  /// @return a random number in ] min ; max [
-  virtual float operator()(void) const;
-
-  // Members accessors
-  float min(void) const;
-  float max(void) const;
-
- private:
-  const float min_;
-  const float max_;
-  // Non-assignable class
-  GeneratorRangedFloat& operator=(const GeneratorRangedFloat&);
-};
-
-/// @brief Generates a normalized integer value in a given interval
-/// TODO(gm): this should not aggregate a generator...
-class GeneratorRangedInteger  {
- public:
-  virtual ~GeneratorRangedInteger() {
+  NormFrequencyDistribution();
+  ~NormFrequencyDistribution() {
     // Nothing to do here for now
   };
-  /// @brief Constructor: parameterizes the generator output range
-  ///
-  /// @param[in]     min     Output range lower bound
-  /// @param[out]    max     Output range upper bound
-  GeneratorRangedInteger(const int min, const int max);
-  /// @brief Actual generation functor
-  ///
-  /// @return a random number in ] min ; max [
-  virtual int operator()(void) const;
- private:
-  GeneratorRangedFloat generator_;
 };
-
-/// @brief Generates normalized frequencies in ] 0.0f ; kMaxFundamentalNorm [
-class GeneratorNormFrequency : public GeneratorRangedFloat {
- public:
-  virtual ~GeneratorNormFrequency() {
-    // Nothing to do here for now
-  };
-  GeneratorNormFrequency();
-};
+static const NormFrequencyDistribution kFreqDistribution;
+static const std::uniform_real_distribution<float> kNormDistribution;
+static std::default_random_engine kRandomGenerator;
 
 /// @brief Compute the mean value of a signal generator for the given length
 ///
