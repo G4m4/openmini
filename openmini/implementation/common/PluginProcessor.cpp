@@ -70,7 +70,7 @@ const juce::String OpenMiniAudioProcessor::getOutputChannelName(
 }
 
 bool OpenMiniAudioProcessor::isInputChannelStereoPair(int index) const {
-    return true;
+  return true;
 }
 
 bool OpenMiniAudioProcessor::isOutputChannelStereoPair(int index) const {

@@ -77,6 +77,7 @@ class OpenMiniAudioProcessor  : public AudioProcessor,
   // Overrides from inherited classes
   void addChangeListener(juce::ChangeListener* listener);
 
+  // OpenMini-specifics
   void triggerNoteOn(const int midi_note);
   void triggerNoteOff(const int midi_note);
 
