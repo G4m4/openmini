@@ -52,7 +52,8 @@ TEST(Synthesizer, RingBufferRandomPushPop) {
   // (not the same as before)
   data_index = 0;
   while (data_index < data_out.size()) {
-    std::uniform_int_distribution<int> kBlockSizeDistribution(1, ringbuf.size());
+    std::uniform_int_distribution<int> kBlockSizeDistribution(1,
+                                                              ringbuf.size());
     const unsigned int kBlockSize(kBlockSizeDistribution(kRandomGenerator));
     ringbuf.Pop(&data_out[data_index], kBlockSize);
     data_index += kBlockSize;
