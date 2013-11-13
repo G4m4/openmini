@@ -18,8 +18,8 @@
 /// You should have received a copy of the GNU General Public License
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OPENMINI_SRC_GENERATORS_GENERATORS_FACTORY_H_
-#define OPENMINI_SRC_GENERATORS_GENERATORS_FACTORY_H_
+#ifndef OPENMINI_SRC_GENERATORS_FACTORY_H_
+#define OPENMINI_SRC_GENERATORS_FACTORY_H_
 
 #include "openmini/src/common.h"
 
@@ -45,4 +45,4 @@ void DestroyGenerator(Generator_Base* generator);
 }  // namespace generators
 }  // namespace openmini
 
-#endif  // OPENMINI_SRC_GENERATORS_GENERATORS_FACTORY_H_
+#endif  // OPENMINI_SRC_GENERATORS_FACTORY_H_

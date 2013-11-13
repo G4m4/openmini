@@ -18,11 +18,11 @@
 /// You should have received a copy of the GNU General Public License
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OPENMINI_SRC_GENERATORS_GENERATOR_SAWTOOTH_DPW_H_
-#define OPENMINI_SRC_GENERATORS_GENERATOR_SAWTOOTH_DPW_H_
+#ifndef OPENMINI_SRC_GENERATORS_SAWTOOTH_DPW_H_
+#define OPENMINI_SRC_GENERATORS_SAWTOOTH_DPW_H_
 
 #include "openmini/src/common.h"
-#include "openmini/src/generators/generator_triangle_dpw.h"
+#include "openmini/src/generators/triangle_dpw.h"
 
 namespace openmini {
 namespace generators {
@@ -39,4 +39,4 @@ class ALIGN SawtoothDPW : public TriangleDPW {
 }  // namespace generators
 }  // namespace openmini
 
-#endif  // OPENMINI_SRC_GENERATORS_GENERATOR_SAWTOOTH_DPW_H_
+#endif  // OPENMINI_SRC_GENERATORS_SAWTOOTH_DPW_H_

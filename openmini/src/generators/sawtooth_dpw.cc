@@ -1,5 +1,5 @@
-/// @filename generator_triangle_dpw.cc
-/// @brief Triangle signal generator using DPW algorithm - implementation
+/// @filename generator_sawtooth_dpw.cc
+/// @brief Sawtooth signal generator using DPW algorithm - implementation
 /// @author gm
 /// @copyright gm 2013
 ///
@@ -20,52 +20,34 @@
 
 #include <cmath>
 
-#include "openmini/src/generators/generator_triangle_dpw.h"
+#include "openmini/src/generators/sawtooth_dpw.h"
 #include "openmini/src/maths.h"
 
 namespace openmini {
 namespace generators {
 
-TriangleDPW::TriangleDPW(const float phase)
-    : Generator_Base(phase),
-      sawtooth_gen_(phase),
-      differentiator_(0.0f),
-      normalization_factor_(0.0f) {
+SawtoothDPW::SawtoothDPW(const float phase)
+    : TriangleDPW(phase) {
   ASSERT(phase <= 1.0f);
   ASSERT(phase >= -1.0f);
 }
 
-Sample TriangleDPW::operator()(void) {
+Sample SawtoothDPW::operator()(void) {
   // Raw sawtooth signal
-  Sample current(sawtooth_gen_());
-  const Sample current_abs(Abs(current));
+  const Sample current(sawtooth_gen_());
   // Parabolization
-  const Sample squared(Mul(current, current_abs));
-  const Sample minus(Sub(current, squared));
+  const Sample squared(Mul(current, current));
   // Differentiation & Normalization
-  const Sample diff(differentiator_(minus));
+  const Sample diff(differentiator_(squared));
   return MulConst(normalization_factor_, diff);
 }
 
-void TriangleDPW::SetPhase(const float phase) {
-  // Phase is supposed to be in [-1.0 ; 1.0], hence the assert
-  ASSERT(phase <= 1.0f);
-  ASSERT(phase >= -1.0f);
-  // If we are not sure, we can use the following:
-  // phase_ = Wrap(phase);
-  sawtooth_gen_.SetPhase(phase);
-}
-
-void TriangleDPW::SetFrequency(const float frequency) {
+void SawtoothDPW::SetFrequency(const float frequency) {
   ASSERT(frequency >= 0.0f);
   ASSERT(frequency <= 0.5f);
 
   sawtooth_gen_.SetFrequency(frequency);
-  normalization_factor_ = 1.0f / (2.0f * frequency);
-}
-
-float TriangleDPW::Phase(void) const {
-  return sawtooth_gen_.Phase();
+  normalization_factor_ = 1.0f / (4.0f * frequency);
 }
 
 }  // namespace generators

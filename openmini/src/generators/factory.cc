@@ -18,11 +18,11 @@
 /// You should have received a copy of the GNU General Public License
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "openmini/src/generators/generators_factory.h"
+#include "openmini/src/generators/factory.h"
 
 #include "openmini/src/generators/generator_base.h"
-#include "openmini/src/generators/generator_sawtooth_dpw.h"
-#include "openmini/src/generators/generator_triangle_dpw.h"
+#include "openmini/src/generators/sawtooth_dpw.h"
+#include "openmini/src/generators/triangle_dpw.h"
 
 namespace openmini {
 namespace generators {

@@ -18,8 +18,8 @@
 /// You should have received a copy of the GNU General Public License
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OPENMINI_SRC_GENERATORS_GENERATOR_TRIANGLE_DPW_H_
-#define OPENMINI_SRC_GENERATORS_GENERATOR_TRIANGLE_DPW_H_
+#ifndef OPENMINI_SRC_GENERATORS_TRIANGLE_DPW_H_
+#define OPENMINI_SRC_GENERATORS_TRIANGLE_DPW_H_
 
 #include "openmini/src/common.h"
 #include "openmini/src/generators/generators_common.h"
@@ -49,4 +49,4 @@ class ALIGN TriangleDPW : public Generator_Base {
 }  // namespace generators
 }  // namespace openmini
 
-#endif  // OPENMINI_SRC_GENERATORS_GENERATOR_TRIANGLE_DPW_H_
+#endif  // OPENMINI_SRC_GENERATORS_TRIANGLE_DPW_H_
