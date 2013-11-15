@@ -50,7 +50,8 @@ OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
       osc2_volume_(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
                    juce::Slider::TextEntryBoxPosition::NoTextBox),
       osc3_volume_(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
-                   juce::Slider::TextEntryBoxPosition::NoTextBox) {
+                   juce::Slider::TextEntryBoxPosition::NoTextBox),
+      debug_infos_() {
   // For some reason Juce keyboard is one octave higher...
   keyboard_.setAvailableRange(openmini::kMinKeyNote + 12,
                               openmini::kMaxKeyNote + 12);
@@ -78,6 +79,7 @@ OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
   osc2_volume_.addListener(this);
   osc3_volume_.addListener(this);
 
+  addAndMakeVisible(&debug_infos_);
   getProcessor()->addChangeListener(this);
   // This is where our plugin's editor size is set.
   setSize(kMainWindowSizeX, kMainWindowSizeY);
@@ -98,6 +100,10 @@ void OpenMiniAudioProcessorEditor::paint(juce::Graphics& g) {
   osc1_volume_.setBounds(200, 0, 60, 60);
   osc2_volume_.setBounds(200, 70, 60, 60);
   osc3_volume_.setBounds(200, 140, 60, 60);
+
+  // DEBUG
+  debug_infos_.setBounds(300, 0, this->getWidth(), 100);
+  //  /DEBUG
 }
 
 void OpenMiniAudioProcessorEditor::sliderValueChanged(juce::Slider* slider) {

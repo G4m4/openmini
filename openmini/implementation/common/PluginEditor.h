@@ -60,6 +60,7 @@ class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
   juce::Slider osc1_volume_;
   juce::Slider osc2_volume_;
   juce::Slider osc3_volume_;
+  juce::TextEditor debug_infos_;
 };
 
 #endif  // OPENMINI_PLUGIN_COMMON_PLUGINEDITOR_H_
