@@ -43,6 +43,7 @@ RingBuffer::RingBuffer(const unsigned int capacity)
 
 RingBuffer::~RingBuffer() {
   Deallocate(data_);
+  data_ = nullptr;
 }
 
 void RingBuffer::Pop(float* dest, const unsigned int count) {
