@@ -11,12 +11,11 @@ set(OPENMINI_PLUGIN_DIR
 )
 
 include_directories(SYSTEM
-  ${FREETYPE_INCLUDE_DIRS}  # Linux-specific stuff
-  ${X11_INCLUDE_DIRS}  # Linux-specific stuff
-  ${VST_INCLUDE_DIR}  # VST SDK root path
-  ${JUCE_INCLUDE_DIR}  # Juce library root path
-  # Those will be null on anything else than Mac
   ${FLATCARBON}  # Mac-specific stuff
+  ${FREETYPE_INCLUDE_DIRS}  # Linux-specific stuff
+  ${JUCE_INCLUDE_DIR}  # Juce library root path
+  ${VST_INCLUDE_DIR}  # VST SDK root path
+  ${X11_INCLUDE_DIRS}  # Linux-specific stuff
 )
 
 include_directories(

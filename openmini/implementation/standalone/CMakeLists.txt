@@ -11,9 +11,10 @@ set(OPENMINI_STANDALONE_DIR
 )
 
 include_directories(SYSTEM
+  ${FLATCARBON}  # Mac-specific stuff
   ${FREETYPE_INCLUDE_DIRS}  # Linux-specific stuff
-  ${X11_INCLUDE_DIRS}  # Linux-specific stuff
   ${JUCE_INCLUDE_DIR}  # Juce library root path
+  ${X11_INCLUDE_DIRS}  # Linux-specific stuff
 )
 
 include_directories(
