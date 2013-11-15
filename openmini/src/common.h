@@ -29,6 +29,8 @@
 
 #include "openmini/src/configuration.h"
 
+// Flag _USE_SSE is defined in configuration.h, that's why this include
+// is done after the configuration.h include
 #if (_USE_SSE)
 extern "C" {
 #include <xmmintrin.h>
