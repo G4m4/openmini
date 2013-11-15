@@ -45,7 +45,7 @@ template<typename Type> void IGNORE(const Type&) {}
 /// @brief Assume that the following condition is always true
 /// (on some compilers, allows optimization)
 #if(_COMPILER_MSVC)
-  #define ASSUME(_condition_) do { __assume(_condition_); } while (0)
+  #define ASSUME(_condition_) _assume((_condition_));
 #elif(_COMPILER_GCC)
   #define ASSUME(_condition_) do { if (!(_condition_)) __builtin_unreachable(); } while (0)
 #else
