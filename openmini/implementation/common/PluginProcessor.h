@@ -81,10 +81,15 @@ class OpenMiniAudioProcessor  : public AudioProcessor,
   void triggerNoteOn(const int midi_note);
   void triggerNoteOff(const int midi_note);
 
+  // DEBUG
+  double GetLastProcessTime() const;
+  //  /DEBUG
+
   juce::MidiKeyboardState keyboard_state_;
 
  private:
   openmini::synthesizer::Synthesizer synth_;
+  double process_time_;
 
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenMiniAudioProcessor)
 };

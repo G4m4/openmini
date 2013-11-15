@@ -27,7 +27,8 @@
 #include "openmini/implementation/common/PluginEditor.h"
 #include "openmini/src/synthesizer/parameter_meta.h"
 
-OpenMiniAudioProcessor::OpenMiniAudioProcessor() {
+OpenMiniAudioProcessor::OpenMiniAudioProcessor()
+  : process_time_(0.0) {
 }
 
 OpenMiniAudioProcessor::~OpenMiniAudioProcessor() {
@@ -157,7 +158,11 @@ void OpenMiniAudioProcessor::processBlock(juce::AudioSampleBuffer& buffer,
   }  // Iterating on midi messages...
   midiMessages.clear();
 
+  const double counter_start(juce::Time::getMillisecondCounterHiRes());
+
   synth_.ProcessAudio(buffer.getArrayOfChannels()[0], buffer.getNumSamples());
+
+  process_time_ = juce::Time::getMillisecondCounterHiRes() - counter_start;
 }
 
 bool OpenMiniAudioProcessor::hasEditor() const {
@@ -165,7 +170,7 @@ bool OpenMiniAudioProcessor::hasEditor() const {
 }
 
 AudioProcessorEditor* OpenMiniAudioProcessor::createEditor() {
-  return new OpenMiniAudioProcessorEditor (this);
+  return new OpenMiniAudioProcessorEditor(this);
 }
 
 void OpenMiniAudioProcessor::getStateInformation(juce::MemoryBlock& destData) {
@@ -192,6 +197,12 @@ void OpenMiniAudioProcessor::triggerNoteOn(const int midi_note) {
 void OpenMiniAudioProcessor::triggerNoteOff(const int midi_note) {
   synth_.NoteOff(midi_note);
 }
+
+// DEBUG
+double OpenMiniAudioProcessor::GetLastProcessTime() const {
+  return process_time_;
+}
+//  /DEBUG
 
 AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
   return new OpenMiniAudioProcessor();

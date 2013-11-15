@@ -79,7 +79,11 @@ OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
   osc2_volume_.addListener(this);
   osc3_volume_.addListener(this);
 
+  // DEBUG
   addAndMakeVisible(&debug_infos_);
+  this->startTimer(kTimerInterval);
+  //  /DEBUG
+
   getProcessor()->addChangeListener(this);
   // This is where our plugin's editor size is set.
   setSize(kMainWindowSizeX, kMainWindowSizeY);
@@ -143,6 +147,11 @@ void OpenMiniAudioProcessorEditor::changeListenerCallback(
                         juce::dontSendNotification);
   osc3_volume_.setValue(proc->getParameter(kOsc3Volume),
                         juce::dontSendNotification);
+}
+
+void OpenMiniAudioProcessorEditor::timerCallback() {
+  const double time(getProcessor()->GetLastProcessTime());
+  debug_infos_.setText(juce::String(time));
 }
 
 OpenMiniAudioProcessor* OpenMiniAudioProcessorEditor::getProcessor() const {

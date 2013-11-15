@@ -37,7 +37,8 @@ static const int kMainWindowSizeY(768);
 /// Contains all UI and user control stuff
 class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
                                      public juce::ChangeListener,
-                                     public juce::Slider::Listener {
+                                     public juce::Slider::Listener,
+                                     public juce::Timer {
  public:
   explicit OpenMiniAudioProcessorEditor(OpenMiniAudioProcessor* owner);
   ~OpenMiniAudioProcessorEditor();
@@ -47,6 +48,7 @@ class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
   // Overrides from inherited classes
   void sliderValueChanged(juce::Slider* slider);
   void changeListenerCallback(juce::ChangeBroadcaster *source);
+  void timerCallback();
 
  private:
   /// @brief Retrieve an access to the audio processor
@@ -61,6 +63,7 @@ class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
   juce::Slider osc2_volume_;
   juce::Slider osc3_volume_;
   juce::TextEditor debug_infos_;
+  static const int kTimerInterval = 100;
 };
 
 #endif  // OPENMINI_PLUGIN_COMMON_PLUGINEDITOR_H_
