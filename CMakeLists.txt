@@ -72,6 +72,16 @@ function(add_compiler_flags _TARGET_NAME _FLAGS)
                )
 endfunction(add_compiler_flags)
 
+# @brief For the specified target, append linker flags to the existing ones
+#
+# @param _TARGET_NAME           target name
+# @param _FLAGS                 flags to set
+function(add_linker_flags _TARGET_NAME _FLAGS)
+  set_property(TARGET ${_TARGET_NAME}
+               APPEND PROPERTY LINK_FLAGS ${_FLAGS}
+               )
+endfunction(add_linker_flags)
+
 # @brief For the whole project, append debug compiler flags
 #
 # @param _FLAGS                 flags to set
