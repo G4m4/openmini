@@ -31,6 +31,9 @@ namespace synthesizer {
 /// Resizable, FIFO-type container; its general philosophy is that,
 /// if one operation could not be done (pushing too much data, etc.)
 /// it asserts - there are no return values nor exceptions.
+///
+/// It is asymmetrical: you push in one Sample at a time, and you pop out
+/// as many floats as you want.
 class RingBuffer {
  public:
   /// @brief Default constructor: the user may provide a buffer length
@@ -44,12 +47,6 @@ class RingBuffer {
   /// @param[out]   dest          Buffer to store the elements into
   /// @param[in]    count         Elements count to retrieve
   void Pop(float* dest, const unsigned int count);
-
-  /// @brief Push elements into the buffer
-  ///
-  /// @param[in]   src        Buffer to get the elements from
-  /// @param[in]   count      Elements count to push
-  void Push(const float* const src, const unsigned int count);
 
   /// @brief Push elements into the buffer
   ///

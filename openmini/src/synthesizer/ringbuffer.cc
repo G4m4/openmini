@@ -89,35 +89,6 @@ void RingBuffer::Pop(float* dest, const unsigned int count) {
   }
 }
 
-void RingBuffer::Push(const float* const src, const unsigned int count) {
-  ASSERT(IsGood());
-  ASSERT(count > 0);
-
-  ASSERT(count <= capacity() - size());
-  // Length of the "right" part: from writing cursor to the buffer end
-  const unsigned int right_part_size(std::min(capacity_ - writing_position_,
-                                              count));
-  // Length of the "left" part: from the buffer beginning
-  // to the last element to be pushed
-  const unsigned int left_part_size(count - right_part_size);
-
-  //  Copying the first part
-  std::copy(&src[0],
-            &src[right_part_size],
-            &data_[writing_position_]);
-  if (0 != left_part_size) {
-    //  copy the second part (if there is one)
-    std::copy(&src[right_part_size],
-              &src[right_part_size + left_part_size],
-              &data_[0]);
-  }
-
-  writing_position_ += count;
-  writing_position_ = writing_position_ % capacity_;
-
-  size_ += count;
-}
-
 void RingBuffer::Push(const Sample& value) {
   ASSERT(IsGood());
   ASSERT(capacity_ - writing_position_ >= openmini::SampleSize);
