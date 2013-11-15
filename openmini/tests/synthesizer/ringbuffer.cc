@@ -39,17 +39,14 @@ TEST(Synthesizer, RingBufferRandomPushPop) {
                 std::bind(kNormDistribution, kRandomGenerator));
 
   unsigned int data_index(0);
-  // First, we push the data with various random block sizes
+  // First, we push the data with constant block sizes
   while (ringbuf.size() < data.size()) {
-    std::uniform_int_distribution<int> kBlockSizeDistribution(1,
-      ringbuf.capacity() - ringbuf.size());
-    const unsigned int kBlockSize(kBlockSizeDistribution(kRandomGenerator));
-    ringbuf.Push(&data[data_index], kBlockSize);
-    data_index += kBlockSize;
+    const Sample current(Fill(&data[data_index]));
+    ringbuf.Push(current);
+    data_index += openmini::SampleSize;
   }
 
   // Now we pop data out with various random block sizes
-  // (not the same as before)
   data_index = 0;
   while (data_index < data_out.size()) {
     std::uniform_int_distribution<int> kBlockSizeDistribution(1,
@@ -74,25 +71,31 @@ TEST(Synthesizer, RingBufferCircularCheck) {
   RingBuffer ringbuf(kRingbufferLength);
   // Creating random data
   std::vector<float> data(kRingbufferLength * 2);
-  std::vector<float> data_out(kRingbufferLength);
+  std::vector<float> data_out(kRingbufferLength * 2);
   std::generate(data.begin(),
                 data.end(),
                 std::bind(kNormDistribution, kRandomGenerator));
 
-  unsigned int data_in_index(0);
-  unsigned int data_out_index(0);
-  // Since we push more than we pop the ringbuffer will soon be filled
-  while (data_out_index < ringbuf.capacity()) {
-    std::uniform_int_distribution<int> kBlockSizeDistribution(1,
-      ringbuf.capacity() - ringbuf.size());
-    const unsigned int kInBlockSize(kBlockSizeDistribution(kRandomGenerator));
-    const unsigned int kOutBlockSize(std::max(static_cast<unsigned int>(1),
-                                              kInBlockSize / 2));
-    ringbuf.Push(&data[data_in_index], kInBlockSize);
-    ringbuf.Pop(&data_out[data_out_index], kOutBlockSize);
-    data_in_index += kInBlockSize;
-    data_out_index += kOutBlockSize;
+  unsigned int data_index(0);
+  // First, we fill the ringbuffer
+  while (ringbuf.size() < data.size() / 2) {
+    const Sample current(Fill(&data[data_index]));
+    ringbuf.Push(current);
+    data_index += openmini::SampleSize;
   }
+
+  // Then we extract the first half
+  ringbuf.Pop(&data_out[0], data.size() / 2);
+
+  // Then we fill the ringbuffer again
+  while (ringbuf.size() < data.size() / 2) {
+    const Sample current(Fill(&data[data_index]));
+    ringbuf.Push(current);
+    data_index += openmini::SampleSize;
+  }
+
+  // Then we extract the second half
+  ringbuf.Pop(&data_out[data.size() / 2], data.size() / 2);
 
   // Data integrity check
   for (unsigned int i(0); i < data_out.size(); ++i) {
