@@ -25,6 +25,7 @@
 extern "C" {
 #include <emmintrin.h>
 #include <mmintrin.h>
+#include <pmmintrin.h>
 }
 #endif  // (_USE_SSE)
 
@@ -126,10 +127,10 @@ static inline Sample Add(const Sample& left, const Sample& right) {
 
 static inline float AddHorizontal(const Sample& value) {
 #if (_USE_SSE)
-  return GetByIndex<0>(value)
-         + GetByIndex<1>(value)
-         + GetByIndex<2>(value)
-         + GetByIndex<3>(value);
+  const Sample first_add(_mm_hadd_ps(value, value));
+  const Sample shuffled(_mm_shuffle_ps(first_add, first_add,
+                                       _MM_SHUFFLE(0, 1, 0, 1)));
+  return GetByIndex<0>(_mm_hadd_ps(shuffled, first_add));
 #else
   return value;
 #endif  // (_USE_SSE)
