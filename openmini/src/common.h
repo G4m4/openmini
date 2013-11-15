@@ -21,9 +21,6 @@
 #ifndef OPENMINI_SRC_COMMON_H_
 #define OPENMINI_SRC_COMMON_H_
 
-// _aligned_malloc (msvc-specific)
-#include <malloc.h>
-
 #include <cassert>
 // size_t
 #include <cstddef>
