@@ -217,6 +217,12 @@ elseif (${COMPILER_IS_GCC})
   endif()
 endif()
 
+# C++11 on Mac: we have to use libc++ as well, because the libstdc++ provided
+# with Macs is based on 4.2, with no C++11 support.
+if (${SYSTEM_IS_MACOSX})
+  add_definitions(-stdlib=libc++)
+endif (${SYSTEM_IS_MACOSX})
+
 # Coverage only available on Linux, with debug configuration
 if (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
   if (UNIX)
