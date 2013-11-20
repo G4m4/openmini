@@ -173,16 +173,9 @@ static inline Sample Abs(const Sample& value) {
 static inline Sample RotateOnRight(const Sample& vector,
                                    const float value) {
 #if (_USE_SSE)
-  ConverterFloatIntVector converter;
-  converter.sample_v = vector;
-  const __m128i tmp(converter.integer_v);
-  const __m128i rotated(_mm_slli_si128(tmp, 4));
-  ConverterFloatIntVector converter_back;
-  converter_back.integer_v = rotated;
-  return Fill(GetByIndex<3>(converter_back.sample_v),
-              GetByIndex<2>(converter_back.sample_v),
-              GetByIndex<1>(converter_back.sample_v),
-              value);
+  const Sample rotated(_mm_castsi128_ps(
+                       _mm_slli_si128(_mm_castps_si128(vector), 4)));
+  return Add(_mm_set_ss(value), rotated);
 #else
   IGNORE(vector);
   return value;
