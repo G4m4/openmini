@@ -10,10 +10,15 @@ include_directories(
 )
 
 # Include all subdirectories tests source files
+add_subdirectory(filters)
 add_subdirectory(generators)
 add_subdirectory(synthesizer)
 
 # Group sources
+source_group("filters"
+  FILES
+  ${OPENMINI_FILTERS_TESTS_SRC}
+)
 source_group("generators"
   FILES
   ${OPENMINI_GENERATORS_TESTS_SRC}
@@ -27,6 +32,7 @@ source_group("synthesizer"
 set(OPENMINI_TESTS_SRC
     main.cc
     tests.cc
+    ${OPENMINI_FILTERS_TESTS_SRC}
     ${OPENMINI_GENERATORS_TESTS_SRC}
     ${OPENMINI_SYNTHESIZER_TESTS_SRC}
 )
