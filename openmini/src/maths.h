@@ -210,6 +210,29 @@ static inline void Store(float* const buffer, const Sample& value) {
 #endif  // (_USE_SSE)
 }
 
+#if (_USE_SSE)
+/// @brief Get each right half of the two given vectors
+///
+/// Given left = (x0, x1, x2, x3) and right = (y0, y1, y2, y3)
+/// it will return (x2, x3, y2, y3)
+static inline Sample TakeEachRightHalf(const Sample& left,
+                                       const Sample& right) {
+  return _mm_shuffle_ps(right, left, _MM_SHUFFLE(3, 2, 3, 2));
+}
+#endif  // (_USE_SSE)
+
+/// @brief Revert the givne vector values order
+///
+/// Given value = (x0, x1, x2, x3)
+/// it will return (x3, x2, x1, x0)
+static inline Sample Revert(const Sample& value) {
+#if (_USE_SSE)
+  return _mm_shuffle_ps(value, value, _MM_SHUFFLE(0, 1, 2, 3));
+#else
+  return value;
+#endif  // (_USE_SSE)
+}
+
 }  // namespace openmini
 
 #endif  // OPENMINI_SRC_MATHS_H_
