@@ -85,6 +85,28 @@ add_library(openmini_vst SHARED
   ${OPENMINI_PLUGIN_VST_HDR}
 )
 
+
+# Specific Mac stuff
+if (${SYSTEM_IS_MACOSX})
+  # Bundle stuff
+  set_target_properties(openmini_vst PROPERTIES
+    BUNDLE TRUE
+    BUNDLE_EXTENSION vst
+    XCODE_ATTRIBUTE_WRAPPER_EXTENSION vst
+    XCODE_ATTRIBUTE_MACH_O_TYPE mh_bundle
+    XCODE_ATTRIBUTE_INFOPLIST_FILE ${CMAKE_CURRENT_BINARY_DIR}/bundle/Info.plist
+    MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/bundle/Info.plist
+    RESOURCE ${ARGN}
+  )
+
+  # Linker: set framework to use
+  add_linker_flags(openmini_vst "-framework Accelerate")
+
+  set(CMAKE_OSX_DEPLOYEMENT_TARGET 10.5)
+  set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION com.apple.compilers.llvm.clang.1_0)
+
+endif (${SYSTEM_IS_MACOSX})
+
 target_link_libraries(openmini_vst
                       openmini_lib)
 
