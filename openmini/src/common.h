@@ -107,6 +107,19 @@ enum Type {
   #define ALIGN
 #endif  // (_USE_SSE)
 
+/// @brief Type for Sample parameter "read only":
+/// It should be passed by value since it allows to keep it into a register,
+/// instead of passing its address and loading it.
+#if (_USE_SSE)
+  #if (_COMPILER_MSVC)
+    typedef const Sample SampleRead;
+  #else
+    typedef const Sample SampleRead;
+  #endif
+#else
+  typedef const Sample SampleRead;
+#endif  // (_USE_SSE)
+
 /// @brief "Sample" type size in bytes
 static const unsigned int SampleSizeBytes(sizeof(Sample));
 /// @brief "Sample" type size compared to audio samples

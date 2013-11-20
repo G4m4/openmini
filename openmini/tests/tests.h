@@ -37,6 +37,7 @@
 
 // Using declarations for openmini maths stuff
 using openmini::Sample;
+using openmini::SampleRead;
 using openmini::Fill;
 using openmini::GetByIndex;
 using openmini::Add;
@@ -50,7 +51,7 @@ using openmini::Store;
 
 // Tests-specific maths (comparison operators) stuff
 
-static inline bool IsMaskNull(const Sample& value) {
+static inline bool IsMaskNull(SampleRead value) {
 #if (_USE_SSE)
   return 0 == _mm_movemask_ps(value);
 #else
@@ -58,7 +59,7 @@ static inline bool IsMaskNull(const Sample& value) {
 #endif
 }
 
-static inline bool GreaterThan(const float threshold, const Sample& value) {
+static inline bool GreaterThan(const float threshold, SampleRead value) {
 #if (_USE_SSE)
   const Sample test_result(_mm_cmpgt_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);
@@ -67,7 +68,7 @@ static inline bool GreaterThan(const float threshold, const Sample& value) {
 #endif
 }
 
-static inline bool GreaterEqual(const float threshold, const Sample& value) {
+static inline bool GreaterEqual(const float threshold, SampleRead value) {
 #if (_USE_SSE)
   const Sample test_result(_mm_cmpge_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);
@@ -76,7 +77,7 @@ static inline bool GreaterEqual(const float threshold, const Sample& value) {
 #endif
 }
 
-static inline bool LessThan(const float threshold, const Sample& value) {
+static inline bool LessThan(const float threshold, SampleRead value) {
 #if (_USE_SSE)
   const Sample test_result(_mm_cmplt_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);
@@ -85,7 +86,7 @@ static inline bool LessThan(const float threshold, const Sample& value) {
 #endif
 }
 
-static inline bool LessEqual(const float threshold, const Sample& value) {
+static inline bool LessEqual(const float threshold, SampleRead value) {
 #if (_USE_SSE)
   const Sample test_result(_mm_cmple_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);
@@ -94,7 +95,7 @@ static inline bool LessEqual(const float threshold, const Sample& value) {
 #endif
 }
 
-static inline bool Equal(const float threshold, const Sample& value) {
+static inline bool Equal(const float threshold, SampleRead value) {
 #if (_USE_SSE)
   const Sample test_result(_mm_cmpeq_ps(Fill(threshold), value));
   return !IsMaskNull(test_result);

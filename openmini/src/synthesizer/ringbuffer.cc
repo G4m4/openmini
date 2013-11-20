@@ -89,7 +89,7 @@ void RingBuffer::Pop(float* dest, const unsigned int count) {
   }
 }
 
-void RingBuffer::Push(const Sample& value) {
+void RingBuffer::Push(SampleRead value) {
   ASSERT(IsGood());
   ASSERT(capacity_ - writing_position_ >= openmini::SampleSize);
 

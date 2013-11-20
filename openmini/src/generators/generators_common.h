@@ -52,7 +52,7 @@ class ALIGN PhaseAccumulator : public Generator_Base {
 class Differentiator {
  public:
   explicit Differentiator(const float last = 0.0f);
-  Sample operator()(const Sample& sample);
+  Sample operator()(SampleRead sample);
 
  private:
   float last_;  ///< Last synthesized sample value
@@ -85,7 +85,7 @@ class OnePoleFilter {
 /// @param[in]  input         Input to be wrapped - supposed not to be < 1.0
 /// @param[in]  increment     Increment to add to the input
 ///@return the incremented output in [-1.0 ; 1.0[
-Sample IncrementAndWrap(const Sample& input, const Sample& increment);
+Sample IncrementAndWrap(SampleRead input, SampleRead increment);
 
 /// @brief Helper function: Clamp input into [min ; max]
 template <typename TypeInput>

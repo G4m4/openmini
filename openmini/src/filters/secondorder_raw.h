@@ -37,7 +37,7 @@ class ALIGN SecondOrderRaw : public Filter_Base {
   virtual ~SecondOrderRaw() {
     // Nothing to do here for now
   };
-  virtual Sample operator()(const Sample& sample);
+  virtual Sample operator()(SampleRead sample);
   virtual void SetParameters(const float frequency, const float resonance);
 
  protected:

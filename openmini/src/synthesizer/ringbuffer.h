@@ -53,7 +53,7 @@ class RingBuffer {
   /// Specialization for custom Sample type: this one is optimized
   ///
   /// @param[in]   src        Sampel to push
-  void Push(const Sample& value);
+  void Push(SampleRead value);
 
   /// @brief Explicitly clear buffer content but does not deallocate it
   void Clear(void);

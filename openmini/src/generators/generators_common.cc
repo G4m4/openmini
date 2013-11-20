@@ -69,7 +69,7 @@ Differentiator::Differentiator(const float last)
   // Nothing to do here
 }
 
-Sample Differentiator::operator()(const Sample& sample) {
+Sample Differentiator::operator()(SampleRead sample) {
   const float before_diff(GetByIndex<3>(sample));
   const Sample prev(RotateOnRight(sample,
                                   last_));
@@ -97,7 +97,7 @@ float OnePoleFilter::operator()(const float input) {
 
 // Miscellaneous
 
-Sample IncrementAndWrap(const Sample& input, const Sample& increment) {
+Sample IncrementAndWrap(SampleRead input, SampleRead increment) {
 #if (_USE_SSE)
   const Sample output(Add(input, increment));
   const Sample constant(Fill(-2.0f));

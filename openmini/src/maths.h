@@ -94,32 +94,32 @@ static inline Sample FillOnLength(const float value) {
 
 #if (_USE_SSE)
 template<unsigned i>
-float GetByIndex(const Sample& value) {
+float GetByIndex(SampleRead value) {
   ConverterFloatScalarVector converter;
   converter.sample_v = value;
   return converter.sample[i];
 }
 #else
 template<unsigned i>
-float GetByIndex(const Sample& value) {
+float GetByIndex(SampleRead value) {
   return value;
 }
 #endif  // (_USE_SSE)
 
 #if (_USE_SSE)
-static inline float GetByIndex(const Sample& value, const unsigned i) {
+static inline float GetByIndex(SampleRead value, const unsigned i) {
   ConverterFloatScalarVector converter;
   converter.sample_v = value;
   return converter.sample[i];
 }
 #else
-static inline float GetByIndex(const Sample& value, const unsigned i) {
+static inline float GetByIndex(SampleRead value, const unsigned i) {
   IGNORE(i);
   return value;
 }
 #endif  // (_USE_SSE)
 
-static inline Sample Add(const Sample& left, const Sample& right) {
+static inline Sample Add(SampleRead left, SampleRead right) {
 #if (_USE_SSE)
   return _mm_add_ps(left, right);
 #else
@@ -127,7 +127,7 @@ static inline Sample Add(const Sample& left, const Sample& right) {
 #endif  // (_USE_SSE)
 }
 
-static inline float AddHorizontal(const Sample& value) {
+static inline float AddHorizontal(SampleRead value) {
 #if (_USE_SSE)
   const Sample first_add(_mm_hadd_ps(value, value));
   const Sample shuffled(_mm_shuffle_ps(first_add, first_add,
@@ -138,7 +138,7 @@ static inline float AddHorizontal(const Sample& value) {
 #endif  // (_USE_SSE)
 }
 
-static inline Sample Sub(const Sample& left, const Sample& right) {
+static inline Sample Sub(SampleRead left, SampleRead right) {
 #if (_USE_SSE)
   return _mm_sub_ps(left, right);
 #else
@@ -146,7 +146,7 @@ static inline Sample Sub(const Sample& left, const Sample& right) {
 #endif  // (_USE_SSE)
 }
 
-static inline Sample Mul(const Sample& left, const Sample& right) {
+static inline Sample Mul(SampleRead left, SampleRead right) {
 #if (_USE_SSE)
   return _mm_mul_ps(left, right);
 #else
@@ -154,7 +154,7 @@ static inline Sample Mul(const Sample& left, const Sample& right) {
 #endif  // (_USE_SSE)
 }
 
-static inline Sample MulConst(const float constant, const Sample& right) {
+static inline Sample MulConst(const float constant, SampleRead right) {
 #if (_USE_SSE)
   return Mul(Fill(constant), right);
 #else
@@ -162,7 +162,7 @@ static inline Sample MulConst(const float constant, const Sample& right) {
 #endif  // (_USE_SSE)
 }
 
-static inline Sample Abs(const Sample& value) {
+static inline Sample Abs(SampleRead value) {
 #if (_USE_SSE)
   return _mm_max_ps(Sub(_mm_setzero_ps(), value), value);
 #else
@@ -170,7 +170,7 @@ static inline Sample Abs(const Sample& value) {
 #endif  // (_USE_SSE)
 }
 
-static inline Sample RotateOnRight(const Sample& vector,
+static inline Sample RotateOnRight(SampleRead vector,
                                    const float value) {
 #if (_USE_SSE)
   const Sample rotated(_mm_castsi128_ps(
@@ -182,7 +182,7 @@ static inline Sample RotateOnRight(const Sample& vector,
 #endif  // (_USE_SSE)
 }
 
-static inline Sample Sgn(const Sample& value) {
+static inline Sample Sgn(SampleRead value) {
 #if (_USE_SSE)
   const Sample kZero(_mm_setzero_ps());
   const Sample kOne(Fill(1.0f));
@@ -195,7 +195,7 @@ static inline Sample Sgn(const Sample& value) {
 #endif  // (_USE_SSE)
 }
 
-static inline void Store(float* const buffer, const Sample& value) {
+static inline void Store(float* const buffer, SampleRead value) {
 #if (_USE_SSE)
   _mm_storeu_ps(buffer, value);
 #else
@@ -208,8 +208,8 @@ static inline void Store(float* const buffer, const Sample& value) {
 ///
 /// Given left = (x0, x1, x2, x3) and right = (y0, y1, y2, y3)
 /// it will return (x2, x3, y2, y3)
-static inline Sample TakeEachRightHalf(const Sample& left,
-                                       const Sample& right) {
+static inline Sample TakeEachRightHalf(SampleRead left,
+                                       SampleRead right) {
   return _mm_shuffle_ps(right, left, _MM_SHUFFLE(3, 2, 3, 2));
 }
 #endif  // (_USE_SSE)
@@ -218,7 +218,7 @@ static inline Sample TakeEachRightHalf(const Sample& left,
 ///
 /// Given value = (x0, x1, x2, x3)
 /// it will return (x3, x2, x1, x0)
-static inline Sample Revert(const Sample& value) {
+static inline Sample Revert(SampleRead value) {
 #if (_USE_SSE)
   return _mm_shuffle_ps(value, value, _MM_SHUFFLE(0, 1, 2, 3));
 #else

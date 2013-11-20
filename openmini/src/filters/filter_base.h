@@ -52,7 +52,7 @@ class ALIGN Filter_Base {
   /// Process is done per-sample for flexibility purpose, beware of not having
   /// one of this called per-sample! Check in the final code that it actually
   /// gets inlined if needed
-  virtual Sample operator()(const Sample& sample) = 0;
+  virtual Sample operator()(SampleRead sample) = 0;
   /// @brief Set the filter parameters:
   /// quality factor ("resonance") and cutoff frequency
   ///

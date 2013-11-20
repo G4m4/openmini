@@ -37,7 +37,7 @@ SecondOrderRaw::SecondOrderRaw()
   history_.fill(0.0f);
 }
 
-Sample SecondOrderRaw::operator()(const Sample& sample) {
+Sample SecondOrderRaw::operator()(SampleRead sample) {
   // Direct Form 1 implementation:
   // the Direct Form 2, although usually more efficient, has issues with
   // time-varying parameters
