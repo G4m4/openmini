@@ -21,6 +21,8 @@
 // std::sin, std::cos
 #include <cmath>
 
+#include "openmini/src/maths.h"
+
 #include "openmini/src/filters/filters_common.h"
 #include "openmini/src/filters/secondorder_raw.h"
 
@@ -36,9 +38,50 @@ SecondOrderRaw::SecondOrderRaw()
 }
 
 Sample SecondOrderRaw::operator()(const Sample& sample) {
-  return sample;
-}
+  // Direct Form 1 implementation:
+  // the Direct Form 2, although usually more efficient, has issues with
+  // time-varying parameters
 
+  // Vector = (x_{n}, x_{n + 1}, x_{n + 2}, x_{n + 3})
+  // previous = (x_{n - 1}, x_{n}, x_{n + 1}, x_{n + 2})
+  // last = (x_{n - 2}, x_{n - 1}, x_{n}, x_{n + 1})
+  const Sample previous(RotateOnRight(sample, history_[1]));
+  const Sample last(RotateOnRight(previous, history_[0]));
+  const Sample current(MulConst(gain_, sample));
+  // previous *= b1
+  const Sample previous_gain(MulConst(coeffs_[1], previous));
+  // previous *= b2
+  const Sample last_gain(MulConst(coeffs_[0], last));
+  // All weighted inputs cumulated sum
+  const Sample tmp_sum(Add(Add(current, previous_gain), last_gain));
+
+#if (_USE_SSE)
+  const float oldest_out(GetByIndex<0>(tmp_sum)
+                         + history_[2] * coeffs_[2]
+                         + history_[3] * coeffs_[3]);
+  const float old_out(GetByIndex<1>(tmp_sum)
+                      + history_[3] * coeffs_[2]
+                      + oldest_out * coeffs_[3]);
+  const float new_out(GetByIndex<2>(tmp_sum)
+                      + oldest_out * coeffs_[2]
+                      + old_out * coeffs_[3]);
+  const float newest_out(GetByIndex<3>(tmp_sum)
+                         + old_out * coeffs_[2]
+                         + new_out * coeffs_[3]);
+  const Sample out(Fill(newest_out, new_out, old_out, oldest_out));
+  const Sample history(TakeEachRightHalf(out, sample));
+  Store(history_.data(), history);
+#else
+  const float out(tmp_sum
+                  + history_[2] * coeffs_[2]
+                  + history_[3] * coeffs_[3]);
+  history_[1] = history_[0];
+  history_[0] = sample;
+  history_[2] = history_[3];
+  history_[3] = out;
+#endif  // (_USE_SSE)
+
+  return out;
 }
 
 void SecondOrderRaw::SetParameters(const float frequency,
