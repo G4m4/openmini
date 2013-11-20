@@ -1,5 +1,5 @@
-/// @filename secondorder_raw.cc
-/// @brief Low Pass filter using a simple ("raw") 2nd order implementation
+/// @filename filters_common.h
+/// @brief OpenMini common stuff for all filters - declarations
 /// @author gm
 /// @copyright gm 2013
 ///
@@ -18,27 +18,17 @@
 /// You should have received a copy of the GNU General Public License
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "openmini/src/filters/filters_common.h"
-#include "openmini/src/filters/secondorder_raw.h"
+#ifndef OPENMINI_SRC_FILTERS_FILTERS_COMMON_H_
+#define OPENMINI_SRC_FILTERS_FILTERS_COMMON_H_
+
+#include "openmini/src/common.h"
 
 namespace openmini {
 namespace filters {
 
-SecondOrderRaw::SecondOrderRaw()
-    : Filter_Base() {
-}
-
-Sample SecondOrderRaw::operator()(const Sample& sample) {
-  return sample;
-}
-
-}
-
-void SecondOrderRaw::SetParameters(const float frequency,
-                                   const float resonance) {
-  ASSERT(frequency >= 0.0f);
-  ASSERT(frequency <= 0.5f);
-}
+static const double Pi(3.14159265358979);
 
 }  // namespace filters
 }  // namespace openmini
+
+#endif  // OPENMINI_SRC_FILTERS_FILTERS_COMMON_H_
