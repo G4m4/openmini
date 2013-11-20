@@ -134,7 +134,7 @@ TEST(Generators, PhaseAccumulatorPerf) {
     generator.SetFrequency(kFrequency);
 
     unsigned int sample_idx(0);
-    while (sample_idx < kDataPerfSetSize) {
+    while (sample_idx < kGeneratorDataPerfSetSize) {
       const Sample kCurrent(Fill(kFreqDistribution(kRandomGenerator)));
       sample_idx += openmini::SampleSize;
       // No actual test!

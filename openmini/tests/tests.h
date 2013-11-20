@@ -118,11 +118,13 @@ static const float kMaxFundamentalNorm(10000.0f / openmini::kSamplingRate);
 
 // Smaller performance test sets in debug
 #if (_BUILD_CONFIGURATION_DEBUG)
-static const unsigned int kDataPerfSetSize(16 * 1024);
+static const unsigned int kFilterDataPerfSetSize(16 * 1024);
+static const unsigned int kGeneratorDataPerfSetSize(16 * 1024);
 static const unsigned int kSynthesizerPerfSetSize(
   static_cast<unsigned int>(openmini::kSamplingRate));
 #else  // (_BUILD_CONFIGURATION_DEBUG)
-static const unsigned int kDataPerfSetSize(16 * 1024 * 256);
+static const unsigned int kFilterDataPerfSetSize(16 * 1024 * 256);
+static const unsigned int kGeneratorDataPerfSetSize(16 * 1024 * 256);
 static const unsigned int kSynthesizerPerfSetSize(
   static_cast<unsigned int>(openmini::kSamplingRate * 10.0f));
 #endif  // (_BUILD_CONFIGURATION_DEBUG)

@@ -156,7 +156,7 @@ TEST(Generators, SawtoothDPWPerf) {
     generator.SetFrequency(kFrequency);
 
     unsigned int sample_idx(0);
-    while (sample_idx < kDataPerfSetSize) {
+    while (sample_idx < kGeneratorDataPerfSetSize) {
       const Sample kCurrent(generator());
       sample_idx += openmini::SampleSize;
       // No actual test!
