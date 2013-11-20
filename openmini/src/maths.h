@@ -21,6 +21,8 @@
 #ifndef OPENMINI_SRC_MATHS_H_
 #define OPENMINI_SRC_MATHS_H_
 
+#include "openmini/src/configuration.h"
+
 #if (_USE_SSE)
 extern "C" {
 #include <emmintrin.h>
