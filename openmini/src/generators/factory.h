@@ -1,4 +1,4 @@
-/// @filename generators_factory.h
+/// @filename factory.h
 /// @brief Generators factory - declaration
 /// @author gm
 /// @copyright gm 2013

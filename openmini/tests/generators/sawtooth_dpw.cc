@@ -1,4 +1,4 @@
-/// @filename tests_sawtooth_dpw.cc
+/// @filename sawtooth_dpw.cc
 /// @brief Sawtooth DPW generator specific tests
 /// @author gm
 /// @copyright gm 2013

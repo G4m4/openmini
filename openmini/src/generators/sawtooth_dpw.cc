@@ -1,4 +1,4 @@
-/// @filename generator_sawtooth_dpw.cc
+/// @filename sawtooth_dpw.cc
 /// @brief Sawtooth signal generator using DPW algorithm - implementation
 /// @author gm
 /// @copyright gm 2013

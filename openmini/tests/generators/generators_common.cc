@@ -1,4 +1,4 @@
-/// @filename tests_generators_common.h
+/// @filename generators_common.cc
 /// @brief OpenMini common generators tests
 /// @author gm
 /// @copyright gm 2013

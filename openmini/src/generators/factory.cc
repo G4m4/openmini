@@ -1,4 +1,4 @@
-/// @filename generators_factory.cc
+/// @filename factory.cc
 /// @brief Generators factory - implementation
 /// @author gm
 /// @copyright gm 2013

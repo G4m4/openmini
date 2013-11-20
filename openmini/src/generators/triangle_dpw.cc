@@ -1,4 +1,4 @@
-/// @filename generator_triangle_dpw.cc
+/// @filename triangle_dpw.cc
 /// @brief Triangle signal generator using DPW algorithm - implementation
 /// @author gm
 /// @copyright gm 2013
