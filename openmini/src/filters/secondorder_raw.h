@@ -21,6 +21,8 @@
 #ifndef OPENMINI_SRC_FILTERS_SECONDORDER_RAW_H_
 #define OPENMINI_SRC_FILTERS_SECONDORDER_RAW_H_
 
+#include <array>
+
 #include "openmini/src/common.h"
 #include "openmini/src/filters/filter_base.h"
 
@@ -39,8 +41,15 @@ class ALIGN SecondOrderRaw : public Filter_Base {
   virtual void SetParameters(const float frequency, const float resonance);
 
  protected:
-  float zeros_;  //< Filter "zeros" coefficients (a0-an)
-  float poles_;  //< Filter "poles" coefficients (b0-bn)
+  float gain_;  ///< Filter gain (b0 coefficient)
+  std::array<float, 4> coeffs_;  ///< Filter coefficients (for zeroes and poles)
+                     ///< organized as follows:
+                     ///< [b2 b1 -a2 -a1]
+  std::array<float, 4> history_;  ///< Filter history (last inputs/outputs)
+                      ///< organized as follows:
+                      ///< [x(n-2) x(n-1) y(n-2) y(n-1)]
+                      ///< where x are the last inputs
+                      ///< and y the last outputs
 };
 
 }  // namespace filters

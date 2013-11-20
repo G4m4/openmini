@@ -18,6 +18,9 @@
 /// You should have received a copy of the GNU General Public License
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
+// std::sin, std::cos
+#include <cmath>
+
 #include "openmini/src/filters/filters_common.h"
 #include "openmini/src/filters/secondorder_raw.h"
 
@@ -25,7 +28,11 @@ namespace openmini {
 namespace filters {
 
 SecondOrderRaw::SecondOrderRaw()
-    : Filter_Base() {
+    : Filter_Base(),
+      gain_(0.0f) {
+  // Nothing to do here for now
+  coeffs_.fill(0.0f);
+  history_.fill(0.0f);
 }
 
 Sample SecondOrderRaw::operator()(const Sample& sample) {
