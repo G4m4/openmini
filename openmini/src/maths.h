@@ -156,7 +156,7 @@ static inline Sample Mul(const Sample& left, const Sample& right) {
 
 static inline Sample MulConst(const float constant, const Sample& right) {
 #if (_USE_SSE)
-  return _mm_mul_ps(Fill(constant), right);
+  return Mul(Fill(constant), right);
 #else
   return constant * right;
 #endif  // (_USE_SSE)
@@ -164,7 +164,7 @@ static inline Sample MulConst(const float constant, const Sample& right) {
 
 static inline Sample Abs(const Sample& value) {
 #if (_USE_SSE)
-  return _mm_max_ps(_mm_sub_ps(_mm_setzero_ps(), value), value);
+  return _mm_max_ps(Sub(_mm_setzero_ps(), value), value);
 #else
   return std::fabs(value);
 #endif  // (_USE_SSE)
