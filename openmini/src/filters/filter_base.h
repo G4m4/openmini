@@ -53,13 +53,10 @@ class ALIGN Filter_Base {
   /// one of this called per-sample! Check in the final code that it actually
   /// gets inlined if needed
   virtual Sample operator()(const Sample& sample) = 0;
-  /// @brief Reset the instance to the given qualitfy factor - "resonance"
+  /// @brief Set the filter parameters:
+  /// quality factor ("resonance") and cutoff frequency
   ///
   /// Resonance is not normalized
-  ///
-  /// @param[in]    resonance     Resonance to set the filter to
-  virtual void SetResonance(const float resonance) = 0;
-  /// @brief Set the filter to the given cutoff frequency
   ///
   /// Frequency is normalized - the input value should be in [0.0f ; 0.5f]
   /// 0.5 because:
@@ -67,8 +64,9 @@ class ALIGN Filter_Base {
   /// and:
   /// f_{max} = \frac{f_{s}}{2}
   ///
-  /// @param[in]    frequency         Cutoff frequency to set the filter to
-  virtual void SetCutoffFrequency(const float frequency) = 0;
+  /// @param[in]    frequency     Cutoff frequency to set the filter to
+  /// @param[in]    resonance     Resonance to set the filter to
+  virtual void SetParameters(const float frequency, const float resonance) = 0;
 };
 
 }  // namespace filters

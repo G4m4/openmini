@@ -36,8 +36,7 @@ class ALIGN SecondOrderRaw : public Filter_Base {
     // Nothing to do here for now
   };
   virtual Sample operator()(const Sample& sample);
-  virtual void SetResonance(const float resonance);
-  virtual void SetCutoffFrequency(const float frequency);
+  virtual void SetParameters(const float frequency, const float resonance);
 
  protected:
   float zeros_;  //< Filter "zeros" coefficients (a0-an)

@@ -31,10 +31,10 @@ Sample SecondOrderRaw::operator()(const Sample& sample) {
   return sample;
 }
 
-void SecondOrderRaw::SetResonance(const float resonance) {
 }
 
-void SecondOrderRaw::SetCutoffFrequency(const float frequency) {
+void SecondOrderRaw::SetParameters(const float frequency,
+                                   const float resonance) {
   ASSERT(frequency >= 0.0f);
   ASSERT(frequency <= 0.5f);
 }
