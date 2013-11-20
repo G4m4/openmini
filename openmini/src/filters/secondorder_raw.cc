@@ -43,8 +43,33 @@ Sample SecondOrderRaw::operator()(const Sample& sample) {
 
 void SecondOrderRaw::SetParameters(const float frequency,
                                    const float resonance) {
+  // Based on Audio EQ Cookbook material
   ASSERT(frequency >= 0.0f);
   ASSERT(frequency <= 0.5f);
+
+  // Computations done in double since precision is crucial here
+  const double kFrequency(frequency);
+  const double kResonance(resonance);
+
+  const double kOmega(2.0 * Pi * kFrequency);
+  const double kSinOmega(std::sin(kOmega));
+  const double kCosOmega(std::cos(kOmega));
+  const double kAlpha(kSinOmega / (2.0 * kResonance));
+
+  // Actual coefficients
+  const double b0 = (1.0 - kCosOmega) / 2.0;
+  const double b1 = (1.0 - kCosOmega);
+  const double b2 = (1.0 - kCosOmega) / 2.0;
+  const double a0 = 1.0 + kAlpha;
+  const double a1 = -2.0 * kCosOmega;
+  const double a2 = 1.0 - kAlpha;
+
+  // Assigning normalized coefficients
+  gain_ = static_cast<float>(b0 / a0);
+  coeffs_[0] = static_cast<float>(b2 / a0);
+  coeffs_[1] = static_cast<float>(b1 / a0);
+  coeffs_[2] = static_cast<float>(-a2 / a0);
+  coeffs_[3] = static_cast<float>(-a1 / a0);
 }
 
 }  // namespace filters
