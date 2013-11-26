@@ -24,7 +24,7 @@
 #include "openmini/tests/tests.h"
 
 NormFrequencyDistribution::NormFrequencyDistribution(void)
-  : uniform_real_distribution(0.0f, kMaxFundamentalNorm) {
+  : uniform_real_distribution(kMinFundamentalNorm, kMaxFundamentalNorm) {
   // Nothing to do here for now
 }
 
