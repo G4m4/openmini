@@ -56,7 +56,7 @@ TEST(Filters, OutputMean) {
     const float kExpected(std::accumulate(data.begin(),
                                           data.end(),
                                           0.0f));
-    const float kEpsilon(1e-4f * kDataTestSetSize);
+    const float kEpsilon(1e-3f * kDataTestSetSize);
 
     EXPECT_NEAR(kExpected, kActual, kEpsilon);
   }  // iterations?
