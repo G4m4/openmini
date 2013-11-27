@@ -37,6 +37,7 @@ set(OPENMINI_TESTS_SRC
     ${OPENMINI_SYNTHESIZER_TESTS_SRC}
 )
 set(OPENMINI_TESTS_HDR
+    debug.h
     tests.h
 )
 
