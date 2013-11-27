@@ -51,6 +51,10 @@ OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
                    juce::Slider::TextEntryBoxPosition::NoTextBox),
       osc3_volume_(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
                    juce::Slider::TextEntryBoxPosition::NoTextBox),
+      filter_freq_(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+                   juce::Slider::TextEntryBoxPosition::NoTextBox),
+      filter_q_(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+                juce::Slider::TextEntryBoxPosition::NoTextBox),
       debug_infos_() {
   // For some reason Juce keyboard is one octave higher...
   keyboard_.setAvailableRange(openmini::kMinKeyNote + 12,
@@ -66,18 +70,24 @@ OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
   addAndMakeVisible(&osc1_volume_);
   addAndMakeVisible(&osc2_volume_);
   addAndMakeVisible(&osc3_volume_);
+  addAndMakeVisible(&filter_freq_);
+  addAndMakeVisible(&filter_q_);
   osc1_waveform_.setRange(0.0, 1.0);
   osc2_waveform_.setRange(0.0, 1.0);
   osc3_waveform_.setRange(0.0, 1.0);
   osc1_volume_.setRange(0.0, 1.0);
   osc2_volume_.setRange(0.0, 1.0);
   osc3_volume_.setRange(0.0, 1.0);
+  filter_freq_.setRange(0.0, 1.0);
+  filter_q_.setRange(0.0, 1.0);
   osc1_waveform_.addListener(this);
   osc2_waveform_.addListener(this);
   osc3_waveform_.addListener(this);
   osc1_volume_.addListener(this);
   osc2_volume_.addListener(this);
   osc3_volume_.addListener(this);
+  filter_freq_.addListener(this);
+  filter_q_.addListener(this);
 
   // DEBUG
   addAndMakeVisible(&debug_infos_);
@@ -104,6 +114,8 @@ void OpenMiniAudioProcessorEditor::paint(juce::Graphics& g) {
   osc1_volume_.setBounds(200, 0, 60, 60);
   osc2_volume_.setBounds(200, 70, 60, 60);
   osc3_volume_.setBounds(200, 140, 60, 60);
+  filter_freq_.setBounds(0, 210, 60, 60);
+  filter_q_.setBounds(200, 210, 60, 60);
 
   // DEBUG
   debug_infos_.setBounds(300, 0, this->getWidth(), 100);
@@ -124,6 +136,10 @@ void OpenMiniAudioProcessorEditor::sliderValueChanged(juce::Slider* slider) {
     getProcessor()->setParameterNotifyingHost(kOsc2Volume, value);
   } else if (slider == &osc3_volume_) {
     getProcessor()->setParameterNotifyingHost(kOsc3Volume, value);
+  } else if (slider == &filter_freq_) {
+    getProcessor()->setParameterNotifyingHost(kFilterFreq, value);
+  } else if (slider == &filter_q_) {
+    getProcessor()->setParameterNotifyingHost(kFilterQ, value);
   }
 }
 
@@ -147,6 +163,10 @@ void OpenMiniAudioProcessorEditor::changeListenerCallback(
                         juce::dontSendNotification);
   osc3_volume_.setValue(proc->getParameter(kOsc3Volume),
                         juce::dontSendNotification);
+  filter_freq_.setValue(proc->getParameter(kFilterFreq),
+                        juce::dontSendNotification);
+  filter_q_.setValue(proc->getParameter(kFilterQ),
+                     juce::dontSendNotification);
 }
 
 void OpenMiniAudioProcessorEditor::timerCallback() {

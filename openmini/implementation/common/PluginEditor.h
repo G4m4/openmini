@@ -62,6 +62,8 @@ class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
   juce::Slider osc1_volume_;
   juce::Slider osc2_volume_;
   juce::Slider osc3_volume_;
+  juce::Slider filter_freq_;
+  juce::Slider filter_q_;
   juce::TextEditor debug_infos_;
   static const int kTimerInterval = 100;
 };
