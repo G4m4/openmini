@@ -39,6 +39,8 @@ enum Type {
   kOsc1Waveform,
   kOsc2Waveform,
   kOsc3Waveform,
+  kFilterFreq,
+  kFilterQ,
   kCount
 };
 
@@ -92,7 +94,25 @@ const std::array<ParameterMeta, Parameters::kCount> kParametersMeta = {{
                 1,
                 Waveform::kCount,
                 "Osc3 Waveform",
-                "Waveform for oscillator 3")
+                "Waveform for oscillator 3"),
+  ParameterMeta(1.0f / openmini::kSamplingRate,
+                (openmini::kSamplingRateHalf - 10.0f)
+                  / openmini::kSamplingRate,
+                (openmini::kSamplingRateHalf - 10.0f)
+                  / openmini::kSamplingRate,  // "almost" passthrough
+                true,
+                1,
+                0,
+                "Filter Freq",
+                "Cutoff Frequency for the filter"),
+  ParameterMeta(0.0f,
+                1.0f,
+                0.7f,
+                true,
+                1,
+                0,
+                "Filter Q",
+                "Q Factor for the filter")
 }};
 
 }  // namespace Parameters
