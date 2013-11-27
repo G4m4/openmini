@@ -63,7 +63,10 @@ TEST(Synthesizer, SynthesizerNoteOnNoteOff) {
     }
   }
   // The generated signal mean square is supposed to be null
-  ASSERT_FLOAT_EQ(0.0f, mean_square * 2.0f / kDataTestSetSize);
+  // ...Or almost null, since we now have filters in our synthesizer
+  // This is -100dBFS and should be ok.
+  const float kEpsilon(1e-5f);
+  ASSERT_NEAR(0.0f, mean_square * 2.0f / kDataTestSetSize, kEpsilon);
 }
 
 /// @brief Update the synthesizer twice in a row
@@ -85,8 +88,9 @@ TEST(Synthesizer, SynthesizerReupdate) {
   // Filling the remaining half
   synth.ProcessAudio(&data[openmini::kBlockSize], openmini::kBlockSize);
 
-  // Check for clicks
-  const float kEpsilon(1.06f);
+  // Check for clicks - this value is a bit higher (although still quite low)
+  // due to the filter ringing effect
+  const float kEpsilon(10.0f);
   EXPECT_FALSE(ClickWasFound(&data[0], data.size(), kEpsilon));
 }
 
@@ -108,8 +112,9 @@ TEST(Synthesizer, SynthesizerSmallBlockSize) {
     data_idx += kBlockSize;
   }
 
-  // Check for clicks
-  const float kEpsilon(1.06f);
+  // Check for clicks - this value is a bit higher (although still quite low)
+  // due to the filter ringing effect
+  const float kEpsilon(10.0f);
   // Not testing the first sample!
   EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
 }
@@ -130,8 +135,9 @@ TEST(Synthesizer, SynthesizerVaryingBlockSize) {
     data_idx += kBlockSize;
   }
 
-  // Check for clicks
-  const float kEpsilon(1.06f);
+  // Check for clicks - this value is a bit higher (although still quite low)
+  // due to the filter ringing effect
+  const float kEpsilon(10.0f);
   // Not testing the first sample!
   EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
 }
