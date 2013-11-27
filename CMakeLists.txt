@@ -156,8 +156,9 @@ message(STATUS "Coverage: ${OPENMINI_ENABLE_COVERAGE}")
 option(OPENMINI_ENABLE_SIMD "Allowing to use SIMD instructions: SSE on x86, etc." OFF)
 message(STATUS "Simd instructions use: ${OPENMINI_ENABLE_SIMD}")
 
-# Project-wide options (multicore compilation)
+# Project-wide various options
 if (${COMPILER_IS_MSVC})
+  # Multithreaded build
   add_definitions("/MP")
 endif (${COMPILER_IS_MSVC})
 
