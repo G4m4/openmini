@@ -35,6 +35,8 @@ static const unsigned int kDefaultBlockSize(512);
 
 Synthesizer::Synthesizer()
     : ParametersManager(),
+      mixer_(),
+      filter_(),
       buffer_(kDefaultBlockSize) {
   // Nothing to do here for now
 }
@@ -56,7 +58,7 @@ void Synthesizer::ProcessAudio(float* const output,
   // Actual amount of data to synthesize:
   // closest multiple of SampleSize >= (required - existing)
   while (buffer_.size() < length) {
-    buffer_.Push(mixer_());
+    buffer_.Push(filter_(mixer_()));
   }
   buffer_.Pop(output, length);
 }
@@ -106,6 +108,14 @@ void Synthesizer::ProcessParameters(void) {
         case(Parameters::kOsc3Waveform): {
           mixer_.SetWaveform(2,
             GetDiscreteValue<Waveform::Type>(Parameters::kOsc3Waveform));
+          break;
+        }
+        case(Parameters::kFilterFreq): {
+          filter_.SetFrequency(GetValue(Parameters::kFilterFreq));
+          break;
+        }
+        case(Parameters::kFilterQ): {
+          filter_.SetQFactor(GetValue(Parameters::kFilterQ));
           break;
         }
         default: {
