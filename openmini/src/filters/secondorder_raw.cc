@@ -88,7 +88,10 @@ void SecondOrderRaw::SetParameters(const float frequency,
                                    const float resonance) {
   // Based on Audio EQ Cookbook material
   ASSERT(resonance >= 0.0f);
-  ASSERT(frequency <= 0.5f);
+  // Required due to imprecisions
+  ASSERT(frequency > 1.0f / openmini::kSamplingRate);
+  ASSERT(frequency <= (openmini::kSamplingRateHalf - 10.0f)
+                         / openmini::kSamplingRate);
 
   // Computations done in double since precision is crucial here
   const double kFrequency(frequency);
