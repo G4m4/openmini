@@ -49,7 +49,9 @@ TEST(Filters, OutputMean) {
 
     Sample actual_mean(Fill(0.0f));
     for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
-      actual_mean = Add(actual_mean, filter(Fill(&data[i])));
+      const Sample input(Fill(&data[i]));
+      const Sample filtered(filter(input));
+      actual_mean = Add(actual_mean, filtered);
     }
 
     const float kActual(AddHorizontal(actual_mean));
