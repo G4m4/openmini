@@ -64,6 +64,34 @@ TEST(Filters, OutputMean) {
   }  // iterations?
 }
 
+/// @brief Filters a random signal with max frequency cutoff
+/// (half the sampling rate) and default Q (0.7)
+/// Check for minimal output/input error
+TEST(Filters, Passthrough) {
+  std::vector<float> data(kDataTestSetSize);
+  std::generate(data.begin(),
+                data.end(),
+                std::bind(kNormDistribution, kRandomGenerator));
+  // Max cutoff frequency, in order to have a passthrough like filter
+  const float kFrequency((openmini::kSamplingRateHalf - 10.0f)
+                         / openmini::kSamplingRate);
+  SecondOrderRaw filter;
+
+  filter.SetParameters(kFrequency, kResonanceWithoutOverShoot);
+
+  Sample diff_mean(Fill(0.0f));
+  for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
+    const Sample input(Fill(&data[i]));
+    const Sample filtered(filter(input));
+    diff_mean = Add(diff_mean, Sub(filtered, input));
+  }
+  const float kExpected(0.0f);
+  const float kActual(AddHorizontal(diff_mean));
+  const float kEpsilon(1e-6f * kDataTestSetSize);
+
+  EXPECT_NEAR(kExpected, kActual, kEpsilon);
+}
+
 /// @brief Filters random data (performance test)
 /// @brief Generates a signal (performance tests)
 TEST(Filters, SecondOrderRawPerf) {
