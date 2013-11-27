@@ -87,7 +87,7 @@ Sample SecondOrderRaw::operator()(SampleRead sample) {
 void SecondOrderRaw::SetParameters(const float frequency,
                                    const float resonance) {
   // Based on Audio EQ Cookbook material
-  ASSERT(frequency >= 0.0f);
+  ASSERT(resonance >= 0.0f);
   ASSERT(frequency <= 0.5f);
 
   // Computations done in double since precision is crucial here
