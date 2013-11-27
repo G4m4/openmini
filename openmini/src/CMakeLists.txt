@@ -41,6 +41,12 @@ set(OPENMINI_HDR
   ${OPENMINI_SYNTHESIZER_HDR}
 )
 
+# Library various options
+if (${COMPILER_IS_MSVC})
+  # No language extensions
+  add_definitions("/Za")
+endif (${COMPILER_IS_MSVC})
+
 # Target
 add_library(openmini_lib
   ${OPENMINI_SRC}
