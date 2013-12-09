@@ -34,7 +34,7 @@ class ALIGN TriangleDPW : public Generator_Base {
   explicit TriangleDPW(const float phase = 0.0f);
   virtual ~TriangleDPW() {
     // Nothing to do here for now
-  };
+  }
   virtual Sample operator()(void);
   virtual void SetPhase(const float phase);
   virtual void SetFrequency(const float frequency);

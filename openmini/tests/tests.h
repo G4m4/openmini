@@ -139,7 +139,7 @@ class NormFrequencyDistribution : public std::uniform_real_distribution<float> {
   NormFrequencyDistribution();
   ~NormFrequencyDistribution() {
     // Nothing to do here for now
-  };
+  }
 };
 static NormFrequencyDistribution kFreqDistribution;
 static std::uniform_real_distribution<float> kNormDistribution(-1.0f, 1.0f);

@@ -50,12 +50,12 @@ class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
   void changeListenerCallback(juce::ChangeBroadcaster *source);
   void timerCallback();
 
- private:
   /// @brief Retrieve an access to the audio processor
   OpenMiniAudioProcessor* getProcessor() const;
 
-  juce::MidiKeyboardComponent keyboard_;
+ private:
   OpenMiniAudioProcessor* owner_;
+  juce::MidiKeyboardComponent keyboard_;
   juce::Slider osc1_waveform_;
   juce::Slider osc2_waveform_;
   juce::Slider osc3_waveform_;

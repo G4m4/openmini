@@ -32,7 +32,7 @@
 /// for debugging purpose only!
 class FileWriter {
  public:
-  FileWriter(const std::string& filename)
+  explicit FileWriter(const std::string& filename)
     : out_stream_(filename) {
     // Nothing to do here for now
   }

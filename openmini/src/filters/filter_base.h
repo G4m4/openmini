@@ -46,7 +46,7 @@ class ALIGN Filter_Base {
   }
   virtual ~Filter_Base() {
     // Nothing to do here for now
-  };
+  }
   /// @brief Actual process function for one sample
   ///
   /// Process is done per-sample for flexibility purpose, beware of not having

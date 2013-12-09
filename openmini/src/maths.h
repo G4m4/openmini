@@ -21,6 +21,8 @@
 #ifndef OPENMINI_SRC_MATHS_H_
 #define OPENMINI_SRC_MATHS_H_
 
+#include <cmath>
+
 #include "openmini/src/configuration.h"
 
 #if (_USE_SSE)
@@ -29,8 +31,6 @@ extern "C" {
 #include <mmintrin.h>
 }
 #endif  // (_USE_SSE)
-
-#include <cmath>
 
 #include "openmini/src/common.h"
 
