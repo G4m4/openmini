@@ -1,4 +1,4 @@
-/// @filename PluginEditor.h
+/// @filename PluginProcessor.h
 /// @brief OpenMini plugin processor (audio)
 /// @author gm
 /// @copyright gm 2013

@@ -29,7 +29,7 @@
 namespace openmini {
 namespace filters {
 class Filter_Base;
-}  // namespace generators
+}  // namespace filters
 }  // namespace openmini
 
 namespace openmini {
