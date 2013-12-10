@@ -75,8 +75,8 @@ Sample SecondOrderRaw::operator()(SampleRead sample) {
   const float out(tmp_sum
                   + history_[2] * coeffs_[2]
                   + history_[3] * coeffs_[3]);
-  history_[1] = history_[0];
-  history_[0] = sample;
+  history_[0] = history_[1];
+  history_[1] = sample;
   history_[2] = history_[3];
   history_[3] = out;
 #endif  // (_USE_SSE)
