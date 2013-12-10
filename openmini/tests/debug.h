@@ -26,6 +26,9 @@
 
 #include "openmini/tests/tests.h"
 
+/// @brief Namespace holding debug stuff - nothing using it should be committed
+namespace debug {
+
 /// @brief Helper class for writing signal data into files
 ///
 /// This is clearly not optimized at all nor really clean,
@@ -49,8 +52,8 @@ class FileWriter {
     }
   }
 
-  /// @brief Overload for one actual value
-  void Push(const float sample) {
+  /// @brief Push version for one actual value
+  void PushFloat(const float sample) {
     out_stream_ << sample << "\n";
   }
 
@@ -58,5 +61,6 @@ class FileWriter {
   std::ofstream out_stream_;
 };
 
+}  // namespace debug
 
 #endif  // OPENMINI_TESTS_DEBUGS_H_
