@@ -100,22 +100,6 @@ int GetSign(const TypeInput input) {
   return (zero < input) - (input < zero);
 }
 
-/// @brief Simple linear interpolation
-///
-/// --------|--------------x--|-----------
-///       left              right
-///         |<    ratio   >|
-///
-/// @param[in]  left     Previous value
-/// @param[in]  right    Next value
-/// @param[out] ratio    Location of the required interpolated value
-///
-/// @return The interpolated value
-float LinearInterpolation(
-    const float left,
-    const float right,
-    const float ratio);
-
 }  // namespace generators
 }  // namespace openmini
 
