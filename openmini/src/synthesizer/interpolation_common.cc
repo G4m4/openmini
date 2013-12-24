@@ -23,6 +23,10 @@
 namespace openmini {
 namespace synthesizer {
 
+LinearInterpolation::LinearInterpolation() {
+  // Nothing to do here for now
+}
+
 float LinearInterpolation::operator()(const float* const data_cursor,
                                       const float ratio) const {
   const float left(*data_cursor);

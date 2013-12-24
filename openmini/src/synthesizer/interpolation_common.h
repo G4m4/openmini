@@ -31,13 +31,24 @@ namespace synthesizer {
 /// To be inherited by all interpolation functors
 class InterpolationInterface {
  public:
-  Sample operator()(const float* const data_cursor,
-                    const float ratio) const;
+  /// @brief Default constructor
+  InterpolationInterface() {
+    // Nothing to do here for now
+  };
+  /// @brief Default destructor
+  virtual ~InterpolationInterface() {
+    // Nothing to do here for now
+  };
+  /// @brief Actual process function for one sample
+  virtual Sample operator()(const float* const data_cursor,
+                            const float ratio) const = 0;
 };
 
 /// @brief Simple linear interpolation
 class LinearInterpolation : public InterpolationInterface {
  public:
+  /// @brief Default constructor
+  LinearInterpolation();
   /// @brief Actual process function for one sample
   ///
   /// --------|--------------x--|-----------
