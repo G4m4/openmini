@@ -1,4 +1,4 @@
-/// @filename tests_synthesizer.cc
+/// @filename synthesizer.cc
 /// @brief Synthesizer specific tests
 /// @author gm
 /// @copyright gm 2013

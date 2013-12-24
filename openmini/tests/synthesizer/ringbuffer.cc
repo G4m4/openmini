@@ -1,4 +1,4 @@
-/// @filename tests_ringbuffer.cc
+/// @filename ringbuffer.cc
 /// @brief RingBuffer specific tests
 /// @author gm
 /// @copyright gm 2013
