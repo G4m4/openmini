@@ -40,7 +40,7 @@ class FileWriter {
     // Nothing to do here for now
   }
   ~FileWriter() {
-    out_stream_.close();
+    Close();
   }
 
   /// @brief Push one sample into file writer, will be unfolded if
@@ -55,6 +55,11 @@ class FileWriter {
   /// @brief Push version for one actual value
   void PushFloat(const float sample) {
     out_stream_ << sample << "\n";
+  }
+
+  /// @brief Close writer (automatically done when destroyed)
+  void Close(void) {
+    out_stream_.close();
   }
 
  private:
