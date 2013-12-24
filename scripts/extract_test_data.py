@@ -40,48 +40,22 @@ def ExtractSignal(filename):
         raise Exception("No such file: "  + str(filename))
     return numpy.fromfile(filename, sep='\n')
 
-def GetMetadata(signal):
-    '''
-    Get signal basic metadata such as sum, mean etc.
-
-    Return a tuple organized as follows:
-    ((text, value)
-     ...
-     (text, value))
-    '''
-    return (("Length: ", len(signal)),
-            ("Sum: ", numpy.sum(signal)),
-            ("Max: ", numpy.max(signal)),
-            ("Mean: ", numpy.mean(signal)),
-            ("Var: ", numpy.var(signal)))
-
-def PrintMetadata(metadatas):
-    '''
-    Print signal metadata extracted before
-
-    Return a string organized as follows:
-    text value ... text value
-    '''
-    output_str = ""
-    for metadata in metadatas:
-        output_str += metadata[0] + str(metadata[1])
-        output_str += " "
-    return output_str
-
 if __name__ == "__main__":
     import pylab
+    import utilities
 
-    files = ('../msvc/openmini/tests/out.dat',
-#              '../msvc/openmini/tests/in.dat'
+    files = (#'../build/out.dat',
+             '../build/in.dat',
+             '../build/intermediate.dat'
              )
 
-    view_length = 32768
+    view_length = 32
 
     for filename in files:
         print ("File: " + str(filename))
         signal = ExtractSignal(filename)
-        metas = GetMetadata(signal)
-        print(PrintMetadata(metas))
+        metas = utilities.GetMetadata(signal)
+        print(utilities.PrintMetadata(metas))
         pylab.plot(signal[0:view_length:1])
 
     pylab.show()
