@@ -31,6 +31,11 @@ namespace synthesizer {
 /// @param[in] value     Value to convert
 int ConvertFloorAsInteger(const float value);
 
+/// @brief Round the input value to the nearest integer
+///
+/// @param[in] value     Value to convert
+int Round(const float value);
+
 /// @brief Check if the input value is an integer
 ///
 /// @param[in] value     Value to test

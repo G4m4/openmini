@@ -30,6 +30,10 @@ int ConvertFloorAsInteger(const float value) {
   return static_cast<int>(std::floor(value));
 }
 
+int Round(const float value) {
+  return static_cast<int>(std::floor(value + 0.5f));
+}
+
 bool IsInteger(const float value) {
   return std::floor(value) == value;
 }
