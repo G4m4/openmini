@@ -44,8 +44,9 @@ class Interpolator {
   template <typename TypeFunctor>
   Sample operator()(void) {
     const TypeFunctor interpolation_func;
-    const int left_idx(ConvertFloorAsInteger(static_cast<float>(cursor_pos_)));
-    const float cursor(static_cast<float>(cursor_pos_) - static_cast<float>(left_idx));
+    const int left_idx(FloorAndConvert<int>(static_cast<float>(cursor_pos_)));
+    const float cursor(static_cast<float>(cursor_pos_)
+                       - static_cast<float>(left_idx));
     cursor_pos_ += static_cast<double>(ratio_);
     return interpolation_func(&data_[left_idx], cursor);
   }
@@ -63,8 +64,8 @@ class Interpolator {
   /// Note that the internal data pointer will not be reseted, @see Reset
   ///
   /// @param[in]  data_cursor   Cursor to the data to interpolate from
-  virtual void SetData(float* data_cursor,
-                       const unsigned int data_length);
+  void SetData(float* const data_cursor,
+               const unsigned int data_length);
 
   /// @brief Check if there is still data to interpolate from
   ///

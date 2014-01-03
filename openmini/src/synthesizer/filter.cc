@@ -42,7 +42,7 @@ void Filter::SetFrequency(const float frequency) {
   ASSERT(frequency > 0.0f);
   ASSERT(frequency < openmini::kSamplingRateHalf);
 
-  // TODO: find a way to do this generically
+  // TODO(gm): find a way to do this generically
   if (frequency != frequency_) {
     frequency_ = frequency;
     update_ = true;
@@ -53,7 +53,7 @@ void Filter::SetQFactor(const float qfactor) {
   ASSERT(qfactor <= 100.0f);
   ASSERT(qfactor >= 0.0f);
 
-  // TODO: find a way to do this generically
+  // TODO(gm): find a way to do this generically
   if (qfactor != qfactor_) {
     qfactor_ = qfactor;
     update_ = true;

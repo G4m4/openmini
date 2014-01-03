@@ -43,11 +43,11 @@ void Interpolator::SetRatio(const float ratio) {
   ratio_ = ratio;
 }
 
-void Interpolator::SetData(float* data_cursor,
 float Interpolator::Ratio(void) const {
   return ratio_;
 }
 
+void Interpolator::SetData(float* const data_cursor,
                            const unsigned int data_length) {
   ASSERT(data_cursor != nullptr);
   ASSERT(data_length > 0);
@@ -64,8 +64,8 @@ void Interpolator::Reset(void) {
 }
 
 unsigned int ExpectedLength(const Interpolator& interpolator) {
-  return static_cast<unsigned int>(std::ceil((static_cast<float>(interpolator.data_length_)
-                                             / interpolator.ratio_)));
+  return CeilAndConvert<unsigned int>(
+    (static_cast<float>(interpolator.data_length_) / interpolator.ratio_));
 }
 
 }  // namespace synthesizer
