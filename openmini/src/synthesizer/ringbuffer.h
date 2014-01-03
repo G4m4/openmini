@@ -52,7 +52,7 @@ class RingBuffer {
   ///
   /// Specialization for custom Sample type: this one is optimized
   ///
-  /// @param[in]   src        Sampel to push
+  /// @param[in]   src        Sample to push
   void Push(SampleRead value);
 
   /// @brief Explicitly clear buffer content but does not deallocate it
@@ -77,7 +77,7 @@ class RingBuffer {
   /// @brief How many elements may be popped from the buffer
   unsigned int size(void) const;
 
- private :
+ private:
   float* data_;  ///< Internal elements buffer
   unsigned int capacity_;  ///< Internal buffer length
   unsigned int size_;  ///< Count of elements currently held within the buffer

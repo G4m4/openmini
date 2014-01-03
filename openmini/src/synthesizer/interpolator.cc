@@ -36,7 +36,7 @@ Interpolator::Interpolator()
 
 Interpolator::~Interpolator() {
     // Nothing to do here for now
-  }
+}
 
 void Interpolator::SetRatio(const float ratio) {
   ASSERT(ratio > 0.0f);
