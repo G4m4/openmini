@@ -37,7 +37,7 @@ namespace synthesizer {
 class RingBuffer {
  public:
   /// @brief Default constructor: the user may provide a buffer length
-  explicit RingBuffer(const unsigned int capacity = 0);
+  explicit RingBuffer(const unsigned int capacity = 1);
   ~RingBuffer();
 
   /// @brief Pop elements out of the buffer
