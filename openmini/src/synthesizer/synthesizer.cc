@@ -51,9 +51,7 @@ void Synthesizer::ProcessAudio(float* const output,
   ProcessParameters();
 
   // Resizing the buffer if need be
-  if (buffer_.capacity() < length) {
-    buffer_.Resize(length);
-  }
+  buffer_.ResizeIfNeedBe(length);
 
   // Actual amount of data to synthesize:
   // closest multiple of SampleSize >= (required - existing)

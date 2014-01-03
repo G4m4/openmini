@@ -38,7 +38,7 @@ class RingBuffer {
  public:
   /// @brief Default constructor: the user may provide a buffer length
   explicit RingBuffer(const unsigned int capacity = 1);
-  ~RingBuffer();
+  virtual ~RingBuffer();
 
   /// @brief Pop elements out of the buffer
   ///
@@ -46,36 +46,60 @@ class RingBuffer {
   ///
   /// @param[out]   dest          Buffer to store the elements into
   /// @param[in]    count         Elements count to retrieve
-  void Pop(float* dest, const unsigned int count);
+  virtual void Pop(float* dest, const unsigned int count);
 
   /// @brief Push elements into the buffer
   ///
   /// Specialization for custom Sample type: this one is optimized
   ///
   /// @param[in]   src        Sample to push
-  void Push(SampleRead value);
+  virtual void Push(SampleRead value);
 
   /// @brief Explicitly clear buffer content but does not deallocate it
-  void Clear(void);
+  virtual void Clear(void);
 
-  /// @brief Change the available count of elements within the buffer
+  /// @brief Check if the buffer is big enough to store and later retrieve
+  /// at least "size" elements
   ///
-  /// Previously stored data will be copied in it as much as possible;
-  /// in case of room left it will be filled with zeroes
-  ///
-  /// @param[in]    capacity    New capacity of the container
-  void Resize(const unsigned int capacity);
+  /// Resize if this is not the case.
+  virtual void ResizeIfNeedBe(const unsigned int size);
 
   /// @brief Returns true if the buffer is "usable"
   ///
   /// For now, this means that some memory is allocated
-  bool IsGood(void) const;
+  virtual bool IsGood(void) const;
 
   /// @brief How many elements may be pushed into the buffer
-  unsigned int capacity(void) const;
+  virtual unsigned int capacity(void) const;
 
   /// @brief How many elements may be popped from the buffer
-  unsigned int size(void) const;
+  virtual unsigned int size(void) const;
+
+ protected:
+  /// @brief Change the available count of elements
+  /// that can be retrieved from the buffer
+  ///
+  /// Previously stored data will be copied in it as much as possible;
+  /// in case of room left it will be filled with zeroes
+  ///
+  /// @param[in]  size    New capacity of the container
+  virtual void Resize(const unsigned int size);
+
+  /// @brief Compute required internal capacity in order to be able to output
+  /// at least "size" elements
+  ///
+  /// @param[in]  size   Minimal amout of elements to be retrieved
+  virtual unsigned int ComputeCapacity(const unsigned int size) const;
+
+  /// @brief Transfer the data from input to output
+  ///
+  /// This method allows to put some extra "post-copy" operations
+  ///
+  /// @param[in]  in_first, in_last    Range of elements to transfer
+  /// @param[in]  out_first   Beginnning of the output range
+  virtual void TransferData(float* const in_first,
+                            float* const in_last,
+                            float* const out_first);
 
  private:
   float* data_;  ///< Internal elements buffer

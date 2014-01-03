@@ -66,14 +66,14 @@ void RingBuffer::Pop(float* dest, const unsigned int count) {
     const unsigned int left_part_size(copy_count - right_part_size);
 
     //  Copying the first part
-    std::copy(&data_[reading_position_],
-              &data_[reading_position_ + right_part_size],
-              &dest[0]);
+    TransferData(&data_[reading_position_],
+                 &data_[reading_position_ + right_part_size],
+                 &dest[0]);
     if (0 != left_part_size) {
       //  copy the second part (if there is one)
-      std::copy(&data_[0],
-                &data_[left_part_size],
-                &dest[right_part_size]);
+      TransferData(&data_[0],
+                   &data_[left_part_size],
+                   &dest[right_part_size]);
     }
 
     reading_position_ += copy_count;
@@ -111,10 +111,32 @@ void RingBuffer::Clear(void) {
   }
 }
 
-void RingBuffer::Resize(const unsigned int capacity) {
-  ASSERT(capacity > 0);
+void RingBuffer::ResizeIfNeedBe(const unsigned int size) {
+  const unsigned int actual_capacity(ComputeCapacity(size));
+  if (actual_capacity > capacity_) {
+    return Resize(actual_capacity);
+  }
+}
 
-  const unsigned int actual_capacity(FindImmediateNextMultiple(capacity,
+bool RingBuffer::IsGood(void) const {
+  return data_ != nullptr;
+}
+
+unsigned int RingBuffer::capacity(void) const {
+  ASSERT(IsGood());
+  return capacity_;
+}
+
+unsigned int RingBuffer::size(void) const {
+  ASSERT(IsGood());
+  return size_;
+}
+
+void RingBuffer::Resize(const unsigned int size) {
+  ASSERT(size > 0);
+
+  // TODO(gm): this should probably be moved into ComputeCapacity()
+  const unsigned int actual_capacity(FindImmediateNextMultiple(size,
                                      openmini::SampleSize)
   // This is the offset required in order to make future left space
   // a multiple of SampleSize.
@@ -129,9 +151,9 @@ void RingBuffer::Resize(const unsigned int capacity) {
   if (IsGood()) {
     // The current "interesting" part, between both position,
     // is copied to the new buffer beginning
-    std::copy(&data_[reading_position_],
-              &data_[reading_position_ + max_fill_count],
-              &temp[0]);
+    TransferData(&data_[reading_position_],
+                 &data_[reading_position_ + max_fill_count],
+                 &temp[0]);
     Deallocate(data_);
   }
   data_ = temp;
@@ -143,18 +165,15 @@ void RingBuffer::Resize(const unsigned int capacity) {
   size_ = max_fill_count;
 }
 
-bool RingBuffer::IsGood(void) const {
-  return (data_ != nullptr);
+unsigned int RingBuffer::ComputeCapacity(const unsigned int size) const {
+  // For this implementation, one internal sample = one output sample
+  return size;
 }
 
-unsigned int RingBuffer::capacity(void) const {
-  ASSERT(IsGood());
-  return capacity_;
-}
-
-unsigned int RingBuffer::size(void) const {
-  ASSERT(IsGood());
-  return size_;
+void RingBuffer::TransferData(float* const in_first,
+                              float* const in_last,
+                              float* const out_first) {
+  std::copy(in_first, in_last, out_first);
 }
 
 }  // namespace synthesizer
