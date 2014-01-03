@@ -44,6 +44,10 @@ void Interpolator::SetRatio(const float ratio) {
 }
 
 void Interpolator::SetData(float* data_cursor,
+float Interpolator::Ratio(void) const {
+  return ratio_;
+}
+
                            const unsigned int data_length) {
   ASSERT(data_cursor != nullptr);
   ASSERT(data_length > 0);

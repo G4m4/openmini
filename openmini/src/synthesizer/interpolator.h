@@ -55,6 +55,9 @@ class Interpolator {
   /// @param[in]     ratio       Resampling ratio: >1 means upsampling
   virtual void SetRatio(const float ratio);
 
+  /// @brief Resampling ratio getter
+  float Ratio(void) const;
+
   /// @brief Input data setter
   ///
   /// Note that the internal data pointer will not be reseted, @see Reset
