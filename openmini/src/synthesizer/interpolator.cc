@@ -28,7 +28,7 @@ namespace synthesizer {
 
 Interpolator::Interpolator()
     : cursor_pos_(0.0),
-      ratio_(0.0f),
+      ratio_(1.0f),
       data_length_(0),
       data_(nullptr) {
   // Nothing to do here for now
