@@ -21,15 +21,28 @@
 #ifndef OPENMINI_SRC_SYNTHESIZER_SYNTHESIZER_COMMON_H_
 #define OPENMINI_SRC_SYNTHESIZER_SYNTHESIZER_COMMON_H_
 
+#include <cmath>
+
 #include "openmini/src/common.h"
 
 namespace openmini {
 namespace synthesizer {
 
-/// @brief Floor the input value and convert it as an integer
+/// @brief Floor the input value and convert it as the given type
 ///
 /// @param[in] value     Value to convert
-int ConvertFloorAsInteger(const float value);
+template <typename TypeOut, typename TypeIn>
+TypeOut FloorAndConvert(const TypeIn value) {
+  return static_cast<TypeOut>(std::floor(value));
+}
+
+/// @brief Ceil the input value and convert it as the given type
+///
+/// @param[in] value     Value to convert
+template <typename TypeOut, typename TypeIn>
+TypeOut CeilAndConvert(const TypeIn value) {
+  return static_cast<TypeOut>(std::ceil(value));
+}
 
 /// @brief Round the input value to the nearest integer
 ///

@@ -18,17 +18,10 @@
 /// You should have received a copy of the GNU General Public License
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
-// std::floor, std::pow
-#include <cmath>
-
 #include "openmini/src/synthesizer/synthesizer_common.h"
 
 namespace openmini {
 namespace synthesizer {
-
-int ConvertFloorAsInteger(const float value) {
-  return static_cast<int>(std::floor(value));
-}
 
 int Round(const float value) {
   return static_cast<int>(std::floor(value + 0.5f));

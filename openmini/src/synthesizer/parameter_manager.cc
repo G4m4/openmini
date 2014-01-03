@@ -55,11 +55,11 @@ int NormalizedToInt(const float normalized,
   ASSERT(normalized <= 1.0f);
 
   return std::min(metadata.cardinality() - 1,
-                  ConvertFloorAsInteger(normalized * metadata.cardinality()));
+                  FloorAndConvert<int>(normalized * metadata.cardinality()));
 }
 
 int UnnormalizedToInt(const float unnormalized) {
-  return ConvertFloorAsInteger(unnormalized);
+  return FloorAndConvert<int>(unnormalized);
 }
 
 ParametersManager::ParametersManager()
