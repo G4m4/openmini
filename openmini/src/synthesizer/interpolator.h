@@ -34,7 +34,7 @@ namespace synthesizer {
 class Interpolator {
  public:
   Interpolator();
-  virtual ~Interpolator();
+  ~Interpolator();
 
   /// @brief Actual processing function
   ///
@@ -54,7 +54,7 @@ class Interpolator {
   /// @brief Resampling ratio setter
   ///
   /// @param[in]     ratio       Resampling ratio: >1 means upsampling
-  virtual void SetRatio(const float ratio);
+  void SetRatio(const float ratio);
 
   /// @brief Resampling ratio getter
   float Ratio(void) const;
@@ -71,10 +71,10 @@ class Interpolator {
   ///
   /// @return true if all the input data, given the current parameters,
   /// has not been entirely read
-  virtual bool AnythingToReadFrom(void) const;
+  bool AnythingToReadFrom(void) const;
 
   /// @brief Reset internal data pointer
-  virtual void Reset(void);
+  void Reset(void);
 
  private:
   friend unsigned int ExpectedLength(const Interpolator& interpolator);
