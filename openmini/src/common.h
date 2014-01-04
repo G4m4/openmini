@@ -78,6 +78,9 @@ static const unsigned int kMinKeyNote(24);
 /// @brief Arbitrary highest allowed key note (= C7)
 static const unsigned int kMaxKeyNote(96);
 
+/// @brief Standard value for Pi
+static const double Pi(3.14159265358979);
+
 // (Using the "enum in its own namespace" trick)
 /// @brief Allowed Waveform for all generators
 namespace Waveform {

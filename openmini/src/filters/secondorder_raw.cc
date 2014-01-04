@@ -23,7 +23,6 @@
 
 #include "openmini/src/maths.h"
 
-#include "openmini/src/filters/filters_common.h"
 #include "openmini/src/filters/secondorder_raw.h"
 
 namespace openmini {

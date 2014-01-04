@@ -26,8 +26,6 @@
 namespace openmini {
 namespace filters {
 
-static const double Pi(3.14159265358979);
-
 }  // namespace filters
 }  // namespace openmini
 
