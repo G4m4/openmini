@@ -78,3 +78,10 @@ def PrintMetadata(metadatas):
         output_str += metadata[0] + str(metadata[1])
         output_str += " "
     return output_str
+
+def ZeroCrossings(signal):
+    '''
+    Return an array holding all indexes before which the input signal crosses zero
+    '''
+    return numpy.where(numpy.diff(numpy.sign(signal)))[0]
+
