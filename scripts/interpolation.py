@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 '''
-@file Interpolation.py
+@file interpolation.py
 @brief Interpolation method sandbox
 @author gm
 @copyright gm 2013
@@ -76,11 +76,11 @@ class Interpolate():
         Input setter
         @param    input_array        Actual input array to interpolate from
         '''
-        self._input = input_array
+        self._data = input_array
 
     def Reset(self):
         '''
-        Reset internal counter to zero 
+        Reset internal counter to zero
         '''
         self._cursor_pos = 0
 
@@ -88,26 +88,19 @@ class Interpolate():
         '''
         @return True if internal input data cursor is outside the input buffer
         '''
-        return self._cursor_pos >= (len(self._input) - 1)
+        return self._cursor_pos >= (len(self._data) - 1)
 
     def ProcessSample(self):
         '''
         Actual process function: gets the interpolated sample
         @return the next sample according interpolation ratio and input data
         '''
-        #if self._cursor_pos < 1.0:
-        #    left_idx = 0
-        #    context = (self._input[0], self._input[0], self._input[0], self._input[1])
-        #elif self._cursor_pos < 2.0:
-        #    left_idx = int(math.floor(self._cursor_pos))
-        #    context = (self._input[0], self._input[0], self._input[1], self._input[2])
-        #else:
         left_idx = int(math.floor(self._cursor_pos))
-        context = self._input[left_idx:left_idx + 2]
+        cursor = self._cursor_pos - left_idx
+        context = self._data[left_idx:left_idx + 2]
 
         sample = self._func(context,
-                            self._cursor_pos - float(left_idx))
-
+                            cursor)
         self._cursor_pos += self._ratio
 
         return sample
