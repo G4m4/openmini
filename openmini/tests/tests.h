@@ -217,4 +217,30 @@ bool ClickWasFound(const float* buffer,
                    const unsigned int length,
                    const float epsilon);
 
+/// @brief Basic sinus generator
+///
+/// No special care has been taken performance or quality-wise
+class SinusGenerator {
+ public:
+  /// @brief Default constructor, the generated and sampling frequencies
+  /// have to be provided
+  ///
+  /// @param[in]  freq    Generated sinus frequency
+  /// @param[in]  sampling_freq    Generated signal sampling frequency
+  SinusGenerator(const float freq, const float sampling_freq);
+  ~SinusGenerator();
+
+  /// @brief Actual processing method
+  ///
+  /// @return the next sample in order to create a sinus
+  float operator()(void);
+
+ private:
+  // No assignment operator for this functor
+  SinusGenerator& operator=(const SinusGenerator& right);
+
+  const double increment_;
+  double current_phase_;
+};
+
 #endif  // OPENMINI_TESTS_TESTS_H_

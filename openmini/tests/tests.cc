@@ -52,3 +52,21 @@ bool ClickWasFound(const float* buffer,
 
   return false;
 }
+
+SinusGenerator::SinusGenerator(const float freq, const float sampling_freq)
+    : current_phase_(0.0),
+      increment_(2.0 * openmini::Pi * freq / sampling_freq) {
+  ASSERT(freq > 0.0f);
+  ASSERT(sampling_freq > 0.0f);
+  ASSERT(freq <= sampling_freq / 2.0f);
+}
+
+SinusGenerator::~SinusGenerator() {
+  // Nothing to do here for now
+}
+
+float SinusGenerator::operator()(void) {
+  const float out(std::cos(current_phase_));
+  current_phase_ += increment_;
+  return out;
+}
