@@ -54,8 +54,8 @@ bool ClickWasFound(const float* buffer,
 }
 
 SinusGenerator::SinusGenerator(const float freq, const float sampling_freq)
-    : current_phase_(0.0),
-      increment_(2.0 * openmini::Pi * freq / sampling_freq) {
+    : increment_(2.0 * openmini::Pi * freq / sampling_freq),
+      current_phase_(0.0) {
   ASSERT(freq > 0.0f);
   ASSERT(sampling_freq > 0.0f);
   ASSERT(freq <= sampling_freq / 2.0f);
