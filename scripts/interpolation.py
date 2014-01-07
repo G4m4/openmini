@@ -56,10 +56,12 @@ def LinearInterpolation4(context, ratio):
 
 class Interpolate():
     '''
-    Implements interpolation based on the given interpolation function
+    Implements interpolation of (possibly non-contiguous) blocks based on the given
+    interpolation function
     '''
     def __init__(self, interpolation_func):
         self._func = interpolation_func
+        self._history = 0.0
         self._cursor_pos = 0.0
         self._ratio = 1.0
 
@@ -71,39 +73,67 @@ class Interpolate():
         '''
         self._ratio = ratio
 
-    def SetData(self, input_array):
-        '''
-        Input setter
-        @param    input_array        Actual input array to interpolate from
-        '''
-        self._data = input_array
-
     def Reset(self):
         '''
         Reset internal counter to zero
         '''
         self._cursor_pos = 0
 
-    def IsInputFinished(self):
+    def Process(self, in_signal, out_length):
         '''
-        @return True if internal input data cursor is outside the input buffer
+        Actual process function
+        @return the interpolated signal according interpolation ratio and input
         '''
-        return self._cursor_pos >= (len(self._data) - 1)
+        in_length = len(in_signal)
+        current_out_idx = 0
+        out_signal = numpy.zeros(out_length)
+        temp_cursor = self._cursor_pos
+        while current_out_idx < out_length:
+            left_idx = int(math.floor(temp_cursor))
+            cursor = temp_cursor - left_idx
+            context = in_signal[left_idx:left_idx + 2]
+            if temp_cursor < 0.0:
+                left_idx = 0
+                cursor = 1.0 + temp_cursor
+                context = [self._history, in_signal[left_idx]]
+                if temp_cursor < -1.0:
+                    raise Exception("WTF?")
+            if left_idx == in_length - 1.0:
+                context = [in_signal[left_idx], in_signal[left_idx]]
+            if left_idx == in_length:
+                raise Exception("WTF?")
+                context = [in_signal[left_idx - 1], in_signal[left_idx - 1]]
 
-    def ProcessSample(self):
+            out_signal[current_out_idx] = self._ProcessSample(context,
+                                                              cursor)
+
+            current_out_idx += 1
+            temp_cursor += self._ratio
+        self._history = context[-1]
+        self._cursor_pos += current_out_idx * self._ratio
+        self._cursor_pos -= in_length
+
+        return out_signal
+
+    def _ProcessSample(self, context, cursor):
         '''
-        Actual process function: gets the interpolated sample
+        Process function for one sample
         @return the next sample according interpolation ratio and input data
         '''
-        left_idx = int(math.floor(self._cursor_pos))
-        cursor = self._cursor_pos - left_idx
-        context = self._data[left_idx:left_idx + 2]
+        return self._func(context, cursor)
 
-        sample = self._func(context,
-                            cursor)
-        self._cursor_pos += self._ratio
+def ExpectedOutLength(in_length, ratio):
+    '''
+    Compute the expected output signal length for a given input length and ratio
+    '''
+    return int(math.ceil(in_length / ratio))
 
-        return sample
+def RequiredInLength(out_length, ratio):
+    '''
+    Compute the required input data length in order to retrieve out_length elements,
+    given the ratio
+    '''
+    return int(math.floor(out_length * ratio) + 1.0)
 
 if __name__ == "__main__":
     '''
@@ -117,16 +147,16 @@ if __name__ == "__main__":
     length = 64
     # Normalized
     artifacts = 0.05
-    ratio = 1.0
-    out_length = length / ratio
-    base_freq = 500
+    ratio = 0.27
+    out_length = ExpectedOutLength(length, ratio)
+    base_freq = 2000
 
     # This method generates a zero at the beginning, that's why it is sliced
-#    base_data = utilities.GenerateData(base_freq,
-#                                       base_freq * 2,
-#                                       length + 1,
-#                                       sampling_freq)[0:length]
-    base_data = numpy.random.rand(length)
+    base_data = utilities.GenerateData(base_freq,
+                                       base_freq * 2,
+                                       length + 1,
+                                       sampling_freq)[0:length]
+#     base_data = numpy.random.rand(length)
 
     in_data = numpy.copy(base_data)
     # Random artifacts are now made
@@ -136,18 +166,25 @@ if __name__ == "__main__":
     print(utilities.PrintMetadata(utilities.GetMetadata(base_data - in_data)))
 
     resampler = Interpolate(LinearInterpolation)
-    resampler.SetData(in_data)
     resampler.SetRatio(ratio)
 
-    out_data = numpy.zeros(out_length)
-    idx = 0
-    while not resampler.IsInputFinished():
-        out_data[idx] = resampler.ProcessSample()
-        idx += 1
+    # Process in two times
+    left_part_length = RequiredInLength(out_length / 2.0, ratio)
+    left_out_part_length = math.ceil(out_length / 2.0)
+    out_data_left = resampler.Process(in_data[0:left_part_length], left_out_part_length)
+    out_data_right = resampler.Process(in_data[left_part_length:length], out_length - left_out_part_length)
 
-    pylab.plot(in_data)
-    pylab.plot(out_data)
-    print(utilities.PrintMetadata(utilities.GetMetadata(base_data[0:out_length]
-                                                         - out_data)))
+    out_data = numpy.append(out_data_left, out_data_right)
 
+    # Process in the other way
+    resampler.Reset()
+    resampler.SetRatio(1.0 / ratio)
+    out_data_resampled = resampler.Process(out_data, ExpectedOutLength(out_length,
+                                                                       1.0 / ratio))
+    pylab.plot(out_data_resampled, label='resampled')
+
+    pylab.plot(in_data, label='in')
+    pylab.plot(out_data, label='out')
+
+    pylab.legend()
     pylab.show()
