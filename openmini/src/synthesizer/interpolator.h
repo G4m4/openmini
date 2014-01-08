@@ -77,7 +77,7 @@ class Interpolator {
   ///
   /// @return one sample for the previously given parameters and input data
   template <typename TypeFunctor>
-  Sample operator()(const float context[2], const float cursor) {
+  float operator()(const float context[2], const float cursor) {
     const TypeFunctor interpolation_func;
     return interpolation_func(context, cursor);
   }

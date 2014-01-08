@@ -40,8 +40,8 @@ class InterpolationInterface {
     // Nothing to do here for now
   }
   /// @brief Actual process function for one sample
-  virtual Sample operator()(const float* const data_cursor,
-                            const float ratio) const = 0;
+  virtual float operator()(const float* const data_cursor,
+                           const float ratio) const = 0;
 };
 
 /// @brief Simple linear interpolation
@@ -60,8 +60,8 @@ class LinearInterpolation : public InterpolationInterface {
   ///                      relative to data_cursor
   ///
   /// @return The interpolated value
-  Sample operator()(const float* const data_cursor,
-                    const float ratio) const;
+  float operator()(const float* const data_cursor,
+                   const float ratio) const;
 };
 
 /// @brief Based on an input length and a given ratio,
