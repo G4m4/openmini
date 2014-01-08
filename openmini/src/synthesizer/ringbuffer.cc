@@ -176,8 +176,8 @@ unsigned int RingBuffer::ComputeMaxElements(const unsigned int size) const {
   return size;
 }
 
-void RingBuffer::TransferData(float* const in_first,
-                              float* const in_last,
+void RingBuffer::TransferData(const float* const in_first,
+                              const float* const in_last,
                               float* const out_first) {
   std::copy(in_first, in_last, out_first);
 }

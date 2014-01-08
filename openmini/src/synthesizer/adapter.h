@@ -80,8 +80,8 @@ class Adapter : public RingBuffer {
   ///
   /// @param[in]  in_first, in_last    Range of elements to transfer
   /// @param[in]  out_first   Beginnning of the output range
-  virtual void TransferData(float* const in_first,
-                            float* const in_last,
+  virtual void TransferData(const float* const in_first,
+                            const float* const in_last,
                             float* const out_first);
 
  private:

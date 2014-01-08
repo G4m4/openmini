@@ -64,8 +64,8 @@ float Adapter::ComputeOutputRatio(void) const {
   return 1.0f / interpolator_.Ratio();
 }
 
-void Adapter::TransferData(float* const in_first,
-                           float* const in_last,
+void Adapter::TransferData(const float* const in_first,
+                           const float* const in_last,
                            float* const out_first) {
   // Instead of a simple copy the resampling is done here
   const unsigned int data_length(in_last - in_first);
