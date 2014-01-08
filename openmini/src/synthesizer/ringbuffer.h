@@ -85,11 +85,17 @@ class RingBuffer {
   /// @param[in]  size    New capacity of the container
   virtual void Resize(const unsigned int size);
 
-  /// @brief Compute required internal capacity in order to be able to output
+  /// @brief Compute required elements count in order to be able to output
   /// at least "size" elements
   ///
   /// @param[in]  size   Minimal amout of elements to be retrieved
-  virtual unsigned int ComputeCapacity(const unsigned int size) const;
+  virtual unsigned int ComputeRequiredElements(const unsigned int size) const;
+
+  /// @brief Compute how much elements can be retrieved with the given number
+  /// of elements
+  ///
+  /// @param[in]  size   Count of input elements
+  virtual unsigned int ComputeMaxElements(const unsigned int size) const;
 
   /// @brief Transfer the data from input to output
   ///

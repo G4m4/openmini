@@ -112,7 +112,7 @@ void RingBuffer::Clear(void) {
 }
 
 void RingBuffer::ResizeIfNeedBe(const unsigned int size) {
-  const unsigned int actual_capacity(ComputeCapacity(size));
+  const unsigned int actual_capacity(ComputeRequiredElements(size));
   if (actual_capacity > capacity_) {
     return Resize(actual_capacity);
   }
@@ -129,7 +129,7 @@ unsigned int RingBuffer::capacity(void) const {
 
 unsigned int RingBuffer::size(void) const {
   ASSERT(IsGood());
-  return size_;
+  return ComputeMaxElements(size_);
 }
 
 void RingBuffer::Resize(const unsigned int size) {
@@ -165,7 +165,13 @@ void RingBuffer::Resize(const unsigned int size) {
   size_ = max_fill_count;
 }
 
-unsigned int RingBuffer::ComputeCapacity(const unsigned int size) const {
+unsigned int RingBuffer::ComputeRequiredElements(
+    const unsigned int size) const {
+  // For this implementation, one internal sample = one output sample
+  return size;
+}
+
+unsigned int RingBuffer::ComputeMaxElements(const unsigned int size) const {
   // For this implementation, one internal sample = one output sample
   return size;
 }
