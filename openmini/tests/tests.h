@@ -123,13 +123,11 @@ static const float kMaxFundamentalNorm(10000.0f / openmini::kSamplingRate);
 #if (_BUILD_CONFIGURATION_DEBUG)
 static const unsigned int kFilterDataPerfSetSize(16 * 1024);
 static const unsigned int kGeneratorDataPerfSetSize(16 * 1024);
-static const unsigned int kSynthesizerPerfSetSize(
-  static_cast<unsigned int>(openmini::kSamplingRate));
+static const float kSynthesizerPerfSetLength(1.0f);
 #else  // (_BUILD_CONFIGURATION_DEBUG)
 static const unsigned int kFilterDataPerfSetSize(16 * 1024 * 256);
 static const unsigned int kGeneratorDataPerfSetSize(16 * 1024 * 256);
-static const unsigned int kSynthesizerPerfSetSize(
-  static_cast<unsigned int>(openmini::kSamplingRate * 10.0f));
+static const float kSynthesizerPerfSetLength(10.0f);
 #endif  // (_BUILD_CONFIGURATION_DEBUG)
 
 /// @brief Uniform distribution of normalized frequencies

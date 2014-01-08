@@ -143,15 +143,40 @@ TEST(Synthesizer, SynthesizerVaryingBlockSize) {
 }
 
 /// @brief Process a fixed amount of data without changing anything
-/// to default parameters, only setting a note on
-TEST(Synthesizer, SynthesizerPerf) {
+/// to default parameters, only setting a note on - at 96kHz
+TEST(Synthesizer, SynthesizerPerf96k) {
+  const float kOutFrequency(96000.0f);
   std::vector<float> data(openmini::kBlockSize);
   Synthesizer synth;
 
   unsigned int sample_idx(0);
   synth.NoteOn(kMinKeyNote);
+  synth.SetOutputSamplingFrequency(kOutFrequency);
 
-  while (sample_idx < kSynthesizerPerfSetSize) {
+  while (sample_idx < static_cast<unsigned int>(kSynthesizerPerfSetLength
+                                                * kOutFrequency)) {
+    // not storing everything, only creating an "history"
+    synth.ProcessAudio(&data[0], openmini::kBlockSize);
+    sample_idx += openmini::kBlockSize;
+  }
+
+  // No actual test!
+  EXPECT_TRUE(true);
+}
+
+/// @brief Process a fixed amount of data without changing anything
+/// to default parameters, only setting a note on - at 48kHz
+TEST(Synthesizer, SynthesizerPerf48k) {
+  const float kOutFrequency(48000.0f);
+  std::vector<float> data(openmini::kBlockSize);
+  Synthesizer synth;
+
+  unsigned int sample_idx(0);
+  synth.NoteOn(kMinKeyNote);
+  synth.SetOutputSamplingFrequency(kOutFrequency);
+
+  while (sample_idx < static_cast<unsigned int>(kSynthesizerPerfSetLength
+                                                * kOutFrequency)) {
     // not storing everything, only creating an "history"
     synth.ProcessAudio(&data[0], openmini::kBlockSize);
     sample_idx += openmini::kBlockSize;

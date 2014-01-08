@@ -55,6 +55,11 @@ class Synthesizer : public ParametersManager {
   /// @param[in]    note      Note to stop
   void NoteOff(const unsigned int note);
 
+  /// @brief Set the output sampling frequency
+  ///
+  /// @param[in]  freq    Output sampling frequency
+  void SetOutputSamplingFrequency(const float freq);
+
  protected:
   /// @brief Asynchronous parameters update
   ///

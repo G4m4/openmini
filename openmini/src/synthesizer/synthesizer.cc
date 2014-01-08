@@ -75,6 +75,10 @@ void Synthesizer::NoteOff(const unsigned int note) {
   mixer_.NoteOff(note);
 }
 
+void Synthesizer::SetOutputSamplingFrequency(const float freq) {
+  buffer_.SetFrequencies(openmini::kSamplingRate, freq);
+}
+
 void Synthesizer::ProcessParameters(void) {
   if (ParametersChanged()) {
     UpdatedParametersIterator iter(*this);
