@@ -43,19 +43,27 @@ def ExtractSignal(filename):
 if __name__ == "__main__":
     import pylab
     import utilities
+    import os.path
+    import scipy.io.wavfile
 
     files = (#'../build/out.dat',
              '../build/in.dat',
              '../build/intermediate.dat'
              )
 
-    view_length = 32
+    view_beginning = 16000
+    view_length = 384
 
+    signals = []
     for filename in files:
-        print ("File: " + str(filename))
+        label = os.path.basename(filename)
+        print ("File '" + label + "': " + str(filename))
         signal = ExtractSignal(filename)
         metas = utilities.GetMetadata(signal)
         print(utilities.PrintMetadata(metas))
-        pylab.plot(signal[0:view_length:1])
+        pylab.plot(signal[view_beginning:view_beginning + view_length:1], label=label)
+        signals.append(signal)
+        scipy.io.wavfile.write(filename + ".wav", 48000.0, signal)
 
+    pylab.legend()
     pylab.show()
