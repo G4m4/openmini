@@ -102,7 +102,6 @@ class Interpolate():
                 context = [in_signal[left_idx], in_signal[left_idx]]
             if left_idx == in_length:
                 raise Exception("WTF?")
-                context = [in_signal[left_idx - 1], in_signal[left_idx - 1]]
 
             out_signal[current_out_idx] = self._ProcessSample(context,
                                                               cursor)
@@ -133,7 +132,9 @@ def RequiredInLength(out_length, ratio):
     Compute the required input data length in order to retrieve out_length elements,
     given the ratio
     '''
-    return int(math.floor(out_length * ratio) + 1.0)
+    # What we actually want is at least 1 sample of advance, except of course
+    # if out_length * ratio is an integer
+    return int(math.ceil(out_length * ratio))
 
 if __name__ == "__main__":
     '''
