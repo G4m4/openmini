@@ -63,13 +63,12 @@ void Adapter::TransferData(const float* const in_first,
                            const float* const in_last,
                            float* const out_first) {
   // Instead of a simple copy the resampling is done here
-  const unsigned int data_length(in_last - in_first);
-  interpolator_.SetData(in_first, data_length);
-  interpolator_.Reset();
-  float* out_cursor(out_first);
-  while (interpolator_.AnythingToReadFrom()) {
-    *out_cursor = interpolator_.operator()<LinearInterpolation>();
-    out_cursor += 1;
+  const unsigned int in_length(in_last - in_first);
+  if (in_length > 0) {
+    interpolator_.Process(in_first,
+                          in_length,
+                          out_first,
+                          ExpectedOutLength(in_length, Ratio()));
   }
 }
 
