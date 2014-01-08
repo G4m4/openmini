@@ -21,9 +21,11 @@
 #include "openmini/tests/tests.h"
 
 #include "openmini/src/synthesizer/adapter.h"
+#include "openmini/src/synthesizer/interpolation_common.h"
 
 // Using declarations for tested class
 using openmini::synthesizer::Adapter;
+using openmini::synthesizer::ExpectedOutLength;
 
 /// @brief With a ratio of exactly 1, whatever the block size,
 /// the adapter should be a passthrough

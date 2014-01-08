@@ -26,7 +26,8 @@
 // Using declarations for tested class
 using openmini::synthesizer::Interpolator;
 using openmini::synthesizer::LinearInterpolation;
-using openmini::synthesizer::ExpectedLength;
+using openmini::synthesizer::ExpectedOutLength;
+using openmini::synthesizer::RequiredInLength;
 
 /// @brief Linear interpolation with a ratio of exactly 1,
 /// should be a passthrough
@@ -39,13 +40,8 @@ TEST(Interpolator, LinearPassthrough) {
                 std::bind(kNormDistribution, kRandomGenerator));
 
   Interpolator interpolator;
-  interpolator.SetData(&data[0], data.size());
   interpolator.SetRatio(1.0f);
-  int i(0);
-  while (interpolator.AnythingToReadFrom()) {
-    data_out[i] = interpolator.operator()<LinearInterpolation>();
-    i += 1;
-  }
+  interpolator.Process(&data[0], data.size(), &data_out[0], data_out.size());
 
   // Data integrity check
   for (unsigned int i(0); i < data_out.size(); ++i) {
