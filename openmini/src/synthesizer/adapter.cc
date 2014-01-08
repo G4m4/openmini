@@ -42,26 +42,21 @@ void Adapter::Pop(float* dest, const unsigned int count) {
 }
 
 void Adapter::SetFrequencies(const float in_freq, const float out_freq) {
-  interpolator_.SetRatio(out_freq / in_freq);
+  interpolator_.SetRatio(in_freq / out_freq);
 }
 
 // TODO(gm): simplify this mess with a better vocabulary!
 
 unsigned int Adapter::ComputeRequiredElements(const unsigned int size) const {
-  return CeilAndConvert<unsigned int>(static_cast<float>(size)
-                                      / ComputeOutputRatio());
+  return RequiredInLength(size, Ratio());
 }
 
-unsigned int Adapter::ComputeCapacity(const unsigned int size) const {
-  return CeilAndConvert<unsigned int>(ComputeInputRatio() * size);
+unsigned int Adapter::ComputeMaxElements(const unsigned int size) const {
+  return ExpectedOutLength(size, Ratio());
 }
 
-float Adapter::ComputeInputRatio(void) const {
+float Adapter::Ratio(void) const {
   return interpolator_.Ratio();
-}
-
-float Adapter::ComputeOutputRatio(void) const {
-  return 1.0f / interpolator_.Ratio();
 }
 
 void Adapter::TransferData(const float* const in_first,

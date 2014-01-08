@@ -62,17 +62,17 @@ class Adapter : public RingBuffer {
   virtual void SetFrequencies(const float in_freq, const float out_freq);
 
  protected:
-  /// @brief Compute required elements to be taken in order to output
+  /// @brief Compute required elements count in order to be able to output
   /// at least "size" elements
   ///
   /// @param[in]  size   Minimal amout of elements to be retrieved
   virtual unsigned int ComputeRequiredElements(const unsigned int size) const;
 
-  /// @brief Compute required internal capacity in order to be able to output
-  /// at least "size" elements
+  /// @brief Compute how much elements can be retrieved with the given number
+  /// of elements
   ///
-  /// @param[in]  size   Minimal amout of elements to be retrieved
-  virtual unsigned int ComputeCapacity(const unsigned int size) const;
+  /// @param[in]  size   Count of input elements
+  virtual unsigned int ComputeMaxElements(const unsigned int size) const;
 
   /// @brief Transfer the data from input to output
   ///
@@ -86,9 +86,8 @@ class Adapter : public RingBuffer {
 
  private:
   /// @brief Based on input/output sampling frequencies,
-  /// compute the current resampling ratios
-  float ComputeInputRatio(void) const;
-  float ComputeOutputRatio(void) const;
+  /// compute the current resampling ratio
+  float Ratio(void) const;
 
   Interpolator interpolator_;  ///< Internal resampler for frequencies matching
 };
