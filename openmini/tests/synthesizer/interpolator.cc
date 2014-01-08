@@ -49,3 +49,61 @@ TEST(Interpolator, LinearPassthrough) {
   }
 }
 
+/// @brief Linear interpolation with a ratio of exactly 2 on a 1kHz sinusoid
+/// should give us the same signal (+ noise) than a generated 2kHz one
+TEST(Interpolator, LinearDoubleRatio) {
+  const float kRatio(2.0f);
+  std::vector<float> data(kDataTestSetSize);
+  // Creating sinusoid data
+  const unsigned int kExpectedLength(ExpectedOutLength(kDataTestSetSize,
+                                                       kRatio));
+  std::vector<float> data_expected(kExpectedLength);
+  std::vector<float> data_out(kExpectedLength);
+  const float kFrequency(1000.0f);
+  std::generate(data.begin(),
+                data.end(),
+                SinusGenerator(kFrequency, openmini::kSamplingRate));
+  std::generate(data_expected.begin(),
+                data_expected.end(),
+                SinusGenerator(kRatio * kFrequency, openmini::kSamplingRate));
+
+  Interpolator interpolator;
+  interpolator.SetRatio(kRatio);
+  interpolator.Process(&data[0], data.size(), &data_out[0], kExpectedLength);
+
+  // A minor epsilon is required due to noise introduced by the interpolation
+  const float kEpsilon(1e-6f);
+  for (unsigned int i(0); i < data_out.size(); ++i) {
+    EXPECT_NEAR(data_expected[i], data_out[i], kEpsilon);
+  }
+}
+
+/// @brief Linear interpolation with a ratio of exactly 0.5 on a 1kHz sinusoid
+/// should give us the same signal (+ noise) than a generated 500Hz one
+TEST(Interpolator, LinearHalfRatio) {
+  const float kRatio(0.5f);
+  std::vector<float> data(kDataTestSetSize);
+  // Creating sinusoid data
+  const unsigned int kExpectedLength(ExpectedOutLength(kDataTestSetSize,
+                                                       kRatio));
+  std::vector<float> data_expected(kExpectedLength);
+  std::vector<float> data_out(kExpectedLength);
+  const float kFrequency(1000.0f);
+  std::generate(data.begin(),
+                data.end(),
+                SinusGenerator(kFrequency, openmini::kSamplingRate));
+  std::generate(data_expected.begin(),
+                data_expected.end(),
+                SinusGenerator(kRatio * kFrequency, openmini::kSamplingRate));
+
+  Interpolator interpolator;
+  interpolator.SetRatio(kRatio);
+  interpolator.Process(&data[0], data.size(), &data_out[0], kExpectedLength);
+
+  // A minor epsilon is required due to noise introduced by the interpolation
+  const float kEpsilon(1e-3f);
+  // Last element not being checked, since interpolation is not an extrapolation
+  for (unsigned int i(0); i < data_out.size() - 1; ++i) {
+    EXPECT_NEAR(data_expected[i], data_out[i], kEpsilon);
+  }
+}
