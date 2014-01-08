@@ -37,7 +37,6 @@ Adapter::~Adapter() {
 
 void Adapter::Pop(float* dest, const unsigned int count) {
   const unsigned int actual_count(ComputeRequiredElements(count));
-
   return RingBuffer::Pop(dest, actual_count);
 }
 
