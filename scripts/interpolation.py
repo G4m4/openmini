@@ -169,13 +169,18 @@ if __name__ == "__main__":
     resampler = Interpolate(LinearInterpolation)
     resampler.SetRatio(ratio)
 
-    # Process in two times
-    left_part_length = RequiredInLength(out_length / 2.0, ratio)
-    left_out_part_length = math.ceil(out_length / 2.0)
-    out_data_left = resampler.Process(in_data[0:left_part_length], left_out_part_length)
-    out_data_right = resampler.Process(in_data[left_part_length:length], out_length - left_out_part_length)
-
-    out_data = numpy.append(out_data_left, out_data_right)
+    # Input data is split in blocks of random size each
+    input_idx = 0
+    output_idx = 0
+    min_block_size = 2
+    out_data = numpy.zeros(out_length)
+    while input_idx < length - min_block_size:
+        block_size = numpy.random.randint(min_block_size, out_length - output_idx)
+        input_length = RequiredInLength(block_size, ratio)
+        out_data[output_idx:output_idx + block_size] = resampler.Process(in_data[input_idx:input_idx + input_length],
+                                                                         block_size)
+        input_idx += input_length
+        output_idx += block_size
 
     # Process in the other way
     resampler.Reset()
