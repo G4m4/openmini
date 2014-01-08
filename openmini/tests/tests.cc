@@ -66,7 +66,7 @@ SinusGenerator::~SinusGenerator() {
 }
 
 float SinusGenerator::operator()(void) {
-  const float out(std::cos(current_phase_));
+  const float out(static_cast<float>(std::cos(current_phase_)));
   current_phase_ += increment_;
   return out;
 }
