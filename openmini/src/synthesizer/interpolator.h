@@ -22,7 +22,6 @@
 #define OPENMINI_SRC_SYNTHESIZER_INTERPOLATOR_H_
 
 #include "openmini/src/common.h"
-#include "openmini/src/synthesizer/synthesizer_common.h"
 
 namespace openmini {
 namespace synthesizer {
@@ -30,26 +29,14 @@ namespace synthesizer {
 /// @brief Interpolator class
 ///
 /// Given a given interpolation function (at compilation time)
-/// and a given ratio (at runtime), interpolates from the given input data
+/// and a given ratio (at runtime), interpolates from the given input data.
+///
+/// This class provides utilities for the interpolation of non-contiguous
+/// blocks into a contiguous output.
 class Interpolator {
  public:
   Interpolator();
   ~Interpolator();
-
-  /// @brief Actual processing function
-  ///
-  /// The interpolation function has to be chosen at the compilation
-  ///
-  /// @return one sample for the previously given parameters and input data
-  template <typename TypeFunctor>
-  Sample operator()(void) {
-    const TypeFunctor interpolation_func;
-    const int left_idx(FloorAndConvert<int>(static_cast<float>(cursor_pos_)));
-    const float cursor(static_cast<float>(cursor_pos_)
-                       - static_cast<float>(left_idx));
-    cursor_pos_ += static_cast<double>(ratio_);
-    return interpolation_func(&data_[left_idx], cursor);
-  }
 
   /// @brief Resampling ratio setter
   ///
@@ -59,32 +46,46 @@ class Interpolator {
   /// @brief Resampling ratio getter
   float Ratio(void) const;
 
-  /// @brief Input data setter
+  /// @brief Interpolation function
   ///
-  /// Note that the internal data pointer will not be reseted, @see Reset
+  /// Based on previously set parameters (ratio, etc.), retrieve exactly
+  /// "output_length" elements from the given input data. The input data is
+  /// supposed to be made up of enough elements
+  /// (e.g. at least output_length * ratio)
   ///
-  /// @param[in]  data_cursor   Cursor to the data to interpolate from
-  void SetData(float* const data_cursor,
-               const unsigned int data_length);
+  /// @param[in]  input   Input data
+  /// @param[in]  input_length   Input data length
+  /// @param[out] output    Output data
+  /// @param[in]  output_length   Output data length
+  void Process(const float* const input,
+               const unsigned int input_length,
+               float* const output,
+               const unsigned int output_length);
 
-  /// @brief Check if there is still data to interpolate from
+  /// @brief Reset internal data pointer to the given cursor position
   ///
-  /// @return true if all the input data, given the current parameters,
-  /// has not been entirely read
-  bool AnythingToReadFrom(void) const;
-
-  /// @brief Reset internal data pointer
-  void Reset(void);
+  /// @param[in]  cursor_pos   New value to set the cursor position to
+  void Reset(const double cursor_pos = 0.0);
 
  private:
   // No assignment operator for this class
   Interpolator& operator=(const Interpolator& right);
 
+  /// @brief Actual processing function
+  ///
+  /// The interpolation function has to be chosen at the compilation
+  ///
+  /// @return one sample for the previously given parameters and input data
+  template <typename TypeFunctor>
+  Sample operator()(const float context[2], const float cursor) {
+    const TypeFunctor interpolation_func;
+    return interpolation_func(context, cursor);
+  }
+
   double cursor_pos_;  ///< Actual cursor position relative to the beginning
                       ///< of the data cursor
-  float ratio_;  ///< Resampling ratio
-  unsigned int data_length_;  ///< Length of the input data
-  float* data_;  ///< Pointer to the data being interpolated from
+  float ratio_;  ///< Interpolation ratio
+  float history_;  ///< Interpolation history
 };
 
 }  // namespace synthesizer
