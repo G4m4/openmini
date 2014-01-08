@@ -64,6 +64,22 @@ class LinearInterpolation : public InterpolationInterface {
                     const float ratio) const;
 };
 
+/// @brief Based on an input length and a given ratio,
+/// retrieve the expected output signal length
+///
+/// @param[in]  input_length    Length of the input signal
+/// @param[in]  ratio   Interpolation ratio ( > 1 meaning decimation)
+unsigned int ExpectedOutLength(const unsigned int input_length,
+                               const float ratio);
+
+/// @brief Return how many elements will be required from the input data
+/// in order to retrieve at least "output_length" elements at the given ratio
+///
+/// @param[in]  output_length    Number of elements t be retrieved
+/// @param[in]  ratio   Interpolation ratio ( > 1 meaning decimation)
+unsigned int RequiredInLength(const unsigned int output_length,
+                              const float ratio);
+
 }  // namespace synthesizer
 }  // namespace openmini
 

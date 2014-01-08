@@ -77,7 +77,6 @@ class Interpolator {
   void Reset(void);
 
  private:
-  friend unsigned int ExpectedLength(const Interpolator& interpolator);
   // No assignment operator for this class
   Interpolator& operator=(const Interpolator& right);
 
@@ -87,10 +86,6 @@ class Interpolator {
   unsigned int data_length_;  ///< Length of the input data
   float* data_;  ///< Pointer to the data being interpolated from
 };
-
-/// @brief Based on current parameters,
-/// retrieve the expected output signal length
-unsigned int ExpectedLength(const Interpolator& interpolator);
 
 }  // namespace synthesizer
 }  // namespace openmini

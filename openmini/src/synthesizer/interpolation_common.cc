@@ -19,6 +19,7 @@
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "openmini/src/synthesizer/interpolation_common.h"
+#include "openmini/src/synthesizer/synthesizer_common.h"
 
 namespace openmini {
 namespace synthesizer {
@@ -32,6 +33,19 @@ float LinearInterpolation::operator()(const float* const data_cursor,
   const float left(*data_cursor);
   const float right(*(data_cursor + 1));
   return (right - left) * ratio + left;
+}
+
+unsigned int ExpectedOutLength(const unsigned int input_length,
+                               const float ratio) {
+  return CeilAndConvert<unsigned int>((static_cast<float>(input_length)
+                                      / ratio));
+}
+
+unsigned int RequiredInLength(const unsigned int output_length,
+                              const float ratio) {
+  // What we actually want is at least 1 sample of advance, except of course
+  // if out_length * ratio is an integer
+  return CeilAndConvert<unsigned int>(ratio * output_length);
 }
 
 }  // namespace synthesizer
