@@ -56,6 +56,9 @@ Generator_Base* CreateGenerator(const Waveform::Type waveform,
 void DestroyGenerator(Generator_Base* generator) {
   ASSERT(generator != nullptr);
 
+  // Beware, this is not safe! (explicit call to base destructor
+  // -> possible leaks in the child!)
+  // We should use smart pointers anyway
   generator->~Generator_Base();
   Deallocate(generator);
 }
