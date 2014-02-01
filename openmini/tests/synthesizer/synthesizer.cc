@@ -45,7 +45,7 @@ TEST(Synthesizer, SynthesizerNoteOnNoteOff) {
   while (sample_idx < kDataTestSetSize / 2) {
     synth.ProcessAudio(&block[0], block.size());
     sample_idx += kBlockSize;
-    for (unsigned int i(0); i < kBlockSize; ++i) {
+    for (unsigned int i(0); i < block.size(); ++i) {
       mean_square += block[i] * block[i];
     }
   }
@@ -58,7 +58,7 @@ TEST(Synthesizer, SynthesizerNoteOnNoteOff) {
   while (sample_idx < kDataTestSetSize) {
     synth.ProcessAudio(&block[0], block.size());
     sample_idx += kBlockSize;
-    for (unsigned int i(0); i < kBlockSize; ++i) {
+    for (unsigned int i(0); i < block.size(); ++i) {
       mean_square += block[i] * block[i];
     }
   }
