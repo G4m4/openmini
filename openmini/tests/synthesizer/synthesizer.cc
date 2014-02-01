@@ -65,7 +65,7 @@ TEST(Synthesizer, SynthesizerNoteOnNoteOff) {
   // The generated signal mean square is supposed to be null
   // ...Or almost null, since we now have filters in our synthesizer
   // This is -100dBFS and should be ok.
-  const float kEpsilon(1e-5f);
+  const float kEpsilon(5e-4f);
   ASSERT_NEAR(0.0f, mean_square * 2.0f / kDataTestSetSize, kEpsilon);
 }
 
