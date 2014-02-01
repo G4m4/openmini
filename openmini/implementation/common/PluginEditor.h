@@ -29,8 +29,8 @@
 #include "JuceHeader.h"
 #include "openmini/implementation/common/PluginProcessor.h"
 
-static const int kMainWindowSizeX(1024);
-static const int kMainWindowSizeY(768);
+static const int kMainWindowSizeX(800);
+static const int kMainWindowSizeY(600);
 
 /// @brief Plugin "editor" class
 ///
