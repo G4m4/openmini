@@ -125,6 +125,7 @@ void OpenMiniAudioProcessor::prepareToPlay(double sampleRate,
                                            int samplesPerBlock) {
   // Notify UI of the last changes
   sendChangeMessage();
+  synth_.SetOutputSamplingFrequency(static_cast<float>(sampleRate));
 }
 
 void OpenMiniAudioProcessor::releaseResources() {
