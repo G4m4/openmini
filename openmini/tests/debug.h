@@ -57,6 +57,13 @@ class FileWriter {
     out_stream_ << sample << "\n";
   }
 
+  /// @brief Push version for an entire buffer
+  void PushBuffer(const float* buffer, const unsigned int buffer_size) {
+    for (unsigned int i(0); i < buffer_size; ++i) {
+      PushFloat(buffer[i]);
+    }
+  }
+
   /// @brief Close writer (automatically done when destroyed)
   void Close(void) {
     out_stream_.close();
