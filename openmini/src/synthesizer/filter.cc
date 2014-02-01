@@ -36,6 +36,7 @@ Filter::Filter()
 
 Filter::~Filter() {
   ASSERT(filter_ != nullptr);
+  filters::DestroyFilter(filter_);
 }
 
 void Filter::SetFrequency(const float frequency) {

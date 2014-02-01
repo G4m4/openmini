@@ -20,6 +20,7 @@
 
 #include "openmini/src/filters/factory.h"
 
+#include "openmini/src/common.h"
 #include "openmini/src/filters/filter_base.h"
 #include "openmini/src/filters/secondorder_raw.h"
 
@@ -27,8 +28,19 @@ namespace openmini {
 namespace filters {
 
 Filter_Base* CreateFilter(void) {
-  static SecondOrderRaw kFilter;
-  return &kFilter;
+  void* ptr(Allocate(sizeof(SecondOrderRaw)));
+  ASSERT(ptr != nullptr);
+  return new (ptr) SecondOrderRaw();
+}
+
+void DestroyFilter(Filter_Base* filter) {
+  ASSERT(filter != nullptr);
+
+  // Beware, this is not safe! (explicit call to base destructor
+  // -> possible leaks in the child!)
+  // We should use smart pointers anyway
+  filter->~Filter_Base();
+  Deallocate(filter);
 }
 
 }  // namespace filters

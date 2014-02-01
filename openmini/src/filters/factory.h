@@ -34,6 +34,8 @@ class Filter_Base;
 /// @return a pointer to the created filter
 Filter_Base* CreateFilter(void);
 
+void DestroyFilter(Filter_Base* filter);
+
 }  // namespace filters
 }  // namespace openmini
 
