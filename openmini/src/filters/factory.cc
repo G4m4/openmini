@@ -30,7 +30,7 @@ namespace filters {
 Filter_Base* CreateFilter(void) {
   void* ptr(Allocate(sizeof(SecondOrderRaw)));
   ASSERT(ptr != nullptr);
-  return new (ptr) SecondOrderRaw();
+  return new (ptr) SecondOrderRaw;
 }
 
 void DestroyFilter(Filter_Base* filter) {
