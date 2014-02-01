@@ -20,6 +20,8 @@
 
 #include "openmini/src/filters/factory.h"
 
+#include <new>
+
 #include "openmini/src/common.h"
 #include "openmini/src/filters/filter_base.h"
 #include "openmini/src/filters/secondorder_raw.h"
@@ -30,7 +32,7 @@ namespace filters {
 Filter_Base* CreateFilter(void) {
   void* ptr(Allocate(sizeof(SecondOrderRaw)));
   ASSERT(ptr != nullptr);
-  return new (ptr) SecondOrderRaw;
+  return new (ptr) SecondOrderRaw();
 }
 
 void DestroyFilter(Filter_Base* filter) {

@@ -20,6 +20,8 @@
 
 #include "openmini/src/generators/factory.h"
 
+#include <new>
+
 #include "openmini/src/generators/generator_base.h"
 #include "openmini/src/generators/sawtooth_dpw.h"
 #include "openmini/src/generators/triangle_dpw.h"
