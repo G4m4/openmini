@@ -64,7 +64,7 @@ template<typename Type> void IGNORE(const Type&) {}
 
 /// @brief Block size used for internal sound synthesis
 /// may be different from the one actually delivered at the output of the synth
-static const int kBlockSize = 64;
+static const unsigned int kBlockSize = 64;
 
 /// @brief Sampling rate used for internal sound synthesis
 /// may be different from the one actually delivered at the output of the synth
