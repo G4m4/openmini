@@ -80,6 +80,22 @@ unsigned int FindImmediateNextMultiple(const unsigned int input,
 unsigned int GetOffsetFromNextMultiple(const unsigned int input,
                                        const unsigned int multiple);
 
+/// @brief Copy a bufffer content into another
+///
+/// @param[in]  dest    Destination buffer
+/// @param[in]  src   Source buffer
+/// @param[in]  length    Count of elements to be copied (this is not the size!)
+void CopyFloatArray(float* const dest,
+                    const float* const src,
+                    const unsigned int length);
+
+/// @brief Copy a bufffer content into another
+///
+/// Overload for "Sample" type
+void CopyFloatArray(float* const dest,
+                    const Sample* const src,
+                    const unsigned int length);
+
 }  // namespace synthesizer
 }  // namespace openmini
 

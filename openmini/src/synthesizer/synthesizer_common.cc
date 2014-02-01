@@ -20,6 +20,9 @@
 
 #include "openmini/src/synthesizer/synthesizer_common.h"
 
+// memcpy()
+#include <cstring>
+
 namespace openmini {
 namespace synthesizer {
 
@@ -56,6 +59,20 @@ unsigned int FindImmediateNextMultiple(const unsigned int input,
 unsigned int GetOffsetFromNextMultiple(const unsigned int input,
                                        const unsigned int multiple) {
   return input % multiple;
+}
+
+void CopyFloatArray(float* const dest,
+                    const float* const src,
+                    const unsigned int length) {
+  std::memcpy(dest, src, length * sizeof(*dest));
+}
+
+void CopyFloatArray(float* const dest,
+                    const Sample* const src,
+                    const unsigned int length) {
+  CopyFloatArray(dest,
+                 reinterpret_cast<const float* const>(src),
+                 length);
 }
 
 }  // namespace synthesizer
