@@ -30,7 +30,7 @@ namespace synthesizer {
 
 RingBuffer::RingBuffer(const unsigned int capacity)
     : data_(nullptr),
-      capacity_(FindImmediateNextMultiple(capacity, openmini::SampleSize)),
+      capacity_(FindImmediateNextMultiple(capacity, openmini::kBlockSize)),
       size_(0),
       writing_position_(0),
       reading_position_(0) {
@@ -98,6 +98,36 @@ void RingBuffer::Push(SampleRead value) {
   writing_position_ += openmini::SampleSize;
   writing_position_ = writing_position_ % capacity_;
   size_ += openmini::SampleSize;
+}
+
+void RingBuffer::Push(const std::array<Sample, openmini::kBlockSize / SampleSize>& src) {
+  ASSERT(IsGood());
+  ASSERT(openmini::kBlockSize > 0);
+  ASSERT((capacity() - size()) >= src.size());
+
+  // Length of the "right" part: from writing cursor to the buffer end
+  const unsigned int right_part_size(std::min(capacity_ - writing_position_,
+                                              openmini::kBlockSize));
+
+  // Length of the "left" part: from the buffer beginning
+  // to the last element to be pushed
+  const unsigned int left_part_size(openmini::kBlockSize - right_part_size);
+
+  // Copying the first part
+  CopyFloatArray(&data_[writing_position_],
+                 &src[0],
+                 right_part_size);
+  if (0 != left_part_size) {
+    // copy the second part (if there is one)
+    CopyFloatArray(&data_[0],
+                   &src[right_part_size / openmini::SampleSize],
+                   left_part_size);
+  }
+
+  writing_position_ += openmini::kBlockSize;
+  writing_position_ = writing_position_ % capacity_;
+  size_ += openmini::kBlockSize;
+  ASSERT(size() <= capacity());
 }
 
 void RingBuffer::Clear(void) {

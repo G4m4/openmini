@@ -21,6 +21,8 @@
 #ifndef OPENMINI_SRC_SYNTHESIZER_RINGBUFFER_H_
 #define OPENMINI_SRC_SYNTHESIZER_RINGBUFFER_H_
 
+#include <array>
+
 #include "openmini/src/common.h"
 
 namespace openmini {
@@ -54,6 +56,13 @@ class RingBuffer {
   ///
   /// @param[in]   src        Sample to push
   virtual void Push(SampleRead value);
+
+  /// @brief Push elements into the buffer
+  ///
+  /// Specialization for a fixed-size buffer
+  ///
+  /// @param[in]  src   Buffer to push in
+  virtual void Push(const std::array<Sample, openmini::kBlockSize / SampleSize>& src);
 
   /// @brief Explicitly clear buffer content but does not deallocate it
   virtual void Clear(void);
