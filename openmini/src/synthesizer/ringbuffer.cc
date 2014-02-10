@@ -136,14 +136,14 @@ void RingBuffer::Clear(void) {
   size_ = 0;
   if (IsGood()) {
     std::fill(&data_[0],
-              &data_[capacity_],
+              &data_[Capacity()],
               0.0f);
   }
 }
 
 void RingBuffer::ResizeIfNeedBe(const unsigned int size) {
   const unsigned int actual_capacity(ComputeRequiredElements(size));
-  if (actual_capacity > capacity_) {
+  if (actual_capacity > Capacity()) {
     return Resize(actual_capacity);
   }
 }
