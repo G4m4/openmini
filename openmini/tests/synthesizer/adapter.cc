@@ -52,7 +52,7 @@ TEST(Adapter, Passthrough) {
   data_index = 0;
   while (data_index < data_out.size()) {
     std::uniform_int_distribution<int> kBlockSizeDistribution(1,
-                                                              adapter.size());
+                                                              adapter.Size());
     const unsigned int kBlockSize(kBlockSizeDistribution(kRandomGenerator));
     adapter.Pop(&data_out[data_index], kBlockSize);
     data_index += kBlockSize;
@@ -95,7 +95,7 @@ TEST(Adapter, Resizing) {
   // TODO(gm): Fix this end-of-buffer mess
   while (data_index < data_out.size() - 32) {
     std::uniform_int_distribution<int> kBlockSizeDistribution(2,
-                                                              adapter.size());
+                                                              adapter.Size());
     const unsigned int kBlockSize(kBlockSizeDistribution(kRandomGenerator));
     adapter.Pop(&data_out[data_index], kBlockSize);
     data_index += kBlockSize;
@@ -143,7 +143,7 @@ TEST(Adapter, 96kTo48kSinusoid) {
   // TODO(gm): Fix this end-of-buffer mess
   while (data_index < data_out.size() - 32) {
     std::uniform_int_distribution<int> kBlockSizeDistribution(1,
-                                                              adapter.size());
+                                                              adapter.Size());
     const unsigned int kBlockSize(kBlockSizeDistribution(kRandomGenerator));
     adapter.Pop(&data_out[data_index], kBlockSize);
     data_index += kBlockSize;

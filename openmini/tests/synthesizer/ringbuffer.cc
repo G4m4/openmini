@@ -40,7 +40,7 @@ TEST(Synthesizer, RingBufferRandomPushPop) {
 
   unsigned int data_index(0);
   // First, we push the data with constant block sizes
-  while (ringbuf.size() < data.size()) {
+  while (ringbuf.Size() < data.size()) {
     const Sample current(Fill(&data[data_index]));
     ringbuf.Push(current);
     data_index += openmini::SampleSize;
@@ -50,7 +50,7 @@ TEST(Synthesizer, RingBufferRandomPushPop) {
   data_index = 0;
   while (data_index < data_out.size()) {
     std::uniform_int_distribution<int> kBlockSizeDistribution(1,
-                                                              ringbuf.size());
+                                                              ringbuf.Size());
     const unsigned int kBlockSize(kBlockSizeDistribution(kRandomGenerator));
     ringbuf.Pop(&data_out[data_index], kBlockSize);
     data_index += kBlockSize;
@@ -78,7 +78,7 @@ TEST(Synthesizer, RingBufferCircularCheck) {
 
   unsigned int data_index(0);
   // First, we fill the ringbuffer
-  while (ringbuf.size() < data.size() / 2) {
+  while (ringbuf.Size() < data.size() / 2) {
     const Sample current(Fill(&data[data_index]));
     ringbuf.Push(current);
     data_index += openmini::SampleSize;
@@ -88,7 +88,7 @@ TEST(Synthesizer, RingBufferCircularCheck) {
   ringbuf.Pop(&data_out[0], data.size() / 2);
 
   // Then we fill the ringbuffer again
-  while (ringbuf.size() < data.size() / 2) {
+  while (ringbuf.Size() < data.size() / 2) {
     const Sample current(Fill(&data[data_index]));
     ringbuf.Push(current);
     data_index += openmini::SampleSize;

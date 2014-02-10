@@ -70,8 +70,8 @@ void Resampler::ResizeIfNeedBe(const unsigned int size) {
   RingBuffer::ResizeIfNeedBe(kRequiredSize);
 }
 
-unsigned int Resampler::size(void) const {
-  return ExpectedOutLength(RingBuffer::size(), interpolator_.Ratio());
+unsigned int Resampler::Size(void) const {
+  return ExpectedOutLength(RingBuffer::Size(), interpolator_.Ratio());
 }
 
 void Resampler::SetFrequencies(const float in_freq, const float out_freq) {

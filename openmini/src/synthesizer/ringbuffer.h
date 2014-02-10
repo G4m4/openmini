@@ -79,10 +79,10 @@ class RingBuffer {
   virtual bool IsGood(void) const;
 
   /// @brief How many elements may be pushed into the buffer
-  virtual unsigned int capacity(void) const;
+  virtual unsigned int Capacity(void) const;
 
   /// @brief How many elements may be popped from the buffer
-  virtual unsigned int size(void) const;
+  virtual unsigned int Size(void) const;
 
  protected:
   /// @brief Change the available count of elements

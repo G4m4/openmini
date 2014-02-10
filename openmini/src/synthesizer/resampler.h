@@ -55,7 +55,7 @@ class Resampler: public RingBuffer {
   void ResizeIfNeedBe(const unsigned int size);
 
   /// @brief How many elements may be popped from the buffer
-  unsigned int size(void) const;
+  unsigned int Size(void) const;
 
   /// @brief Change the input/output sampling frequencies
   ///

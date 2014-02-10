@@ -55,7 +55,7 @@ void Synthesizer::ProcessAudio(float* const output,
 
   // Actual amount of data to synthesize:
   // closest multiple of SampleSize >= (required - existing)
-  while (buffer_.size() < length) {
+  while (buffer_.Size() < length) {
     // Processing in the internal buffer
     for (unsigned int i(0); i < openmini::kBlockSize / SampleSize; ++i) {
       internal_buf_[i] = filter_(mixer_());

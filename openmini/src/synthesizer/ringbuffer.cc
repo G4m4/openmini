@@ -103,7 +103,7 @@ void RingBuffer::Push(SampleRead value) {
 void RingBuffer::Push(const std::array<Sample, openmini::kBlockSize / SampleSize>& src) {
   ASSERT(IsGood());
   ASSERT(openmini::kBlockSize > 0);
-  ASSERT((capacity() - size()) >= src.size());
+  ASSERT((Capacity() - Size()) >= src.size());
 
   // Length of the "right" part: from writing cursor to the buffer end
   const unsigned int right_part_size(std::min(capacity_ - writing_position_,
@@ -127,7 +127,7 @@ void RingBuffer::Push(const std::array<Sample, openmini::kBlockSize / SampleSize
   writing_position_ += openmini::kBlockSize;
   writing_position_ = writing_position_ % capacity_;
   size_ += openmini::kBlockSize;
-  ASSERT(size() <= capacity());
+  ASSERT(Size() <= Capacity());
 }
 
 void RingBuffer::Clear(void) {
@@ -152,12 +152,12 @@ bool RingBuffer::IsGood(void) const {
   return data_ != nullptr;
 }
 
-unsigned int RingBuffer::capacity(void) const {
+unsigned int RingBuffer::Capacity(void) const {
   ASSERT(IsGood());
   return capacity_;
 }
 
-unsigned int RingBuffer::size(void) const {
+unsigned int RingBuffer::Size(void) const {
   ASSERT(IsGood());
   return ComputeMaxElements(size_);
 }
