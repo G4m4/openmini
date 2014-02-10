@@ -142,7 +142,10 @@ void RingBuffer::Clear(void) {
 }
 
 void RingBuffer::ResizeIfNeedBe(const unsigned int size) {
-  const unsigned int actual_capacity(ComputeRequiredElements(size));
+  // Taking into account the alrady existing data
+  // TODO(gm): Check that all successive size computation do not result in
+  // too much data being allocated, or find a smart data size allocation scheme
+  const unsigned int actual_capacity(ComputeRequiredElements(size) + Size());
   if (actual_capacity > Capacity()) {
     return Resize(actual_capacity);
   }
