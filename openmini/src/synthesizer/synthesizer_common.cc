@@ -62,17 +62,11 @@ unsigned int GetOffsetFromNextMultiple(const unsigned int input,
 }
 
 void CopyFloatArray(float* const dest,
-                    const float* const src,
-                    const unsigned int length) {
-  std::memcpy(dest, src, length * sizeof(*dest));
-}
-
-void CopyFloatArray(float* const dest,
                     const Sample* const src,
                     const unsigned int length) {
-  CopyFloatArray(dest,
-                 reinterpret_cast<const float* const>(src),
-                 length);
+  std::memcpy(dest,
+              reinterpret_cast<const float* const>(src),
+              length * sizeof(*dest));
 }
 
 }  // namespace synthesizer
