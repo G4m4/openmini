@@ -147,6 +147,28 @@ TEST(Synthesizer, SynthesizerVaryingBlockSize) {
   EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
 }
 
+/// @brief Asking the synthesizer for the smallest possible block size
+/// The generated sound should stay OK
+TEST(Synthesizer, SynthesizerSmallestBlockSize) {
+  std::vector<float> data(kDataTestSetSize);
+  Synthesizer synth;
+  const unsigned int kMinBlockSize(1);
+
+  synth.NoteOn(kMinKeyNote);
+
+  unsigned int data_idx(0);
+  while (data_idx < data.size()) {
+    synth.ProcessAudio(&data[data_idx], kMinBlockSize);
+    data_idx += kMinBlockSize;
+  }
+
+  // Check for clicks - this value is a bit higher (although still quite low)
+  // due to the filter ringing effect
+  const float kEpsilon(10.0f);
+  // Not testing the first sample!
+  EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
+}
+
 /// @brief Process a fixed amount of data without changing anything
 /// to default parameters, only setting a note on - at 96kHz
 TEST(Synthesizer, SynthesizerPerf96k) {
