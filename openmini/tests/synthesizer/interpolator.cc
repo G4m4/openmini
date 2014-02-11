@@ -107,3 +107,33 @@ TEST(Interpolator, LinearHalfRatio) {
     EXPECT_NEAR(data_expected[i], data_out[i], kEpsilon);
   }
 }
+
+/// @brief Linear interpolation with a ratio of slightly more than 1,
+/// on a known signal
+TEST(Interpolator, LinearNonIntegerRate) {
+  const float kRatio(1.1f);
+  std::vector<float> data(kDataTestSetSize);
+  // Creating sinusoid data
+  const unsigned int kExpectedLength(ExpectedOutLength(kDataTestSetSize,
+                                                       kRatio));
+  std::vector<float> data_expected(kExpectedLength);
+  std::vector<float> data_out(kExpectedLength);
+  const float kFrequency(1000.0f);
+  std::generate(data.begin(),
+                data.end(),
+                SinusGenerator(kFrequency, openmini::kSamplingRate));
+  std::generate(data_expected.begin(),
+                data_expected.end(),
+                SinusGenerator(kRatio * kFrequency, openmini::kSamplingRate));
+
+  Interpolator interpolator;
+  interpolator.SetRatio(kRatio);
+  interpolator.Process(&data[0], data.size(), &data_out[0], kExpectedLength);
+
+  // The epsilon is quite high here (e.g. likely audible)
+  // TODO(gm): optimize the interpolator
+  const float kEpsilon(6e-4f);
+  for (unsigned int i(0); i < data_out.size() - 1; ++i) {
+    EXPECT_NEAR(data_expected[i], data_out[i], kEpsilon);
+  }
+}
