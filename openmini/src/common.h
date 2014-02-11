@@ -73,6 +73,14 @@ static const float kSamplingRate = 96000.0f;
 /// @brief Half of the above defined sampling rate : max reachable frequency
 static const float kSamplingRateHalf = kSamplingRate / 2.0f;
 
+/// @brief Min filter frequency (due to precision issues)
+static const float kMinFilterFreq = 10.0f / openmini::kSamplingRate;
+
+/// @brief Max filter frequency (slightly lower than half the sampling
+/// frequency, due to precision issues)
+static const float kMaxFilterFreq = (openmini::kSamplingRateHalf - 10.0f)
+                                     / openmini::kSamplingRate;
+
 /// @brief Arbitrary lowest allowed key note (= C1)
 static const unsigned int kMinKeyNote(24);
 /// @brief Arbitrary highest allowed key note (= C7)

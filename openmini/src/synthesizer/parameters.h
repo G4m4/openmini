@@ -95,11 +95,9 @@ const std::array<ParameterMeta, Parameters::kCount> kParametersMeta = {{
                 Waveform::kCount,
                 "Osc3 Waveform",
                 "Waveform for oscillator 3"),
-  ParameterMeta(1.0f / openmini::kSamplingRate,
-                (openmini::kSamplingRateHalf - 10.0f)
-                  / openmini::kSamplingRate,
-                (openmini::kSamplingRateHalf - 10.0f)
-                  / openmini::kSamplingRate,  // "almost" passthrough
+  ParameterMeta(kMinFilterFreq,
+                kMaxFilterFreq,
+                1.0f,  // "almost" passthrough
                 true,
                 1,
                 0,
