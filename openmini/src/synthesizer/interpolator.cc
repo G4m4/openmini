@@ -53,7 +53,7 @@ void Interpolator::Process(const float* const input,
                            float* const output,
                            const unsigned int output_length) {
   ASSERT(input != nullptr);
-  ASSERT(input_length >= RequiredInLength(output_length, ratio_));
+  ASSERT(input_length >= RequiredInLength(output_length, ratio_) - 1);
   ASSERT(output != nullptr);
   ASSERT(output_length > 0);
 

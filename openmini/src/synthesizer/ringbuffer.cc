@@ -127,7 +127,8 @@ void RingBuffer::Push(const std::array<Sample, openmini::kBlockSize / SampleSize
   writing_position_ += openmini::kBlockSize;
   writing_position_ = writing_position_ % capacity_;
   size_ += openmini::kBlockSize;
-  ASSERT(Size() <= Capacity());
+  // These are the actual raw value (e.g. this is a plain buffer overflow check)
+  ASSERT(size_ <= capacity_);
 }
 
 void RingBuffer::Clear(void) {
@@ -142,10 +143,10 @@ void RingBuffer::Clear(void) {
 }
 
 void RingBuffer::ResizeIfNeedBe(const unsigned int size) {
-  // Taking into account the alrady existing data
+  // Taking into account the already existing data - the plain samples!
   // TODO(gm): Check that all successive size computation do not result in
   // too much data being allocated, or find a smart data size allocation scheme
-  const unsigned int actual_capacity(ComputeRequiredElements(size) + Size());
+  const unsigned int actual_capacity(ComputeRequiredElements(size) + size_);
   if (actual_capacity > Capacity()) {
     return Resize(actual_capacity);
   }
