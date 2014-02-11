@@ -22,6 +22,7 @@
 
 #include "openmini/src/filters/factory.h"
 #include "openmini/src/filters/filter_base.h"
+#include "openmini/src/synthesizer/parameters.h"
 
 namespace openmini {
 namespace synthesizer {
@@ -40,12 +41,19 @@ Filter::~Filter() {
 }
 
 void Filter::SetFrequency(const float frequency) {
-  ASSERT(frequency > 0.0f);
-  ASSERT(frequency < openmini::kSamplingRateHalf);
+  ASSERT(frequency >= 0.0f);
+  ASSERT(frequency <= 1.0f);
 
+  // De-normalization
   // TODO(gm): find a way to do this generically
-  if (frequency != frequency_) {
-    frequency_ = frequency;
+  const float actual_freq(frequency * (Parameters::kParametersMeta[Parameters::kFilterFreq].max()
+                                       - Parameters::kParametersMeta[Parameters::kFilterFreq].min())
+                          + Parameters::kParametersMeta[Parameters::kFilterFreq].min());
+  ASSERT(actual_freq >= kMinFilterFreq);
+  ASSERT(actual_freq <= kMaxFilterFreq);
+  // TODO(gm): find a way to do this generically
+  if (actual_freq != frequency_) {
+    frequency_ = actual_freq;
     update_ = true;
   }
 }

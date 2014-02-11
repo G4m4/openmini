@@ -102,6 +102,8 @@ class ParametersManager {
   /// This getter retrieves a floating point number,
   /// whatever the actual parameter format is
   ///
+  /// The retrieved value is normalized, you may want to re-convert it!
+  ///
   /// @param[in]   parameter_id     ID of the parameter to be retrieved
   virtual float GetValue(const int parameter_id) const;
 
