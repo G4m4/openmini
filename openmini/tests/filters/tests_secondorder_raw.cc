@@ -1,4 +1,4 @@
-/// @filename secondorder_raw.cc
+/// @filename tests_secondorder_raw.cc
 /// @brief OpenMini 2nd order filters tests
 /// @author gm
 /// @copyright gm 2013

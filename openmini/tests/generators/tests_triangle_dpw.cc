@@ -1,4 +1,4 @@
-/// @filename triangle_dpw.cc
+/// @filename tests_triangle_dpw.cc
 /// @brief Triangle DPW generator specific tests
 /// @author gm
 /// @copyright gm 2013

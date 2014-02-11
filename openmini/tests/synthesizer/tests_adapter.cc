@@ -1,4 +1,4 @@
-/// @filename adapter.cc
+/// @filename tests_adapter.cc
 /// @brief Adapter specific tests
 /// @author gm
 /// @copyright gm 2013

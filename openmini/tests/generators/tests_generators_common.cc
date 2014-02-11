@@ -1,5 +1,5 @@
-/// @filename sawtooth_dpw.cc
-/// @brief Sawtooth DPW generator specific tests
+/// @filename tests_generators_common.cc
+/// @brief OpenMini common generators tests
 /// @author gm
 /// @copyright gm 2013
 ///
@@ -22,16 +22,16 @@
 
 #include "openmini/tests/tests.h"
 
-#include "openmini/src/generators/sawtooth_dpw.h"
+#include "openmini/src/generators/generators_common.h"
 
 // Using declarations for tested generator
-using openmini::generators::SawtoothDPW;
+using openmini::generators::PhaseAccumulator;
+using openmini::generators::Differentiator;
 
 /// @brief Generates a signal, check for null mean (no DC offset)
-TEST(Generators, SawtoothDPWMean) {
+TEST(Generators, PhaseAccumulatorMean) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
-
     // Random normalized frequency
     const float kFrequency(kFreqDistribution(kRandomGenerator));
 
@@ -41,11 +41,12 @@ TEST(Generators, SawtoothDPWMean) {
                                                 * kSignalDataPeriodsCount)));
 
     // Generating data
-    SawtoothDPW generator;
+    PhaseAccumulator generator;
     generator.SetFrequency(kFrequency);
 
     const float kExpected(0.0f);
-    const float kEpsilon(1e-2f);
+    // Epsilon is quite big here, this generator being very crude
+    const float kEpsilon(1e-1f);
     const float kActual(ComputeMean(generator, kDataLength));
 
     std::cout << "Frequency: " << kFrequency
@@ -55,8 +56,8 @@ TEST(Generators, SawtoothDPWMean) {
   }  // iterations?
 }
 
-/// @brief Generates a signal, check for its mean power
-TEST(Generators, SawtoothDPWPower) {
+/// @brief Generates a signal, check for signal power
+TEST(Generators, PhaseAccumulatorPower) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
@@ -69,33 +70,33 @@ TEST(Generators, SawtoothDPWPower) {
                                                 * kSignalDataPeriodsCount)));
 
     // Generating data
-    SawtoothDPW generator;
+    PhaseAccumulator generator;
     generator.SetFrequency(kFrequency);
 
     const float kExpected(1.0f / 3.0f);
-    // Sawtooth is less powerful than expected using this algorithm
-    const float kEpsilon(1e-1f);
+    // Very low epsilon with this algorithm!
+    const float kEpsilon(6e-3f);
     const float kActual(ComputePower(generator, kDataLength));
 
     std::cout << "Frequency: " << kFrequency
               << "    Power:" << kActual << std::endl;
+
     EXPECT_NEAR(kExpected, kActual, kEpsilon);
   }  // iterations?
 }
 
 /// @brief Generates a signal,
 /// check for normalized range (within [-1.0f ; 1.0f])
-TEST(Generators, SawtoothDPWRange) {
+TEST(Generators, PhaseAccumulatorRange) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
     const float kFrequency(kFreqDistribution(kRandomGenerator));
-
-    SawtoothDPW generator;
+    PhaseAccumulator generator;
     generator.SetFrequency(kFrequency);
 
     for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
-      const Sample sample(generator());
+      const Sample sample(Fill(kFreqDistribution(kRandomGenerator)));
       EXPECT_TRUE(GreaterEqual(1.0f, sample));
       EXPECT_TRUE(LessEqual(-1.0f, sample));
     }
@@ -104,39 +105,16 @@ TEST(Generators, SawtoothDPWRange) {
 
 /// @brief Generates a signal and check for expected zero crossing
 /// according parameterized frequency (1 expected zero crossings per period)
-TEST(Generators, SawtoothDPWZeroCrossings) {
+TEST(Generators, PhaseAccumulatorZeroCrossings) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
-  const float kFrequency(kFreqDistribution(kRandomGenerator));
-
+    const float kFrequency(kFreqDistribution(kRandomGenerator));
     const unsigned int kDataLength(static_cast<unsigned int>(
                                      std::floor((0.5f / kFrequency)
                                                 * kSignalDataPeriodsCount)));
-    SawtoothDPW generator;
+    PhaseAccumulator generator;
     generator.SetFrequency(kFrequency);
-
-    // Due to rounding one or even two zero crossings may be lost/added
-    const int kEpsilon(2);
-    const int kActual(ComputeZeroCrossing(generator, kDataLength));
-
-    EXPECT_NEAR(kSignalDataPeriodsCount, kActual, kEpsilon);
-  }
-}
-
-/// @brief Generates a signal at each frequency corresponding
-/// to key notes from C1 to C8, check for expected zero crossing
-TEST(Generators, SawtoothDPWNotes) {
-  for (unsigned int key_note(kMinKeyNote);
-       key_note < kMaxKeyNote;
-       ++key_note) {
-    const float kFrequency(NoteToFrequency(key_note));
-    const unsigned int kDataLength(
-       static_cast<unsigned int>(std::floor((0.5f / kFrequency)
-                                            * kSignalDataPeriodsCount
-                                            * openmini::kSamplingRate)));
-    SawtoothDPW generator;
-    generator.SetFrequency(kFrequency / openmini::kSamplingRate);
 
     // Due to rounding one or even two zero crossings may be lost/added
     const int kEpsilon(2);
@@ -147,20 +125,65 @@ TEST(Generators, SawtoothDPWNotes) {
 }
 
 /// @brief Generates a signal (performance tests)
-TEST(Generators, SawtoothDPWPerf) {
+TEST(Generators, PhaseAccumulatorPerf) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
     const float kFrequency(kFreqDistribution(kRandomGenerator));
-    SawtoothDPW generator;
+    PhaseAccumulator generator;
     generator.SetFrequency(kFrequency);
 
     unsigned int sample_idx(0);
     while (sample_idx < kGeneratorDataPerfSetSize) {
-      const Sample kCurrent(generator());
+      const Sample kCurrent(Fill(kFreqDistribution(kRandomGenerator)));
       sample_idx += openmini::SampleSize;
       // No actual test!
       EXPECT_TRUE(LessEqual(-1.0f, kCurrent));
+    }
+  }
+}
+
+/// @brief Differentiate a constant, check for null derivative
+TEST(Generators, DifferentiatedConstant) {
+  // Filling a vector with one random value in [-1.0f ; 1.0f]
+  std::vector<float> data(kDataTestSetSize,
+                          kNormDistribution(kRandomGenerator));
+
+  Differentiator differentiator;
+  // Not checking the first value!
+  differentiator(Fill(&data[0]));
+  for (unsigned int i(openmini::SampleSize);
+       i < kDataTestSetSize;
+       i += openmini::SampleSize) {
+    EXPECT_TRUE(Equal(0.0f, differentiator(Fill(&data[i]))));
+  }
+}
+
+/// @brief Generates a triangle, check for its differentiated output:
+/// it is supposed to be almost null everywhere except at discontinuities
+TEST(Generators, DifferentiatedSawtooth) {
+  const float kFrequency(kFreqDistribution(kRandomGenerator));
+  PhaseAccumulator generator;
+  generator.SetFrequency(kFrequency);
+  std::vector<float> data(kDataTestSetSize);
+  for (std::vector<float>::iterator iter(data.begin());
+       iter != data.end();
+       iter += openmini::SampleSize) {
+    Store(&(*iter), generator());
+  }
+
+  // This is the sawtooth period e.g. each time the discontinuity occurs
+  const int kPeriod(static_cast<int>(std::floor(kFrequency
+                                                * openmini::kSamplingRate)));
+  // The sawtooth is not perfect:
+  // there may be a small DC offset for its derivative
+  const float kThreshold(0.15f);
+
+  Differentiator differentiator;
+  for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
+    const Sample diff(differentiator(Fill(&data[0])));
+    if (i % kPeriod != 0) {
+      EXPECT_TRUE(GreaterThan(kThreshold, diff));
     }
   }
 }

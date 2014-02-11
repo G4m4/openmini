@@ -1,4 +1,4 @@
-/// @filename interpolator.cc
+/// @filename tests_interpolator.cc
 /// @brief Interpolator specific tests
 /// @author gm
 /// @copyright gm 2013
