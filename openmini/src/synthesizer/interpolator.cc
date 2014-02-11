@@ -30,9 +30,8 @@ namespace synthesizer {
 
 Interpolator::Interpolator()
     : cursor_pos_(0.0),
-      ratio_(1.0f),
-      history_(0.0f) {
-  // Nothing to do here for now
+      ratio_(1.0f) {
+  history_.fill(0.0f);
 }
 
 Interpolator::~Interpolator() {
@@ -59,27 +58,36 @@ void Interpolator::Process(const float* const input,
 
   unsigned int current_out_idx(0);
   double temp_cursor(cursor_pos_);
+  // TODO(gm): Check if using std::array for context is pertinent
   float context[2];
   while (current_out_idx < output_length) {
-    // Default case: all is good,
-    // far from the beginning and from the end of the input data
-    unsigned int left_idx(FloorAndConvert<unsigned int>(temp_cursor));
-    float current_cursor(static_cast<float>(temp_cursor)
-                         - static_cast<float>(left_idx));
-    context[0] = input[left_idx];
-    context[1] = input[left_idx + 1];
-    if (temp_cursor < 0.0) {
+    unsigned int left_idx(0);
+    double current_cursor(0.0);
+    if (temp_cursor >= 0.0) {
+      // Default case: all is good,
+      // far from the beginning and from the end of the input data
+      left_idx = FloorAndConvert<unsigned int>(temp_cursor);
+      current_cursor = temp_cursor - static_cast<double>(left_idx);
+      context[0] = input[left_idx];
+      context[1] = input[left_idx + 1];
+    } else {
       // Should never happen
-      ASSERT(temp_cursor < -1.0);
       // Being "late" relative to the cursor, e.g.:
       //
       // -----x----------------------|-----------
       //    cursor                 input[0]
       //      |< abs(current_cursor) >|
       left_idx = 0;
-      current_cursor += 1.0f;
-      context[0] = history_;
+      current_cursor = temp_cursor - static_cast<double>(left_idx);
+      current_cursor += 1.0;
+      context[0] = history_[0];
       context[1] = input[left_idx];
+      if (temp_cursor < 1.0) {
+        left_idx = 0;
+        current_cursor += 1.0;
+        context[0] = history_[0];
+        context[1] = history_[1];
+      }
     }
     if (left_idx == input_length - 1) {
       // Cursor on (or after, because of the floor above) the last input sample
@@ -89,14 +97,16 @@ void Interpolator::Process(const float* const input,
     // Should never happen
     ASSERT(left_idx != input_length);
 
-    output[current_out_idx]
-      = this->operator()<LinearInterpolation>(context, current_cursor);
+    output[current_out_idx] = this->operator()<LinearInterpolation>(
+                                context,
+                                static_cast<float>(current_cursor));
 
     current_out_idx += 1;
     temp_cursor += static_cast<double>(ratio_);
   }
 
-  history_ = context[1];
+  history_[0] = context[0];
+  history_[1] = context[1];
   cursor_pos_ += static_cast<double>(ratio_) * current_out_idx;
   cursor_pos_ -= static_cast<double>(input_length);
 }
