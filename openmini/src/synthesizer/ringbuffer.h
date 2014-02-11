@@ -62,7 +62,8 @@ class RingBuffer {
   /// Specialization for a fixed-size buffer
   ///
   /// @param[in]  src   Buffer to push in
-  virtual void Push(const std::array<Sample, openmini::kBlockSize / SampleSize>& src);
+  virtual void Push(
+    const std::array<Sample, openmini::kBlockSize / SampleSize>& src);
 
   /// @brief Explicitly clear buffer content but does not deallocate it
   virtual void Clear(void);

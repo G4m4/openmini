@@ -100,7 +100,8 @@ void RingBuffer::Push(SampleRead value) {
   size_ += openmini::SampleSize;
 }
 
-void RingBuffer::Push(const std::array<Sample, openmini::kBlockSize / SampleSize>& src) {
+void RingBuffer::Push(
+    const std::array<Sample, openmini::kBlockSize / SampleSize>& src) {
   ASSERT(IsGood());
   ASSERT(openmini::kBlockSize > 0);
   ASSERT((Capacity() - Size()) >= src.size());
