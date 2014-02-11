@@ -1,5 +1,5 @@
-/// @filename filter.h
-/// @brief Filter: wrapper around an internal filter - definitions
+/// @filename vcf.h
+/// @brief "VCF": wrapper around an internal filter
 ///
 /// @author gm
 /// @copyright gm 2013
@@ -19,8 +19,8 @@
 /// You should have received a copy of the GNU General Public License
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OPENMINI_SRC_SYNTHESIZER_FILTER_H_
-#define OPENMINI_SRC_SYNTHESIZER_FILTER_H_
+#ifndef OPENMINI_SRC_SYNTHESIZER_VCF_H_
+#define OPENMINI_SRC_SYNTHESIZER_VCF_H_
 
 #include "openmini/src/common.h"
 #include "openmini/src/maths.h"
@@ -35,16 +35,16 @@ class Filter_Base;
 namespace openmini {
 namespace synthesizer {
 
-/// @brief Filter: wraps an internal filter and gives it
+/// @brief Vcf: wraps an internal filter and gives it
 /// additional parameters as well as a more advanced parameters management.
 ///
 /// It handles everything about asynchronous parameters update.
-class Filter {
+class Vcf {
  public:
   /// @brief Default constructor
-  Filter();
+  Vcf();
   /// @brief Default destructor
-  ~Filter();
+  ~Vcf();
   /// @brief Set the filter to the given frequency
   ///
   /// Frequency is not normalized here - the unit is Hz
@@ -66,7 +66,7 @@ class Filter {
 
  private:
   // No assignment operator for this class
-  Filter& operator=(const Filter& right);
+  Vcf& operator=(const Vcf& right);
 
   filters::Filter_Base* filter_;  ///< Internal filter
   float frequency_; ///< Frequency of the filter (non-normalized, in Hz).
@@ -81,4 +81,4 @@ class Filter {
 }  // namespace synthesizer
 }  // namespace openmini
 
-#endif  // OPENMINI_SRC_SYNTHESIZER_FILTER_H_
+#endif  // OPENMINI_SRC_SYNTHESIZER_VCF_H_

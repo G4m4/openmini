@@ -1,5 +1,5 @@
-/// @filename filter.cc
-/// @brief Filter: wrapper around an internal filter - implementation
+/// @filename vcf.cc
+/// @brief "VCF": wrapper around an internal filter - implementation
 /// @author gm
 /// @copyright gm 2013
 ///
@@ -18,7 +18,7 @@
 /// You should have received a copy of the GNU General Public License
 /// along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "openmini/src/synthesizer/filter.h"
+#include "openmini/src/synthesizer/vcf.h"
 
 #include "openmini/src/filters/factory.h"
 #include "openmini/src/filters/filter_base.h"
@@ -27,7 +27,7 @@
 namespace openmini {
 namespace synthesizer {
 
-Filter::Filter()
+Vcf::Vcf()
   : filter_(filters::CreateFilter()),
     frequency_(0.0f),
     qfactor_(0.0f),
@@ -35,12 +35,12 @@ Filter::Filter()
   ASSERT(filter_ != nullptr);
 }
 
-Filter::~Filter() {
+Vcf::~Vcf() {
   ASSERT(filter_ != nullptr);
   filters::DestroyFilter(filter_);
 }
 
-void Filter::SetFrequency(const float frequency) {
+void Vcf::SetFrequency(const float frequency) {
   ASSERT(frequency >= 0.0f);
   ASSERT(frequency <= 1.0f);
 
@@ -58,7 +58,7 @@ void Filter::SetFrequency(const float frequency) {
   }
 }
 
-void Filter::SetQFactor(const float qfactor) {
+void Vcf::SetQFactor(const float qfactor) {
   ASSERT(qfactor <= 100.0f);
   ASSERT(qfactor >= 0.0f);
 
@@ -69,13 +69,13 @@ void Filter::SetQFactor(const float qfactor) {
   }
 }
 
-Sample Filter::operator()(SampleRead sample) {
+Sample Vcf::operator()(SampleRead sample) {
   ASSERT(filter_ != nullptr);
   ProcessParameters();
   return (*filter_)(sample);
 }
 
-void Filter::ProcessParameters(void) {
+void Vcf::ProcessParameters(void) {
   ASSERT(filter_ != nullptr);
   if (update_) {
     filter_->SetParameters(frequency_, qfactor_);

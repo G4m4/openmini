@@ -23,10 +23,10 @@
 
 #include <array>
 
-#include "openmini/src/synthesizer/filter.h"
 #include "openmini/src/synthesizer/mixer.h"
 #include "openmini/src/synthesizer/parameter_manager.h"
 #include "openmini/src/synthesizer/resampler.h"
+#include "openmini/src/synthesizer/vcf.h"
 
 namespace openmini {
 namespace synthesizer {
@@ -70,7 +70,7 @@ class Synthesizer : public ParametersManager {
 
  private:
   Mixer mixer_;  ///< Mixer object for VCOs management
-  Filter filter_;  ///< Filter object
+  Vcf filter_;  ///< Filter object
   Resampler buffer_;  ///< Adapter object for output audio stream matching
 
   std::array<Sample, openmini::kBlockSize / SampleSize> internal_buf_;  ///< Internal memory
