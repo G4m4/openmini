@@ -164,6 +164,63 @@ TEST(Synthesizer, SynthesizerSmallestBlockSize) {
   EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
 }
 
+/// @brief Asking the synthesizer for various output sampling rates over time.
+/// The generated sound should stay OK
+TEST(Synthesizer, SynthesizerVaryingSamplingRate) {
+  std::vector<float> data(kDataTestSetSize);
+  Synthesizer synth;
+  const unsigned int kBlockSize(1024);
+  const float kMinSamplingRate(10.0f);
+  const float kMaxSamplingRate(openmini::kSamplingRate);
+
+  synth.NoteOn(kMinKeyNote);
+
+  unsigned int data_idx(0);
+  while (data_idx < data.size()) {
+    const float kSamplingRate(std::uniform_real_distribution<float>(
+                                kMinSamplingRate, kMaxSamplingRate)
+                              (kRandomGenerator));
+    synth.SetOutputSamplingFrequency(kSamplingRate);
+    synth.ProcessAudio(&data[data_idx], kBlockSize);
+    data_idx += kBlockSize;
+  }
+
+  // Check for clicks - this value is a bit higher (although still quite low)
+  // due to the filter ringing effect
+  const float kEpsilon(25.0f);
+  // Not testing the first sample!
+  EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
+}
+
+/// @brief Asking the synthesizer for various block size and various sampling
+/// frequencies over time - the generated sound should stay OK
+TEST(Synthesizer, SynthesizerVaryingOutputFormat) {
+  std::vector<float> data(kDataTestSetSize);
+  Synthesizer synth;
+  const float kMinSamplingRate(10.0f);
+  const float kMaxSamplingRate(openmini::kSamplingRate);
+
+  synth.NoteOn(kMinKeyNote);
+
+  unsigned int data_idx(0);
+  while (data_idx < data.size()) {
+    const unsigned int kBlockSize(std::uniform_int_distribution<int>(1,
+                                    data.size() - data_idx)(kRandomGenerator));
+    const float kSamplingRate(std::uniform_real_distribution<float>(
+                                kMinSamplingRate, kMaxSamplingRate)
+                              (kRandomGenerator));
+    synth.SetOutputSamplingFrequency(kSamplingRate);
+    synth.ProcessAudio(&data[data_idx], kBlockSize);
+    data_idx += kBlockSize;
+  }
+
+  // Check for clicks - this value is a bit higher (although still quite low)
+  // due to the filter ringing effect
+  const float kEpsilon(25.0f);
+  // Not testing the first sample!
+  EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
+}
+
 /// @brief Process a fixed amount of data without changing anything
 /// to default parameters, only setting a note on - at 96kHz
 TEST(Synthesizer, SynthesizerPerf96k) {
