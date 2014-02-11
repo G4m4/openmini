@@ -124,20 +124,15 @@ TEST(Synthesizer, SynthesizerSmallBlockSize) {
 TEST(Synthesizer, SynthesizerVaryingBlockSize) {
   std::vector<float> data(kDataTestSetSize);
   Synthesizer synth;
-  const unsigned int kMinBlockSize(4);
 
   synth.NoteOn(kMinKeyNote);
 
   unsigned int data_idx(0);
-  while (data_idx < data.size() - kMinBlockSize) {
-    const unsigned int kBlockSize(std::uniform_int_distribution<int>(kMinBlockSize,
+  while (data_idx < data.size()) {
+    const unsigned int kBlockSize(std::uniform_int_distribution<int>(1,
                                     data.size() - data_idx)(kRandomGenerator));
     synth.ProcessAudio(&data[data_idx], kBlockSize);
     data_idx += kBlockSize;
-  }
-  // Last samples (< min block size) case
-  if (data_idx < kDataTestSetSize) {
-    synth.ProcessAudio(&data[data_idx], data.size() - data_idx);
   }
 
   // Check for clicks - this value is a bit higher (although still quite low)
