@@ -140,6 +140,11 @@ void OpenMiniAudioProcessorEditor::sliderValueChanged(juce::Slider* slider) {
     getProcessor()->setParameterNotifyingHost(kFilterFreq, value);
   } else if (slider == &filter_q_) {
     getProcessor()->setParameterNotifyingHost(kFilterQ, value);
+  } else {
+    // Should never happen
+    ASSERT(false);
+  }
+}
   }
 }
 
