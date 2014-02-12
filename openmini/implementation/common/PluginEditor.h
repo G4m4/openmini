@@ -28,6 +28,7 @@
 
 #include "JuceHeader.h"
 #include "openmini/implementation/common/PluginProcessor.h"
+#include "openmini/implementation/common/WidgetsManager.h"
 
 static const int kMainWindowSizeX(800);
 static const int kMainWindowSizeY(600);
@@ -36,8 +37,8 @@ static const int kMainWindowSizeY(600);
 ///
 /// Contains all UI and user control stuff
 class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
+                                     public juce::ChangeBroadcaster,
                                      public juce::ChangeListener,
-                                     public juce::Slider::Listener,
                                      public juce::Timer {
  public:
   explicit OpenMiniAudioProcessorEditor(OpenMiniAudioProcessor* owner);
@@ -46,26 +47,22 @@ class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
   void paint(juce::Graphics& g);
 
   // Overrides from inherited classes
-  void sliderValueChanged(juce::Slider* slider);
-  void sliderDragStarted(juce::Slider* slider);
-  void sliderDragEnded(juce::Slider* slider);
   void changeListenerCallback(juce::ChangeBroadcaster *source);
   void timerCallback();
+
+  // Give access to parameter changes to other UI components
+  float GetParamValue(const int param_id);
+  void ParamValueChanged(const int param_id, const float value);
+  void ParamGestureBegan(const int param_id);
+  void ParamGestureEnded(const int param_id);
 
   /// @brief Retrieve an access to the audio processor
   OpenMiniAudioProcessor* getProcessor() const;
 
  private:
   OpenMiniAudioProcessor* owner_;
+  WidgetsManager widgets_manager_;
   juce::MidiKeyboardComponent keyboard_;
-  juce::Slider osc1_waveform_;
-  juce::Slider osc2_waveform_;
-  juce::Slider osc3_waveform_;
-  juce::Slider osc1_volume_;
-  juce::Slider osc2_volume_;
-  juce::Slider osc3_volume_;
-  juce::Slider filter_freq_;
-  juce::Slider filter_q_;
   juce::TextEditor debug_infos_;
   static const int kTimerInterval = 100;
 };
