@@ -122,7 +122,7 @@ class ParametersManager {
   virtual const ParameterMeta& GetMetadata(const int parameter_id) const;
 
   /// @brief Return managed parameters count
-  virtual int ParametersCount(void) const;
+  virtual unsigned int ParametersCount(void) const;
 
   /// @brief An iterator class to browse through all "updated" parameters
   ///
