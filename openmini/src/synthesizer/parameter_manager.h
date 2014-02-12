@@ -78,6 +78,15 @@ int UnnormalizedToInt(const float unnormalized);
 ///
 /// Any synthesizer class should derive from it since a synthesizer "is a"
 /// parameter manager.
+///
+/// Parameters id may be considered adjacent, beginning at 0;
+/// hence this is how you iterate on them:
+///
+/// for (unsigned int param_id(0);
+///      param_id < manager.ParametersCount();
+///      ++param_id) {
+///   Do something here on one parameter given its (param_id)
+/// }
 class ParametersManager {
  public:
   /// @brief Default constructor:
