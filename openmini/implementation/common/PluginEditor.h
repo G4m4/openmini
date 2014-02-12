@@ -47,6 +47,8 @@ class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
 
   // Overrides from inherited classes
   void sliderValueChanged(juce::Slider* slider);
+  void sliderDragStarted(juce::Slider* slider);
+  void sliderDragEnded(juce::Slider* slider);
   void changeListenerCallback(juce::ChangeBroadcaster *source);
   void timerCallback();
 

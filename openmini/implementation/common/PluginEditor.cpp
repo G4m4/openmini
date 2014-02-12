@@ -145,6 +145,50 @@ void OpenMiniAudioProcessorEditor::sliderValueChanged(juce::Slider* slider) {
     ASSERT(false);
   }
 }
+
+void OpenMiniAudioProcessorEditor::sliderDragStarted(juce::Slider* slider) {
+  if (slider == &osc1_waveform_) {
+    getProcessor()->beginParameterChangeGesture(kOsc1Waveform);
+  } else if (slider == &osc2_waveform_) {
+    getProcessor()->beginParameterChangeGesture(kOsc2Waveform);
+  } else if (slider == &osc3_waveform_) {
+    getProcessor()->beginParameterChangeGesture(kOsc3Waveform);
+  } else if (slider == &osc1_volume_) {
+    getProcessor()->beginParameterChangeGesture(kOsc1Volume);
+  } else if (slider == &osc2_volume_) {
+    getProcessor()->beginParameterChangeGesture(kOsc2Volume);
+  } else if (slider == &osc3_volume_) {
+    getProcessor()->beginParameterChangeGesture(kOsc3Volume);
+  } else if (slider == &filter_freq_) {
+    getProcessor()->beginParameterChangeGesture(kFilterFreq);
+  } else if (slider == &filter_q_) {
+    getProcessor()->beginParameterChangeGesture(kFilterQ);
+  } else {
+    // Should never happen
+    ASSERT(false);
+  }
+}
+
+void OpenMiniAudioProcessorEditor::sliderDragEnded(juce::Slider* slider) {
+  if (slider == &osc1_waveform_) {
+    getProcessor()->endParameterChangeGesture(kOsc1Waveform);
+  } else if (slider == &osc2_waveform_) {
+    getProcessor()->endParameterChangeGesture(kOsc2Waveform);
+  } else if (slider == &osc3_waveform_) {
+    getProcessor()->endParameterChangeGesture(kOsc3Waveform);
+  } else if (slider == &osc1_volume_) {
+    getProcessor()->endParameterChangeGesture(kOsc1Volume);
+  } else if (slider == &osc2_volume_) {
+    getProcessor()->endParameterChangeGesture(kOsc2Volume);
+  } else if (slider == &osc3_volume_) {
+    getProcessor()->endParameterChangeGesture(kOsc3Volume);
+  } else if (slider == &filter_freq_) {
+    getProcessor()->endParameterChangeGesture(kFilterFreq);
+  } else if (slider == &filter_q_) {
+    getProcessor()->endParameterChangeGesture(kFilterQ);
+  } else {
+    // Should never happen
+    ASSERT(false);
   }
 }
 
