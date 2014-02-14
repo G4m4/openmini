@@ -106,7 +106,7 @@ const ParameterMeta& ParametersManager::GetMetadata(
   return metadatas_[parameter_id];
 }
 
-int ParametersManager::ParametersCount(void) const {
+unsigned int ParametersManager::ParametersCount(void) const {
   return values_.size();
 }
 
