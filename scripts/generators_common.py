@@ -35,7 +35,7 @@ class GeneratorInterface(object):
         '''
         The only difference with actual C++ code:
         here in Python we are initializing generators with a sampling rate,
-        instead of using a static constant 
+        instead of using a static constant
         '''
         self._sampling_rate = sampling_rate
 
