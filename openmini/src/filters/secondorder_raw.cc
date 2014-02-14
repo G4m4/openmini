@@ -31,7 +31,6 @@ namespace filters {
 SecondOrderRaw::SecondOrderRaw()
     : Filter_Base(),
       gain_(0.0f) {
-  // Nothing to do here for now
   coeffs_.fill(0.0f);
   history_.fill(0.0f);
 }
