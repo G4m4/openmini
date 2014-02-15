@@ -62,7 +62,6 @@ class ALIGN Adsd : public EnvelopGenerator_Base {
   unsigned int cursor_;  ///< Time cursor (e.g. samples since the last event)
   unsigned int attack_;  ///< Time setting for the attack
   unsigned int decay_;  ///< Time setting for the decay
-  unsigned int release_;  ///< Time setting for the attack
   unsigned int actual_decay_;  ///< Actual decay time in local frame
   unsigned int actual_release_;  ///<  Actual release time in local frame
 };

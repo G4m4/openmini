@@ -36,7 +36,6 @@ Adsd::Adsd()
       cursor_(0),
       attack_(0),
       decay_(0),
-      release_(0),
       actual_decay_(0),
       actual_release_(0) {
   // Nothing to do here for now
