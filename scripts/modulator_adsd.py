@@ -102,6 +102,8 @@ class ADSD(EnvelopGeneratorInterface):
         Helper function for computing the increment at each increment,
         given the rise (vertical change) and run (horizontal change)
         '''
+        if 0 == run:
+            return rise
         return rise / run
 
 if __name__ == "__main__":

@@ -20,10 +20,13 @@
 
 #include "openmini/src/modulators/modulators_common.h"
 
+#include "openmini/src/common.h"
+
 namespace openmini {
 namespace modulators {
 
 Section GetNextSection(const Section enum_value) {
+  ASSERT(enum_value != kZero);
   return static_cast<Section>(static_cast<int>(enum_value) + 1);
 }
 

@@ -21,8 +21,6 @@
 #ifndef OPENMINI_SRC_MODULATORS_MODULATORS_COMMON_H_
 #define OPENMINI_SRC_MODULATORS_MODULATORS_COMMON_H_
 
-#include "openmini/src/common.h"
-
 namespace openmini {
 namespace modulators {
 
