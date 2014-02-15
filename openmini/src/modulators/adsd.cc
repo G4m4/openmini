@@ -60,7 +60,7 @@ float Adsd::operator()(void) {
   switch (current_section_) {
     case(kAttack): {
       current_value_ += static_cast<float>(current_increment_);
-      if (cursor_ > attack_) {
+      if (cursor_ >= attack_) {
         current_section_ = GetNextSection(current_section_);
         current_increment_ = ComputeIncrement(sustain_level_ - current_value_,
                                               decay_);
@@ -69,7 +69,7 @@ float Adsd::operator()(void) {
     }
     case(kDecay): {
       current_value_ += static_cast<float>(current_increment_);
-      if (cursor_ > actual_decay_) {
+      if (cursor_ >= actual_decay_) {
         current_section_ = GetNextSection(current_section_);
         current_value_ = sustain_level_;
       }
