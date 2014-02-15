@@ -42,26 +42,27 @@ class ADSD(EnvelopGeneratorInterface):
         self._time_settings = [0, 0, 0, 0]
         self._amplitude_settings = [self.kMaxAmplitude, 0, 0, 0]
         self._section = 0
+        self._release = 0
 
     def SetParameters(self, attack, decay, sustain_level, release):
         self._time_settings[0] = attack
         self._time_settings[1] = decay + self._time_settings[0]
-        self._time_settings[2] = decay
+        self._release = decay
         self._amplitude_settings = [self.kMaxAmplitude, sustain_level, sustain, 0]
         self._section = 4
 
     def TriggerOn(self):
         self._cursor = 0
         self._section = 0
-        rise = self._amplitude_settings[0] - self._current_value
+        rise = self._amplitude_settings[0]
         self._current_increment = self._ComputeIncrement(rise, attack)
 
     def TriggerOff(self):
         self._section = 3
         rise = -self._current_value
-        run = self._time_settings[2]
+        run = self._release
         self._current_increment = self._ComputeIncrement(rise, run)
-        self._time_settings[2] += self._cursor
+        self._time_settings[2] = self._cursor + self._release
 
     def ProcessSample(self):
         if self._section == 0:
