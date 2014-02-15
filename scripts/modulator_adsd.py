@@ -109,24 +109,27 @@ if __name__ == "__main__":
 
     sampling_freq = 48000
 
-    attack = 100
-    decay = 50
+    attack = 200
+    decay = 150
     sustain = 0.5
-    release = 25
+    release = 125
 
     TriggerOccurence = 512
-    TriggerLength = 384
+    TriggerLength = 480
 
-    length = 2048
+    length = 4192
 
     generator = ADSD(sampling_freq)
     generator.SetParameters(attack, decay, sustain, release)
     generated_data = numpy.zeros(length)
+    was_triggered = False
     for idx, _ in enumerate(generated_data):
+        if was_triggered and (idx % TriggerLength) == 0:
+            generator.TriggerOff()
+            was_triggered = False
         if (idx % TriggerOccurence) == 0:
             generator.TriggerOn()
-        if (generator._section == 2) and (idx % TriggerLength) == 0:
-            generator.TriggerOff()
+            was_triggered = True
         generated_data[idx] = generator.ProcessSample()
 
     pylab.plot(generated_data)
