@@ -39,48 +39,51 @@ class ADSD(EnvelopGeneratorInterface):
         self._cursor = 0
         self._current_increment = 0.0
         self._current_value = 0.0
-        self._time_settings = [0, 0, 0, 0]
-        self._amplitude_settings = [self.kMaxAmplitude, 0, 0, 0]
+        self._sustain_level = 0.0
         self._section = 0
-        self._release = 0
+        self._attack = 0
+        self._decay = 0
+        self._actual_decay = 0
+        self._actual_release = 0
 
     def SetParameters(self, attack, decay, sustain_level, release):
-        self._time_settings[0] = attack
-        self._time_settings[1] = decay + self._time_settings[0]
-        self._release = decay
-        self._amplitude_settings = [self.kMaxAmplitude, sustain_level, sustain, 0]
+        self._attack = attack
+        self._decay = decay
+        self._actual_decay = decay + attack
+        self._sustain_level = sustain_level
         self._section = 4
 
     def TriggerOn(self):
         self._cursor = 0
         self._section = 0
-        rise = self._amplitude_settings[0]
+        rise = self.kMaxAmplitude
         self._current_increment = self._ComputeIncrement(rise, attack)
 
     def TriggerOff(self):
         self._section = 3
         rise = -self._current_value
-        run = self._release
+        run = self._decay
         self._current_increment = self._ComputeIncrement(rise, run)
-        self._time_settings[2] = self._cursor + self._release
+        self._actual_release = self._cursor + self._decay
 
     def ProcessSample(self):
         if self._section == 0:
             self._current_value += self._current_increment
-            if (self._cursor > self._time_settings[0]):
+            if (self._cursor > self._attack):
                 self._section += 1
-                rise = self._amplitude_settings[self._section] - self._current_value
-                run = self._time_settings[self._section] - self._time_settings[self._section - 1]
+                rise = self._sustain_level - self._current_value
+                run = self._decay
                 self._current_increment = self._ComputeIncrement(rise, run)
         elif self._section == 1:
             self._current_value += self._current_increment
-            if (self._cursor > self._time_settings[1]):
+            if (self._cursor > self._actual_decay):
                 self._section += 1
+                self._current_value = self._sustain_level
         elif self._section == 2:
             # Sustain case
             pass
         elif self._section == 3:
-            if (self._cursor >= self._time_settings[2]):
+            if (self._cursor >= self._actual_release):
                 self._section += 1
             else:
                 self._current_value += self._current_increment
@@ -112,7 +115,7 @@ if __name__ == "__main__":
 
     attack = 200
     decay = 150
-    sustain = 0.5
+    sustain = 0.75
     release = 125
 
     TriggerOccurence = 512
