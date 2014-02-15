@@ -117,7 +117,7 @@ if __name__ == "__main__":
     TriggerOccurence = 512
     TriggerLength = 384
 
-    length = 1024
+    length = 2048
 
     generator = ADSD(sampling_freq)
     generator.SetParameters(attack, decay, sustain, release)
