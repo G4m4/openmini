@@ -68,17 +68,19 @@ class ADSD(EnvelopGeneratorInterface):
 
     def ProcessSample(self):
         if self._section == 0:
-            self._current_value += self._current_increment
             if (self._cursor > self._attack):
                 self._section += 1
                 rise = self._sustain_level - self._current_value
                 run = self._decay
                 self._current_increment = self._ComputeIncrement(rise, run)
+            else:
+                self._current_value += self._current_increment
         elif self._section == 1:
-            self._current_value += self._current_increment
             if (self._cursor > self._actual_decay):
                 self._section += 1
                 self._current_value = self._sustain_level
+            else:
+                self._current_value += self._current_increment
         elif self._section == 2:
             # Sustain case
             pass
@@ -115,13 +117,13 @@ if __name__ == "__main__":
 
     sampling_freq = 48000
 
-    attack = 200
-    decay = 150
-    sustain = 0.75
+    attack = 143
+    decay = 34072
+    sustain = 0.239910811
     release = 125
 
-    TriggerOccurence = 512
-    TriggerLength = 480
+    TriggerOccurence = 40000
+    TriggerLength = 40000
 
     length = 4192
 

@@ -59,19 +59,21 @@ void Adsd::TriggerOff(void) {
 float Adsd::operator()(void) {
   switch (current_section_) {
     case(kAttack): {
-      current_value_ += static_cast<float>(current_increment_);
       if (cursor_ >= attack_) {
         current_section_ = GetNextSection(current_section_);
         current_increment_ = ComputeIncrement(sustain_level_ - current_value_,
                                               decay_);
+      } else {
+        current_value_ += static_cast<float>(current_increment_);
       }
       break;
     }
     case(kDecay): {
-      current_value_ += static_cast<float>(current_increment_);
       if (cursor_ >= actual_decay_) {
         current_section_ = GetNextSection(current_section_);
         current_value_ = sustain_level_;
+      } else {
+        current_value_ += static_cast<float>(current_increment_);
       }
       break;
     }
