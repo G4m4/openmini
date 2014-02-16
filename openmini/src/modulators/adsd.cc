@@ -57,6 +57,7 @@ void Adsd::TriggerOff(void) {
 }
 
 float Adsd::operator()(void) {
+  const float out(current_value_);
   switch (current_section_) {
     case(kAttack): {
       if (cursor_ >= attack_) {
@@ -100,7 +101,7 @@ float Adsd::operator()(void) {
 
   cursor_ += 1;
 
-  return current_value_;
+  return out;
 }
 
 void Adsd::SetParameters(const unsigned int attack,
