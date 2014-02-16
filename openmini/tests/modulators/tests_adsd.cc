@@ -87,6 +87,62 @@ TEST(Modulators, Adsd) {
   }  // iterations?
 }
 
+/// @brief Generates an envelop, check for its proper timings:
+/// - when in attack samples should be in a continuous upward slope
+/// - when in decay samples should be in a continuous downward slope
+/// - when in sustain samples should all be equal
+/// - when in release samples should be in a continuous downward slope
+TEST(Modulators, AdsdTimings) {
+  for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
+    IGNORE(iterations);
+
+    // Random parameters
+    const unsigned int kAttack(kTimeDistribution(kRandomGenerator));
+    const unsigned int kDecay(kTimeDistribution(kRandomGenerator));
+    const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
+    const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
+
+    // Generating data
+    Adsd generator;
+    generator.SetParameters(kAttack, kDecay, kDecay, kSustainLevel);
+
+    generator.TriggerOn();
+    unsigned int i(1);
+    // Envelops should all begin at zero!
+    float previous(generator());
+    EXPECT_EQ(0.0f, previous);
+    // Attack
+    while (i <= kAttack) {
+      const float sample(generator());
+      EXPECT_LE(previous, sample);
+      previous = sample;
+      i += 1;
+    }
+    // Decay
+    while (i <= kAttack + kDecay) {
+      const float sample(generator());
+      EXPECT_GE(previous, sample);
+      previous = sample;
+      i += 1;
+    }
+    // Sustain
+    while (i <= kAttack + kDecay + kSustain) {
+      const float sample(generator());
+      EXPECT_EQ(kSustainLevel, sample);
+      i += 1;
+    }
+    previous = kSustainLevel;
+    // Release
+    generator.TriggerOff();
+    while (i <= kAttack + kDecay + kSustain + kDecay) {
+      const float sample(generator());
+      EXPECT_GE(previous, sample);
+      previous = sample;
+      i += 1;
+    }
+  }  // iterations?
+}
+
 /// @brief Generates an envelop with one or both timing parameters null
 TEST(Modulators, AdsdNullParameters) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
