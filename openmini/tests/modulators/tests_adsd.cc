@@ -83,3 +83,55 @@ TEST(Modulators, Adsd) {
     }
   }  // iterations?
 }
+
+/// @brief Generates an envelop with one or both timing parameters null
+TEST(Modulators, AdsdNullParameters) {
+  for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
+    IGNORE(iterations);
+
+    // Random parameters
+    // Each parameter has half a chance to be null
+    const unsigned int kAttack(kBoolDistribution(kRandomGenerator) ? kTimeDistribution(kRandomGenerator) : 0);
+    const unsigned int kDecay(kBoolDistribution(kRandomGenerator) ? kTimeDistribution(kRandomGenerator) : 0);
+    const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
+    const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
+
+    // Generating data
+    Adsd generator;
+    generator.SetParameters(kAttack, kDecay, kDecay, kSustainLevel);
+
+    const float kEpsilon(1e-3f);
+
+    generator.TriggerOn();
+    unsigned int i(0);
+    // Attack & Decay
+    while (i < kAttack + kDecay) {
+      const float sample(generator());
+      EXPECT_LE(0.0f - kEpsilon, sample);
+      EXPECT_GE(1.0f + kEpsilon, sample);
+      i += 1;
+    }
+    // Sustain
+    while (i < kAttack + kDecay + kSustain) {
+      const float sample(generator());
+      EXPECT_LE(0.0f - kEpsilon, sample);
+      EXPECT_GE(1.0f + kEpsilon, sample);
+      i += 1;
+    }
+    // Release
+    generator.TriggerOff();
+    while (i < kAttack + kDecay + kSustain + kDecay) {
+      const float sample(generator());
+      EXPECT_LE(0.0f - kEpsilon, sample);
+      EXPECT_GE(1.0f + kEpsilon, sample);
+      i += 1;
+    }
+    // A little bit after release
+    while (i < kAttack + kDecay + kSustain + kDecay + kDecay) {
+      const float sample(generator());
+      EXPECT_LE(0.0f - kEpsilon, sample);
+      EXPECT_GE(1.0f + kEpsilon, sample);
+      i += 1;
+    }
+  }  // iterations?
+}
