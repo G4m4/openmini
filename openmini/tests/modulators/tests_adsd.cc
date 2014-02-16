@@ -33,6 +33,9 @@ static const unsigned int kMaxTime(static_cast<unsigned int>(
 static std::uniform_int_distribution<unsigned int> kTimeDistribution(0,
                                                                      kMaxTime);
 
+/// @brief Length of the tail to check after each envelop
+static const unsigned int kTail(256);
+
 /// @brief Generates an envelop, check for its range (must be >= 0)
 TEST(Modulators, Adsd) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
@@ -75,7 +78,7 @@ TEST(Modulators, Adsd) {
       i += 1;
     }
     // A little bit after release
-    while (i < kAttack + kDecay + kSustain + kDecay + kDecay) {
+    while (i < kAttack + kDecay + kSustain + kDecay + kTail) {
       const float sample(generator());
       EXPECT_LE(0.0f - kEpsilon, sample);
       EXPECT_GE(1.0f + kEpsilon, sample);
