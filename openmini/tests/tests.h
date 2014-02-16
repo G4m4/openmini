@@ -142,6 +142,7 @@ class NormFrequencyDistribution : public std::uniform_real_distribution<float> {
 static NormFrequencyDistribution kFreqDistribution;
 static std::uniform_real_distribution<float> kNormDistribution(-1.0f, 1.0f);
 static std::uniform_real_distribution<float> kNormPosDistribution(0.0f, 1.0f);
+static std::bernoulli_distribution kBoolDistribution;
 static std::default_random_engine kRandomGenerator;
 
 /// @brief Compute the mean value of a signal generator for the given length
