@@ -68,6 +68,7 @@ class ADSD(EnvelopGeneratorInterface):
 
     def ProcessSample(self):
         out = self._current_value
+        self._cursor += 1
         if self._section == 0:
             if (self._cursor > self._attack):
                 self._section += 1
@@ -86,7 +87,7 @@ class ADSD(EnvelopGeneratorInterface):
             # Sustain case
             pass
         elif self._section == 3:
-            if (self._cursor >= self._actual_release):
+            if (self._cursor > self._actual_release):
                 self._section += 1
             else:
                 self._current_value += self._current_increment
@@ -95,8 +96,6 @@ class ADSD(EnvelopGeneratorInterface):
             return 0.0
         else:
             raise Exception("This should not happen!")
-
-        self._cursor += 1
 
         return out
 

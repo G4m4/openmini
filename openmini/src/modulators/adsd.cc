@@ -59,9 +59,10 @@ void Adsd::TriggerOff(void) {
 
 float Adsd::operator()(void) {
   const float out(static_cast<float>(current_value_));
+  cursor_ += 1;
   switch (current_section_) {
     case(kAttack): {
-      if (cursor_ >= attack_) {
+      if (cursor_ > attack_) {
         current_section_ = GetNextSection(current_section_);
         current_increment_ = ComputeIncrement(sustain_level_ - out,
                                               decay_);
@@ -71,7 +72,7 @@ float Adsd::operator()(void) {
       break;
     }
     case(kDecay): {
-      if (cursor_ >= actual_decay_) {
+      if (cursor_ > actual_decay_) {
         current_section_ = GetNextSection(current_section_);
         current_value_ = static_cast<float>(sustain_level_);
       } else {
@@ -84,7 +85,7 @@ float Adsd::operator()(void) {
       break;
     }
     case(kRelease): {
-      if (cursor_ >= actual_release_) {
+      if (cursor_ > actual_release_) {
         current_section_ = GetNextSection(current_section_);
       } else {
         current_value_ += current_increment_;
@@ -99,8 +100,6 @@ float Adsd::operator()(void) {
       ASSERT(false);
     }
   }  // switch(current_section_)
-
-  cursor_ += 1;
 
   return out;
 }
@@ -122,6 +121,9 @@ Section Adsd::GetCurrentSection(void) const {
 }
 
 double Adsd::ComputeIncrement(const float rise, const unsigned int run) {
+  if (0 == run) {
+    return rise;
+  }
   return static_cast<double>(rise) / run;
 }
 

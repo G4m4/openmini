@@ -55,7 +55,7 @@ TEST(Modulators, AdsdRange) {
     generator.TriggerOn();
     unsigned int i(0);
     // Attack / Decay / Sustain
-    while (i < kAttack + kDecay + kSustain) {
+    while (i <= kAttack + kDecay + kSustain) {
       const float sample(generator());
       EXPECT_LE(0.0f - kEpsilon, sample);
       EXPECT_GE(1.0f + kEpsilon, sample);
@@ -63,7 +63,7 @@ TEST(Modulators, AdsdRange) {
     }
     // Release + a little bit after that
     generator.TriggerOff();
-    while (i < kAttack + kDecay + kSustain + kDecay + kTail) {
+    while (i <= kAttack + kDecay + kSustain + kDecay + kTail) {
       const float sample(generator());
       EXPECT_LE(0.0f - kEpsilon, sample);
       EXPECT_GE(1.0f + kEpsilon, sample);
