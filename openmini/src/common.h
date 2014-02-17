@@ -86,6 +86,11 @@ static const unsigned int kMinKeyNote(24);
 /// @brief Arbitrary highest allowed key note (= C7)
 static const unsigned int kMaxKeyNote(96);
 
+/// @brief Arbitrary smallest allowed attack/decay/release time
+static const unsigned int kMinTime(0);
+/// @brief Arbitrary highest allowed attack/decay/release time
+static const unsigned int kMaxTime(static_cast<unsigned int>(kSamplingRate));
+
 /// @brief Standard value for Pi
 static const double Pi(3.14159265358979);
 

@@ -25,12 +25,12 @@
 // Using declarations for tested generator
 using openmini::modulators::Adsd;
 
-/// @brief Time parameters allowed max (half a second)
-static const unsigned int kMaxTime(static_cast<unsigned int>(
-                                     openmini::kSamplingRateHalf));
+// Using declarations for allowed timings
+using openmini::kMinTime;
+using openmini::kMaxTime;
 
 /// @brief Time parameters random generator
-static std::uniform_int_distribution<unsigned int> kTimeDistribution(0,
+static std::uniform_int_distribution<unsigned int> kTimeDistribution(kMinTime,
                                                                      kMaxTime);
 
 /// @brief Length of the tail to check after each envelop
