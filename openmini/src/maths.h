@@ -91,6 +91,18 @@ static inline Sample FillOnLength(const float value) {
   return Fill(actual_value);
 }
 
+template <typename TypeGenerator>
+static inline Sample FillWithGenerator(TypeGenerator& generator) {
+#if (_USE_SSE)
+  return Fill(generator(),
+              generator(),
+              generator(),
+              generator());
+#else
+  return Fill(generator());
+#endif  // (_USE_SSE)
+}
+
 #if (_USE_SSE)
 template<unsigned i>
 float GetByIndex(SampleRead value) {

@@ -39,6 +39,7 @@
 using openmini::Sample;
 using openmini::SampleRead;
 using openmini::Fill;
+using openmini::FillWithGenerator;
 using openmini::GetByIndex;
 using openmini::Add;
 using openmini::AddHorizontal;
