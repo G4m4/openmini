@@ -72,3 +72,62 @@ TEST(Synthesizer, VcaRange) {
     }
   }  // iterations?
 }
+
+/// @brief Modulates a constant, check for its proper timings:
+/// - when in attack samples should be in a continuous upward slope
+/// - when in decay samples should be in a continuous downward slope
+/// - when in sustain samples should all be equal
+/// - when in release samples should be in a continuous downward slope
+TEST(Synthesizer, VcaTimings) {
+  const Sample kConstant(Fill(0.5f));
+  for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
+    IGNORE(iterations);
+
+    // Random parameters
+    const unsigned int kAttack(kTimeDistribution(kRandomGenerator));
+    const unsigned int kDecay(kTimeDistribution(kRandomGenerator));
+    const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
+    const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
+
+    // Generating data
+    Vca modulator;
+    modulator.SetAttack(kAttack);
+    modulator.SetDecay(kDecay);
+    modulator.SetSustain(kSustainLevel);
+
+    modulator.TriggerOn();
+    unsigned int i(openmini::SampleSize);
+    // Envelops should all begin at zero!
+    Sample previous(modulator(kConstant));
+    EXPECT_EQ(0.0f, previous);
+    // Attack
+    while (i <= kAttack) {
+      const Sample sample(modulator(kConstant));
+      EXPECT_TRUE(LessEqual(previous, sample));
+      previous = sample;
+      i += openmini::SampleSize;
+    }
+    // Decay
+    while (i <= kAttack + kDecay) {
+      const Sample sample(modulator(kConstant));
+      EXPECT_TRUE(GreaterEqual(previous, sample));
+      previous = sample;
+      i += openmini::SampleSize;
+    }
+    // Sustain
+    while (i <= kAttack + kDecay + kSustain) {
+      const Sample sample(modulator(kConstant));
+      EXPECT_TRUE(Equal(Mul(kSustainLevel, kConstant), sample));
+      i += openmini::SampleSize;
+    }
+    previous = Mul(kSustainLevel, kConstant);
+    // Release
+    modulator.TriggerOff();
+    while (i <= kAttack + kDecay + kSustain + kDecay) {
+      const Sample sample(modulator(kConstant));
+      EXPECT_TRUE(GreaterEqual(previous, sample));
+      previous = sample;
+      i += openmini::SampleSize;
+    }
+  }  // iterations?
+}
