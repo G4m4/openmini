@@ -26,6 +26,7 @@
 #include "openmini/src/synthesizer/mixer.h"
 #include "openmini/src/synthesizer/parameter_manager.h"
 #include "openmini/src/synthesizer/resampler.h"
+#include "openmini/src/synthesizer/vca.h"
 #include "openmini/src/synthesizer/vcf.h"
 
 namespace openmini {
@@ -71,6 +72,7 @@ class Synthesizer : public ParametersManager {
  private:
   Mixer mixer_;  ///< Mixer object for VCOs management
   Vcf filter_;  ///< Filter object
+  Vca modulator_;  ///< Modulator object
   Resampler buffer_;  ///< Adapter object for output audio stream matching
 
   std::array<Sample, openmini::kBlockSize / SampleSize> internal_buf_;  ///< Internal memory

@@ -37,6 +37,7 @@ Synthesizer::Synthesizer()
     : ParametersManager(),
       mixer_(),
       filter_(),
+      modulator_(),
       buffer_() {
   internal_buf_.fill(Fill(0.0f));
 }
@@ -58,7 +59,7 @@ void Synthesizer::ProcessAudio(float* const output,
   while (buffer_.Size() < length) {
     // Processing in the internal buffer
     for (unsigned int i(0); i < openmini::kBlockSize / SampleSize; ++i) {
-      internal_buf_[i] = filter_(mixer_());
+      internal_buf_[i] = modulator_(filter_(mixer_()));
     }
     // Filling it
     buffer_.Push(internal_buf_);
@@ -70,14 +71,24 @@ void Synthesizer::NoteOn(const unsigned int note) {
   ASSERT(note >= openmini::kMinKeyNote);
   ASSERT(note <= openmini::kMaxKeyNote);
 
+  // This has to be done BEFORE sending trigger messages;
+  // Indeed things may have changed since last audio process!
+  ProcessParameters();
+
   mixer_.NoteOn(note);
+  modulator_.TriggerOn();
 }
 
 void Synthesizer::NoteOff(const unsigned int note) {
   ASSERT(note >= openmini::kMinKeyNote);
   ASSERT(note <= openmini::kMaxKeyNote);
 
+  // This has to be done BEFORE sending trigger messages;
+  // Indeed things may have changed since last audio process!
+  ProcessParameters();
+
   mixer_.NoteOff(note);
+  modulator_.TriggerOff();
 }
 
 void Synthesizer::SetOutputSamplingFrequency(const float freq) {
@@ -123,6 +134,20 @@ void Synthesizer::ProcessParameters(void) {
         }
         case(Parameters::kFilterQ): {
           filter_.SetQFactor(GetValue(Parameters::kFilterQ));
+          break;
+        }
+        case(Parameters::kAttackTime): {
+          modulator_.SetAttack(
+            GetDiscreteValue<unsigned int>(Parameters::kAttackTime));
+          break;
+        }
+        case(Parameters::kDecayTime): {
+          modulator_.SetDecay(
+            GetDiscreteValue<unsigned int>(Parameters::kDecayTime));
+          break;
+        }
+        case(Parameters::kSustainLevel): {
+          modulator_.SetSustain(GetValue(Parameters::kSustainLevel));
           break;
         }
         default: {
