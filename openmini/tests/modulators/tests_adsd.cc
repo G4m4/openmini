@@ -55,29 +55,15 @@ TEST(Modulators, AdsdRange) {
 
     generator.TriggerOn();
     unsigned int i(0);
-    // Attack & Decay
-    while (i < kAttack + kDecay) {
-      const float sample(generator());
-      EXPECT_LE(0.0f - kEpsilon, sample);
-      EXPECT_GE(1.0f + kEpsilon, sample);
-      i += 1;
-    }
-    // Sustain
+    // Attack / Decay / Sustain
     while (i < kAttack + kDecay + kSustain) {
       const float sample(generator());
       EXPECT_LE(0.0f - kEpsilon, sample);
       EXPECT_GE(1.0f + kEpsilon, sample);
       i += 1;
     }
-    // Release
+    // Release + a little bit after that
     generator.TriggerOff();
-    while (i < kAttack + kDecay + kSustain + kDecay) {
-      const float sample(generator());
-      EXPECT_LE(0.0f - kEpsilon, sample);
-      EXPECT_GE(1.0f + kEpsilon, sample);
-      i += 1;
-    }
-    // A little bit after release
     while (i < kAttack + kDecay + kSustain + kDecay + kTail) {
       const float sample(generator());
       EXPECT_LE(0.0f - kEpsilon, sample);
@@ -150,8 +136,10 @@ TEST(Modulators, AdsdNullParameters) {
 
     // Random parameters
     // Each parameter has half a chance to be null
-    const unsigned int kAttack(kBoolDistribution(kRandomGenerator) ? kTimeDistribution(kRandomGenerator) : 0);
-    const unsigned int kDecay(kBoolDistribution(kRandomGenerator) ? kTimeDistribution(kRandomGenerator) : 0);
+    const unsigned int kAttack(kBoolDistribution(kRandomGenerator)
+                               ? kTimeDistribution(kRandomGenerator) : 0);
+    const unsigned int kDecay(kBoolDistribution(kRandomGenerator)
+                              ? kTimeDistribution(kRandomGenerator) : 0);
     const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
     const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
 
@@ -163,23 +151,14 @@ TEST(Modulators, AdsdNullParameters) {
 
     generator.TriggerOn();
     unsigned int i(0);
-    // Attack & Decay
-    while (i < kAttack + kDecay) {
-      const float sample(generator());
-      EXPECT_LE(0.0f - kEpsilon, sample);
-      EXPECT_GE(1.0f + kEpsilon, sample);
-      i += 1;
-    }
-    // Sustain
     while (i < kAttack + kDecay + kSustain) {
       const float sample(generator());
       EXPECT_LE(0.0f - kEpsilon, sample);
       EXPECT_GE(1.0f + kEpsilon, sample);
       i += 1;
     }
-    // Release
     generator.TriggerOff();
-    while (i < kAttack + kDecay + kSustain + kDecay) {
+    while (i < kAttack + kDecay + kSustain + kDecay + kTail) {
       const float sample(generator());
       EXPECT_LE(0.0f - kEpsilon, sample);
       EXPECT_GE(1.0f + kEpsilon, sample);
