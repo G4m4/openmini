@@ -114,7 +114,6 @@ void Adsd::SetParameters(const unsigned int attack,
   decay_ = decay;
   actual_decay_ = decay + attack;
   sustain_level_ = sustain_level;
-  current_section_ = kZero;
 }
 
 Section Adsd::GetCurrentSection(void) const {
