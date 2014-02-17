@@ -41,6 +41,9 @@ enum Type {
   kOsc3Waveform,
   kFilterFreq,
   kFilterQ,
+  kAttackTime,
+  kDecayTime,
+  kSustainLevel,
   kCount
 };
 
@@ -110,7 +113,31 @@ const std::array<ParameterMeta, Parameters::kCount> kParametersMeta = {{
                 1,
                 0,
                 "Filter Q",
-                "Q Factor for the filter")
+                "Q Factor for the filter"),
+  ParameterMeta(static_cast<float>(kMinTime),
+                static_cast<float>(kMaxTime),
+                0.5f,
+                true,
+                1,
+                kMaxTime - kMinTime,
+                "Attack Time",
+                "Envelop generator attack time"),
+  ParameterMeta(static_cast<float>(kMinTime),
+                static_cast<float>(kMaxTime),
+                0.5f,
+                true,
+                1,
+                kMaxTime - kMinTime,
+                "Decay Time",
+                "Envelop generator decay time"),
+  ParameterMeta(0.0f,
+                1.0f,
+                0.5f,
+                true,
+                1,
+                0,
+                "Sustain Level",
+                "Envelop generator sustain level")
 }};
 
 }  // namespace Parameters
