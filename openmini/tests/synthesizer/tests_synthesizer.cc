@@ -186,8 +186,9 @@ TEST(Synthesizer, SynthesizerVaryingSamplingRate) {
   }
 
   // Check for clicks - this value is a bit higher (although still quite low)
-  // due to the filter ringing effect
-  const float kEpsilon(25.0f);
+  // - due to the filter ringing effect
+  // - due to the modulator amplitude changes
+  const float kEpsilon(35.0f);
   // Not testing the first sample!
   EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
 }
