@@ -56,8 +56,8 @@ class ALIGN Adsd : public EnvelopGenerator_Base {
   double ComputeIncrement(const float rise, const unsigned int run);
 
   double current_increment_;  ///< Increment to use for the current slope
+  double current_value_;  ///< Current amplitude
   Section current_section_;  ///< The current part of the generated envelop
-  float current_value_;  ///< Current amplitude
   float sustain_level_;  ///< Amplitude to maintain while sustain is on
   unsigned int cursor_;  ///< Time cursor (e.g. samples since the last event)
   unsigned int attack_;  ///< Time setting for the attack

@@ -30,8 +30,8 @@ static const float kMaxAmplitude(1.0f);
 
 Adsd::Adsd()
     : current_increment_(0.0),
+      current_value_(0.0),
       current_section_(kZero),
-      current_value_(0.0f),
       sustain_level_(0.0f),
       cursor_(0),
       attack_(0),
@@ -52,29 +52,30 @@ void Adsd::TriggerOn(void) {
 
 void Adsd::TriggerOff(void) {
   current_section_ = kRelease;
-  current_increment_ = ComputeIncrement(-current_value_, decay_);
+  current_increment_ = ComputeIncrement(-static_cast<float>(current_value_),
+                                        decay_);
   actual_release_ = cursor_ + decay_;
 }
 
 float Adsd::operator()(void) {
-  const float out(current_value_);
+  const float out(static_cast<float>(current_value_));
   switch (current_section_) {
     case(kAttack): {
       if (cursor_ >= attack_) {
         current_section_ = GetNextSection(current_section_);
-        current_increment_ = ComputeIncrement(sustain_level_ - current_value_,
+        current_increment_ = ComputeIncrement(sustain_level_ - out,
                                               decay_);
       } else {
-        current_value_ += static_cast<float>(current_increment_);
+        current_value_ += current_increment_;
       }
       break;
     }
     case(kDecay): {
       if (cursor_ >= actual_decay_) {
         current_section_ = GetNextSection(current_section_);
-        current_value_ = sustain_level_;
+        current_value_ = static_cast<float>(sustain_level_);
       } else {
-        current_value_ += static_cast<float>(current_increment_);
+        current_value_ += current_increment_;
       }
       break;
     }
@@ -86,7 +87,7 @@ float Adsd::operator()(void) {
       if (cursor_ >= actual_release_) {
         current_section_ = GetNextSection(current_section_);
       } else {
-        current_value_ += static_cast<float>(current_increment_);
+        current_value_ += current_increment_;
       }
       break;
     }
