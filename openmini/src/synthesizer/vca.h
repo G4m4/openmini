@@ -59,6 +59,10 @@ class Vca {
   /// Note that this does not mean that the envelop stops right after this
   /// function was called, depending on the parameters currently in use
   void TriggerOff(void);
+
+  /// @brief Actual process function for one sample
+  Sample operator()(SampleRead input);
+
   /// @brief Set the given attack time
   ///
   /// The parameter is not normalized here - the unit is "samples"
@@ -83,8 +87,6 @@ class Vca {
   ///
   /// @param[in]  sustain_level   Level when sustaining
   void SetSustain(const float sustain_level);
-  /// @brief Actual process function for one sample
-  Sample operator()(SampleRead input);
   /// @brief Update internal generator parameters
   ///
   /// Allows asynchronous updates; to be called within an update loop.

@@ -21,6 +21,7 @@
 #include "openmini/src/synthesizer/vca.h"
 
 #include "openmini/src/modulators/envelopgenerator_base.h"
+#include "openmini/src/modulators/adsd.h"
 #include "openmini/src/modulators/factory.h"
 
 namespace openmini {
@@ -53,6 +54,17 @@ void Vca::TriggerOff(void) {
   ProcessParameters();
   generator_->TriggerOff();
 }
+
+Sample Vca::operator()(SampleRead input) {
+  ASSERT(generator_ != nullptr);
+  ProcessParameters();
+  // TODO(gm): this cast should not be done:
+  // the generator is actually known at compile-time,
+  // so find an elegant way to statically do this
+  return openmini::Mul(input,
+    FillWithGenerator(*(static_cast<modulators::Adsd*>(generator_))));
+}
+
 void Vca::SetAttack(const unsigned int attack) {
   if (attack != attack_) {
     attack_ = attack;
@@ -82,16 +94,6 @@ void Vca::SetSustain(const float sustain_level) {
     sustain_level_ = sustain_level;
     update_ = true;
   }
-}
-
-Sample Vca::operator()(SampleRead input) {
-  ASSERT(generator_ != nullptr);
-  ProcessParameters();
-  const float envelop[4] = {generator_->operator()(),
-                            generator_->operator()(),
-                            generator_->operator()(),
-                            generator_->operator()()};
-  return openmini::Mul(input, Fill(&envelop[0]));
 }
 
 void Vca::ProcessParameters(void) {
