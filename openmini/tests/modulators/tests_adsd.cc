@@ -165,6 +165,41 @@ TEST(Modulators, AdsdNullParameters) {
   }  // iterations?
 }
 
+/// @brief Generates a "click envelop" - with both timing parameters null
+TEST(Modulators, AdsdClick) {
+  for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
+    IGNORE(iterations);
+
+    const unsigned int kAttack(0);
+    const unsigned int kDecay(0);
+    const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
+    const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
+
+    Adsd generator;
+    generator.SetParameters(kAttack, kDecay, kDecay, kSustainLevel);
+
+    generator.TriggerOn();
+    unsigned int i(2);
+    // The first sample is always null!
+    IGNORE(generator());
+    // The second one is due to the attack/decay
+    IGNORE(generator());
+    while (i <= kSustain) {
+      const float sample(generator());
+      EXPECT_EQ(kSustainLevel, sample);
+      i += 1;
+    }
+    generator.TriggerOff();
+    // This sample left is due to the release
+    IGNORE(generator());
+    while (i <= kSustain + kTail) {
+      const float sample(generator());
+      EXPECT_EQ(0.0f, sample);
+      i += 1;
+    }
+  }  // iterations?
+}
+
 /// @brief Generates an envelop, check for its "regularity"
 /// the more regular it is, the less spiky, the less liable to audio artefacts
 /// on the modulated signal

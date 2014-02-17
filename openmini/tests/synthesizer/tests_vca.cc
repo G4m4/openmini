@@ -129,3 +129,48 @@ TEST(Synthesizer, VcaTimings) {
     }
   }  // iterations?
 }
+
+
+/// @brief Modulates using a "click envelop" - with both timing parameters null
+TEST(Synthesizer, VcaClickEnvelop) {
+  const float kFrequency(1000.0f);
+  SinusGenerator input_signal(kFrequency, openmini::kSamplingRate);
+  for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
+    IGNORE(iterations);
+
+    const unsigned int kAttack(0);
+    const unsigned int kDecay(0);
+    const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
+    const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
+
+    Vca modulator;
+    modulator.SetAttack(kAttack);
+    modulator.SetDecay(kDecay);
+    modulator.SetSustain(kSustainLevel);
+
+    modulator.TriggerOn();
+    // Since vectorized we have to ignore (the length worst case) samples
+    unsigned int i(0);
+    while (i < 4) {
+      const Sample input(FillWithGenerator(input_signal));
+      IGNORE(modulator(input));
+      i += 1;
+    }
+    while (i <= kSustain) {
+      const Sample input(FillWithGenerator(input_signal));
+      const Sample sample(modulator(input));
+      EXPECT_TRUE(Equal(MulConst(kSustainLevel, input), sample));
+      i += 1;
+    }
+    modulator.TriggerOff();
+    // Same here, ignoring (the length worst case) samples, due to the release
+    const Sample input(FillWithGenerator(input_signal));
+    IGNORE(modulator(input));
+    while (i <= kSustain + kTail) {
+      const Sample input(FillWithGenerator(input_signal));
+      const Sample sample(modulator(input));
+      EXPECT_TRUE(Equal(Fill(0.0f), sample));
+      i += 1;
+    }
+  }  // iterations?
+}
