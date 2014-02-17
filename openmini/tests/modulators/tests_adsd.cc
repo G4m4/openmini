@@ -111,6 +111,7 @@ TEST(Modulators, AdsdTimings) {
       previous = sample;
       i += 1;
     }
+    EXPECT_GE(previous, kSustainLevel);
     // Sustain
     while (i <= kAttack + kDecay + kSustain) {
       const float sample(generator());
