@@ -148,11 +148,31 @@ TEST(Modulators, AdsdNullParameters) {
     const float kEpsilon(1e-3f);
 
     generator.TriggerOn();
-    unsigned int i(0);
-    while (i < kAttack + kDecay + kSustain) {
+    unsigned int i(1);
+    float previous(generator());
+    while (i <= kAttack) {
       const float sample(generator());
-      EXPECT_LE(0.0f - kEpsilon, sample);
-      EXPECT_GE(1.0f + kEpsilon, sample);
+      EXPECT_LE(previous, sample);
+      previous = sample;
+      i += 1;
+    }
+    // If the attack is null, then we have to ignore its "click".
+    if (0 == kAttack) {
+      previous = generator();
+    }
+    while (i <= kAttack + kDecay) {
+      const float sample(generator());
+      EXPECT_GE(previous, sample);
+      previous = sample;
+      i += 1;
+    }
+    // If the decay is null, then we have to ignore its "click".
+    if (0 == kDecay) {
+      previous = generator();
+    }
+    while (i <= kAttack + kDecay + kSustain) {
+      const float sample(generator());
+      EXPECT_EQ(kSustainLevel, sample);
       i += 1;
     }
     generator.TriggerOff();
@@ -182,8 +202,8 @@ TEST(Modulators, AdsdClick) {
     unsigned int i(2);
     // The first sample is always null!
     IGNORE(generator());
-    // The second one is due to the attack/decay
-    IGNORE(generator());
+    // The second sample is the max, the "click"
+    EXPECT_EQ(1.0f, generator());
     while (i <= kSustain) {
       const float sample(generator());
       EXPECT_EQ(kSustainLevel, sample);
