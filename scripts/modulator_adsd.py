@@ -67,6 +67,7 @@ class ADSD(EnvelopGeneratorInterface):
         self._actual_release = self._cursor + self._decay
 
     def ProcessSample(self):
+        out = self._current_value
         if self._section == 0:
             if (self._cursor > self._attack):
                 self._section += 1
@@ -97,7 +98,7 @@ class ADSD(EnvelopGeneratorInterface):
 
         self._cursor += 1
 
-        return self._current_value
+        return out
 
     def _ComputeIncrement(self, rise, run):
         '''
@@ -117,19 +118,21 @@ if __name__ == "__main__":
 
     sampling_freq = 48000
 
-    attack = 143
-    decay = 34072
-    sustain = 0.239910811
+    attack = 1669
+    decay = 294
+    sustain = 6735
+    sustain_level = 0.503662705
     release = 125
 
-    TriggerOccurence = 40000
-    TriggerLength = 40000
+    TriggerOccurence = attack + decay * 2 + sustain
+    TriggerLength = attack + decay + sustain
 
-    length = 4192
+    view_beginning = TriggerOccurence
+    view_length = 10000
 
     generator = ADSD(sampling_freq)
-    generator.SetParameters(attack, decay, sustain, release)
-    generated_data = numpy.zeros(length)
+    generator.SetParameters(attack, decay, sustain_level, release)
+    generated_data = numpy.zeros(view_length)
     was_triggered = False
     for idx, _ in enumerate(generated_data):
         if was_triggered and (idx % TriggerLength) == 0:
@@ -140,5 +143,5 @@ if __name__ == "__main__":
             was_triggered = True
         generated_data[idx] = generator.ProcessSample()
 
-    pylab.plot(generated_data)
+    pylab.plot(generated_data[view_beginning:view_length])
     pylab.show()
