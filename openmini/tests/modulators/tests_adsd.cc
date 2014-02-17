@@ -37,7 +37,7 @@ static std::uniform_int_distribution<unsigned int> kTimeDistribution(0,
 static const unsigned int kTail(256);
 
 /// @brief Generates an envelop, check for its range (must be >= 0)
-TEST(Modulators, Adsd) {
+TEST(Modulators, AdsdRange) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
