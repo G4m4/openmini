@@ -25,6 +25,7 @@
 
 #include "openmini/src/common.h"
 #include "openmini/src/maths.h"
+#include "openmini/src/modulators/modulators_common.h"
 
 // Internal forward declarations
 namespace openmini {
@@ -88,6 +89,11 @@ class Vca {
   ///
   /// Allows asynchronous updates; to be called within an update loop.
   void ProcessParameters(void);
+
+  /// @brief Modulator section getter
+  ///
+  /// @return the envelop current state
+  modulators::Section GetCurrentSection(void) const;
 
  private:
   // No assignment operator for this class

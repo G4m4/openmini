@@ -25,6 +25,7 @@
 #define OPENMINI_SRC_MODULATORS_ENVELOPGENERATOR_BASE_H_
 
 #include "openmini/src/common.h"
+#include "openmini/src/modulators/modulators_common.h"
 
 namespace openmini {
 namespace modulators {
@@ -80,6 +81,11 @@ class ALIGN EnvelopGenerator_Base {
                              const unsigned int decay,
                              const unsigned int release,
                              const float sustain_level) = 0;
+
+  /// @brief Modulator section getter
+  ///
+  /// @return the envelop current state
+  virtual Section GetCurrentSection(void) const = 0;
 };
 
 }  // namespace modulators

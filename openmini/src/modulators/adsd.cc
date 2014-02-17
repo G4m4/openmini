@@ -117,6 +117,10 @@ void Adsd::SetParameters(const unsigned int attack,
   current_section_ = kZero;
 }
 
+Section Adsd::GetCurrentSection(void) const {
+  return current_section_;
+}
+
 double Adsd::ComputeIncrement(const float rise, const unsigned int run) {
   return static_cast<double>(rise) / run;
 }

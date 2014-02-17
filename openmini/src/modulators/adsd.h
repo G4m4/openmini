@@ -50,6 +50,8 @@ class ALIGN Adsd : public EnvelopGenerator_Base {
                              const unsigned int release,
                              const float sustain_level);
 
+  Section GetCurrentSection(void) const;
+
  private:
   /// @brief Helper function for computing the increment at each increment,
   /// given the rise (vertical change) and run (horizontal change)
