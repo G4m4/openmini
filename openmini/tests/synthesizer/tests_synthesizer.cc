@@ -50,7 +50,7 @@ TEST(Synthesizer, SynthesizerNoteOnNoteOff) {
     }
   }
   // The generated signal mean square is supposed not to be null
-  ASSERT_LT(0.0f, mean_square * 2.0f / kDataTestSetSize);
+  EXPECT_LT(0.0f, mean_square * 2.0f / kDataTestSetSize);
 
   mean_square = 0.0f;
   // Generating a silence during all the remaining time
@@ -66,7 +66,7 @@ TEST(Synthesizer, SynthesizerNoteOnNoteOff) {
   // ...Or almost null, since we now have filters in our synthesizer
   // This is -100dBFS and should be ok.
   const float kEpsilon(5e-4f);
-  ASSERT_NEAR(0.0f, mean_square * 2.0f / kDataTestSetSize, kEpsilon);
+  EXPECT_NEAR(0.0f, mean_square * 2.0f / kDataTestSetSize, kEpsilon);
 }
 
 /// @brief Update the synthesizer twice in a row
