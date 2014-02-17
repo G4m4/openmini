@@ -46,6 +46,18 @@ class Vca {
   Vca();
   /// @brief Default destructor
   ~Vca();
+
+  /// @brief Event for triggering the beginning of the envelop
+  ///
+  /// Note that the amplitude start value is the one applied when triggering.
+  /// e.g. repeated calls to this function will lead to accumulated envelops.
+  void TriggerOn(void);
+
+  /// @brief Event for triggering the end of the envelop
+  ///
+  /// Note that this does not mean that the envelop stops right after this
+  /// function was called, depending on the parameters currently in use
+  void TriggerOff(void);
   /// @brief Set the given attack time
   ///
   /// The parameter is not normalized here - the unit is "samples"

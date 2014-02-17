@@ -42,6 +42,17 @@ Vca::~Vca() {
   modulators::DestroyEnvelopGenerator(generator_);
 }
 
+void Vca::TriggerOn(void) {
+  ASSERT(generator_ != nullptr);
+  ProcessParameters();
+  generator_->TriggerOn();
+}
+
+void Vca::TriggerOff(void) {
+  ASSERT(generator_ != nullptr);
+  ProcessParameters();
+  generator_->TriggerOff();
+}
 void Vca::SetAttack(const unsigned int attack) {
   if (attack != attack_) {
     attack_ = attack;
