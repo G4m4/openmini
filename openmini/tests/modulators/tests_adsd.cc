@@ -47,7 +47,6 @@ TEST(Modulators, AdsdRange) {
     const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
     const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
 
-    // Generating data
     Adsd generator;
     generator.SetParameters(kAttack, kDecay, kDecay, kSustainLevel);
 
@@ -88,7 +87,6 @@ TEST(Modulators, AdsdTimings) {
     const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
     const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
 
-    // Generating data
     Adsd generator;
     generator.SetParameters(kAttack, kDecay, kDecay, kSustainLevel);
 
@@ -144,7 +142,6 @@ TEST(Modulators, AdsdNullParameters) {
     const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
     const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
 
-    // Generating data
     Adsd generator;
     generator.SetParameters(kAttack, kDecay, kDecay, kSustainLevel);
 
@@ -184,7 +181,6 @@ TEST(Modulators, AdsdOutRegularity) {
     const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
     const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
 
-    // Generating data
     Adsd generator;
     generator.SetParameters(kAttack, kDecay, kDecay, kSustainLevel);
 

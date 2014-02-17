@@ -47,7 +47,6 @@ TEST(Synthesizer, VcaRange) {
     const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
     const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
 
-    // Generating data
     Vca modulator;
     modulator.SetAttack(kAttack);
     modulator.SetDecay(kDecay);
@@ -89,7 +88,6 @@ TEST(Synthesizer, VcaTimings) {
     const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
     const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
 
-    // Generating data
     Vca modulator;
     modulator.SetAttack(kAttack);
     modulator.SetDecay(kDecay);
