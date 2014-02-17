@@ -74,7 +74,7 @@ void OpenMiniAudioProcessorEditor::paint(juce::Graphics& g) {
   keyboard_.setBounds(0, kKeyboardTop, this->getWidth(), kKeyboardHeight);
 
   // DEBUG
-  debug_infos_.setBounds(500, 0, this->getWidth(), 200);
+  debug_infos_.setBounds(0, 300, this->getWidth(), 150);
   //  /DEBUG
 }
 
