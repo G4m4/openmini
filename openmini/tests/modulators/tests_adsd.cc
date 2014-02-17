@@ -165,11 +165,51 @@ TEST(Modulators, AdsdNullParameters) {
       EXPECT_GE(1.0f + kEpsilon, sample);
       i += 1;
     }
-    // A little bit after release
-    while (i < kAttack + kDecay + kSustain + kDecay + kDecay) {
-      const float sample(generator());
-      EXPECT_LE(0.0f - kEpsilon, sample);
-      EXPECT_GE(1.0f + kEpsilon, sample);
+  }  // iterations?
+}
+
+/// @brief Generates an envelop, check for its "regularity"
+/// the more regular it is, the less spiky, the less liable to audio artefacts
+/// on the modulated signal
+/// Checking regularity is done as follows: since timings are parameterized,
+/// it is easy to deduce the maximum theoretical change
+/// between two consecutive samples. Nowhere it should be greater!
+TEST(Modulators, AdsdOutRegularity) {
+  for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
+    IGNORE(iterations);
+
+    // Random parameters
+    const unsigned int kAttack(kTimeDistribution(kRandomGenerator));
+    const unsigned int kDecay(kTimeDistribution(kRandomGenerator));
+    const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
+    const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
+
+    // Generating data
+    Adsd generator;
+    generator.SetParameters(kAttack, kDecay, kDecay, kSustainLevel);
+
+    generator.TriggerOn();
+    unsigned int i(1);
+    // A very small epsilon is added for computation/casts imprecisions
+    // TODO(gm): this might not be required if all floating point operations
+    // were properly understood and managed.
+    const double kMaxDelta(1.0 / std::min(kAttack, kDecay) + 1e-7);
+    // Envelops should all begin at zero!
+    double previous(static_cast<double>(generator()));
+    // Checking the whole envelop since clicks may occur anywhere
+    while (i < kAttack + kDecay + kSustain) {
+      const double sample(static_cast<double>(generator()));
+      const double diff(std::fabs(sample - previous));
+      EXPECT_GE(kMaxDelta, diff);
+      previous = sample;
+      i += 1;
+    }
+    generator.TriggerOff();
+    while (i < kAttack + kDecay + kSustain + kDecay + kTail) {
+      const double sample(static_cast<double>(generator()));
+      const double diff(std::fabs(sample - previous));
+      EXPECT_GE(kMaxDelta, diff);
+      previous = sample;
       i += 1;
     }
   }  // iterations?
