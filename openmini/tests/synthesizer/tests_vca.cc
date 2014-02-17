@@ -97,7 +97,7 @@ TEST(Synthesizer, VcaTimings) {
     unsigned int i(openmini::SampleSize);
     // Envelops should all begin at zero!
     Sample previous(modulator(kConstant));
-    EXPECT_EQ(0.0f, previous);
+    EXPECT_TRUE(Equal(0.0f, previous));
     // Attack
     while (i <= kAttack) {
       const Sample sample(modulator(kConstant));
@@ -115,10 +115,10 @@ TEST(Synthesizer, VcaTimings) {
     // Sustain
     while (i <= kAttack + kDecay + kSustain) {
       const Sample sample(modulator(kConstant));
-      EXPECT_TRUE(Equal(Mul(kSustainLevel, kConstant), sample));
+      EXPECT_TRUE(Equal(MulConst(kSustainLevel, kConstant), sample));
       i += openmini::SampleSize;
     }
-    previous = Mul(kSustainLevel, kConstant);
+    previous = MulConst(kSustainLevel, kConstant);
     // Release
     modulator.TriggerOff();
     while (i <= kAttack + kDecay + kSustain + kDecay) {
