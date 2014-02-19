@@ -145,17 +145,15 @@ TEST(Generators, PhaseAccumulatorPerf) {
 
 /// @brief Differentiate a constant, check for null derivative
 TEST(Generators, DifferentiatedConstant) {
-  // Filling a vector with one random value in [-1.0f ; 1.0f]
-  std::vector<float> data(kDataTestSetSize,
-                          kNormDistribution(kRandomGenerator));
-
+  // The input is a random value in [-1.0f ; 1.0f]
+  const Sample input(Fill(kNormDistribution(kRandomGenerator)));
   Differentiator differentiator;
   // Not checking the first value!
-  differentiator(Fill(&data[0]));
+  differentiator(input);
   for (unsigned int i(openmini::SampleSize);
        i < kDataTestSetSize;
        i += openmini::SampleSize) {
-    EXPECT_TRUE(Equal(0.0f, differentiator(Fill(&data[i]))));
+    EXPECT_TRUE(Equal(0.0f, differentiator(input)));
   }
 }
 
@@ -165,12 +163,6 @@ TEST(Generators, DifferentiatedSawtooth) {
   const float kFrequency(kFreqDistribution(kRandomGenerator));
   PhaseAccumulator generator;
   generator.SetFrequency(kFrequency);
-  std::vector<float> data(kDataTestSetSize);
-  for (std::vector<float>::iterator iter(data.begin());
-       iter != data.end();
-       iter += openmini::SampleSize) {
-    Store(&(*iter), generator());
-  }
 
   // This is the sawtooth period e.g. each time the discontinuity occurs
   const int kPeriod(static_cast<int>(std::floor(kFrequency
@@ -181,7 +173,8 @@ TEST(Generators, DifferentiatedSawtooth) {
 
   Differentiator differentiator;
   for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
-    const Sample diff(differentiator(Fill(&data[0])));
+    const Sample input(generator());
+    const Sample diff(differentiator(input));
     if (i % kPeriod != 0) {
       EXPECT_TRUE(GreaterThan(kThreshold, diff));
     }
