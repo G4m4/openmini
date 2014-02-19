@@ -85,3 +85,8 @@ def ZeroCrossings(signal):
     '''
     return numpy.where(numpy.diff(numpy.sign(signal)))[0]
 
+def Diff(signal):
+    '''
+    Return the differentiated input signal
+    '''
+    return signal[1:len(signal)] - signal[0:len(signal) - 1]
