@@ -20,6 +20,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OpenMini.  If not, see <http://www.gnu.org/licenses/>.
 '''
+import utilities
 
 '''
 Note that all of this mimics C++ code for testing/prototyping purpose.
@@ -115,20 +116,22 @@ if __name__ == "__main__":
     '''
     import numpy
     import pylab
+    import generators_common
 
     sampling_freq = 48000
 
-    attack = 1669
-    decay = 294
-    sustain = 6735
-    sustain_level = 0.503662705
+    attack = 0
+    decay = 0
+    sustain = 27939
+    sustain_level = 0.547215521
     release = 125
+    tail = 256
 
-    TriggerOccurence = attack + decay * 2 + sustain
+    TriggerOccurence = attack + decay * 2 + sustain + tail
     TriggerLength = attack + decay + sustain
 
-    view_beginning = TriggerOccurence
-    view_length = 10000
+    view_beginning = 0
+    view_length = 30000
 
     generator = ADSD(sampling_freq)
     generator.SetParameters(attack, decay, sustain_level, release)
@@ -144,4 +147,13 @@ if __name__ == "__main__":
         generated_data[idx] = generator.ProcessSample()
 
     pylab.plot(generated_data[view_beginning:view_length])
+
+    differentiator = generators_common.Differentiator()
+    diff_data = numpy.zeros(len(generated_data))
+    for idx, sample in enumerate(generated_data):
+        diff_data[idx] = differentiator.ProcessSample(sample)
+
+    print(utilities.ZeroCrossings(diff_data))
+
+    pylab.plot(diff_data)
     pylab.show()
