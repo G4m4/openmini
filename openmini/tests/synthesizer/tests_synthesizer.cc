@@ -32,9 +32,8 @@ using openmini::synthesizer::Synthesizer;
 /// Using default values everywhere (sampling rate, block size etc.)
 TEST(Synthesizer, NoteOnNoteOff) {
   // Random, weird block size
-  const unsigned int kBlockSize(FindImmediateNextMultiple(
-    std::uniform_int_distribution<int>(32, 1024)(kRandomGenerator),
-    4));
+  const unsigned int kBlockSize(
+    std::uniform_int_distribution<int>(32, 4096)(kRandomGenerator));
   std::vector<float> block(kBlockSize);
   Synthesizer synth;
 
