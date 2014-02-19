@@ -33,11 +33,12 @@ namespace synthesizer {
 /// @brief Default (on startup) expected block size
 static const unsigned int kDefaultBlockSize(512);
 
-Synthesizer::Synthesizer()
+Synthesizer::Synthesizer(const float output_limit)
     : ParametersManager(),
       mixer_(),
       filter_(),
       modulator_(),
+      limiter_(output_limit),
       buffer_() {
   internal_buf_.fill(Fill(0.0f));
 }
@@ -59,7 +60,7 @@ void Synthesizer::ProcessAudio(float* const output,
   while (buffer_.Size() < length) {
     // Processing in the internal buffer
     for (unsigned int i(0); i < openmini::kBlockSize / SampleSize; ++i) {
-      internal_buf_[i] = modulator_(filter_(mixer_()));
+      internal_buf_[i] = limiter_(modulator_(filter_(mixer_())));
     }
     // Filling it
     buffer_.Push(internal_buf_);

@@ -23,6 +23,7 @@
 
 #include <array>
 
+#include "openmini/src/synthesizer/limiter.h"
 #include "openmini/src/synthesizer/mixer.h"
 #include "openmini/src/synthesizer/parameter_manager.h"
 #include "openmini/src/synthesizer/resampler.h"
@@ -36,7 +37,11 @@ namespace synthesizer {
 class Synthesizer : public ParametersManager {
  public:
   /// @brief Default constructor
-  Synthesizer();
+  ///
+  /// The output max amplitude can be set here - everything above it is clipped
+  ///
+  /// @param[in]  output_limit    Max absolute output amplitude
+  Synthesizer(const float output_limit = 1.0f);
 
   /// @brief Process function for one buffer
   ///
@@ -73,6 +78,7 @@ class Synthesizer : public ParametersManager {
   Mixer mixer_;  ///< Mixer object for VCOs management
   Vcf filter_;  ///< Filter object
   Vca modulator_;  ///< Modulator object
+  Limiter limiter_;  ///< Limiter object
   Resampler buffer_;  ///< Adapter object for output audio stream matching
 
   std::array<Sample, openmini::kBlockSize / SampleSize> internal_buf_;  ///< Internal memory
