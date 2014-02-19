@@ -329,4 +329,29 @@ class SinusGenerator {
 /// @brief Round the input value to the given increment
 Sample RoundToIncrement(SampleRead input, const float increment);
 
+template <typename TypeValue>
+struct IsClose {
+  IsClose(const TypeValue threshold)
+     : threshold_(threshold) {
+  }
+  bool operator()(const TypeValue left, const TypeValue right) {
+    return (right - left < threshold_);
+  }
+
+ private:
+  // No assignment operator for this class
+  IsClose& operator=(const IsClose& right);
+
+  const TypeValue threshold_;
+};
+
+/// @brief Helper for removing close consecutive elements of a container
+template <typename TypeContainer, typename TypeValue>
+void RemoveClose(TypeContainer* container, const TypeValue threshold) {
+  container->erase(std::unique(container->begin(),
+                               container->end(),
+                               IsClose<TypeValue>(threshold)),
+                   container->end());
+}
+
 #endif  // OPENMINI_TESTS_TESTS_H_
