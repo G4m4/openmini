@@ -63,10 +63,10 @@ float Adsd::operator()(void) {
   switch (current_section_) {
     case(kAttack): {
       if (cursor_ > attack_) {
-        current_value_ = kMaxAmplitude;
         current_section_ = GetNextSection(current_section_);
         current_increment_ = ComputeIncrement(sustain_level_ - kMaxAmplitude,
                                               decay_);
+        current_value_ = kMaxAmplitude + current_increment_;
       } else {
         current_value_ += current_increment_;
       }

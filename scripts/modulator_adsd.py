@@ -72,10 +72,10 @@ class ADSD(EnvelopGeneratorInterface):
         if self._section == 0:
             if (self._cursor > self._attack):
                 self._section += 1
-                self._current_value = self.kMaxAmplitude
-                rise = self._sustain_level - self._current_value
+                rise = self._sustain_level - self.kMaxAmplitude
                 run = self._decay
                 self._current_increment = self._ComputeIncrement(rise, run)
+                self._current_value = self.kMaxAmplitude + self._current_increment
             else:
                 self._current_value += self._current_increment
         elif self._section == 1:
