@@ -218,14 +218,12 @@ TEST(Modulators, AdsdClick) {
     generator.SetParameters(kAttack, kDecay, kDecay, kSustainLevel);
 
     generator.TriggerOn();
-    unsigned int i(2);
+    unsigned int i(1);
     // The first sample is always null!
     IGNORE(generator());
-    // The second sample is the max, the "click"
-    EXPECT_EQ(1.0f, generator());
     while (i <= kSustain) {
       const float sample(generator());
-      EXPECT_EQ(kSustainLevel, sample);
+      EXPECT_FLOAT_EQ(kSustainLevel, sample);
       i += 1;
     }
     generator.TriggerOff();
