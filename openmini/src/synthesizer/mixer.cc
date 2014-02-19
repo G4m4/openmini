@@ -1,4 +1,4 @@
-/// @filename ringbuffer.cc
+/// @filename mixer.cc
 /// @brief Mixer object implementation
 /// @author gm
 /// @copyright gm 2013
