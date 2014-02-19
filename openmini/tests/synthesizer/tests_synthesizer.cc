@@ -30,7 +30,7 @@ using openmini::synthesizer::Synthesizer;
 /// stop sound and check that we actually gets zeroes
 ///
 /// Using default values everywhere (sampling rate, block size etc.)
-TEST(Synthesizer, SynthesizerNoteOnNoteOff) {
+TEST(Synthesizer, NoteOnNoteOff) {
   // Random, weird block size
   const unsigned int kBlockSize(FindImmediateNextMultiple(
     std::uniform_int_distribution<int>(32, 1024)(kRandomGenerator),
@@ -71,7 +71,7 @@ TEST(Synthesizer, SynthesizerNoteOnNoteOff) {
 
 /// @brief Update the synthesizer twice in a row
 /// The generated sound should stay unchanged
-TEST(Synthesizer, SynthesizerReupdate) {
+TEST(Synthesizer, Reupdate) {
   std::vector<float> data(openmini::kBlockSize * 2);
   Synthesizer synth;
 
@@ -97,7 +97,7 @@ TEST(Synthesizer, SynthesizerReupdate) {
 /// @brief Asking the synthesizer for small block size
 /// (not being a multiple of a sample size)
 /// The generated sound should stay OK
-TEST(Synthesizer, SynthesizerSmallBlockSize) {
+TEST(Synthesizer, SmallBlockSize) {
   const unsigned int kBlockSize(openmini::SampleSize * 2 - 1);
   const unsigned int kDataSize(FindImmediateNextMultiple(kDataTestSetSize,
                                                          kBlockSize));
@@ -121,7 +121,7 @@ TEST(Synthesizer, SynthesizerSmallBlockSize) {
 
 /// @brief Asking the synthesizer for various block size over time
 /// The generated sound should stay OK
-TEST(Synthesizer, SynthesizerVaryingBlockSize) {
+TEST(Synthesizer, VaryingBlockSize) {
   std::vector<float> data(kDataTestSetSize);
   Synthesizer synth;
 
@@ -144,7 +144,7 @@ TEST(Synthesizer, SynthesizerVaryingBlockSize) {
 
 /// @brief Asking the synthesizer for the smallest possible block size
 /// The generated sound should stay OK
-TEST(Synthesizer, SynthesizerSmallestBlockSize) {
+TEST(Synthesizer, SmallestBlockSize) {
   std::vector<float> data(kDataTestSetSize);
   Synthesizer synth;
   const unsigned int kMinBlockSize(1);
@@ -166,7 +166,7 @@ TEST(Synthesizer, SynthesizerSmallestBlockSize) {
 
 /// @brief Asking the synthesizer for various output sampling rates over time.
 /// The generated sound should stay OK
-TEST(Synthesizer, SynthesizerVaryingSamplingRate) {
+TEST(Synthesizer, VaryingSamplingRate) {
   std::vector<float> data(kDataTestSetSize);
   Synthesizer synth;
   const unsigned int kBlockSize(1024);
@@ -195,7 +195,7 @@ TEST(Synthesizer, SynthesizerVaryingSamplingRate) {
 
 /// @brief Asking the synthesizer for various block size and various sampling
 /// frequencies over time - the generated sound should stay OK
-TEST(Synthesizer, SynthesizerVaryingOutputFormat) {
+TEST(Synthesizer, VaryingOutputFormat) {
   std::vector<float> data(kDataTestSetSize);
   Synthesizer synth;
   const float kMinSamplingRate(10.0f);
@@ -224,7 +224,7 @@ TEST(Synthesizer, SynthesizerVaryingOutputFormat) {
 
 /// @brief Process a fixed amount of data without changing anything
 /// to default parameters, only setting a note on - at 96kHz
-TEST(Synthesizer, SynthesizerPerf96k) {
+TEST(Synthesizer, Perf96k) {
   const float kOutFrequency(96000.0f);
   std::vector<float> data(openmini::kBlockSize);
   Synthesizer synth;
@@ -246,7 +246,7 @@ TEST(Synthesizer, SynthesizerPerf96k) {
 
 /// @brief Process a fixed amount of data without changing anything
 /// to default parameters, only setting a note on - at 48kHz
-TEST(Synthesizer, SynthesizerPerf48k) {
+TEST(Synthesizer, Perf48k) {
   const float kOutFrequency(48000.0f);
   std::vector<float> data(openmini::kBlockSize);
   Synthesizer synth;

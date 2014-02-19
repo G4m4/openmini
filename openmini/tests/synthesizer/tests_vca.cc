@@ -35,7 +35,7 @@ static std::uniform_int_distribution<unsigned int> kTimeDistribution(0,
 static const unsigned int kTail(256);
 
 /// @brief Modulate a sinus, check for its range (must be within [-1.0 ; 1.0])
-TEST(Synthesizer, VcaRange) {
+TEST(Vca, Range) {
   const float kFrequency(1000.0f);
   SinusGenerator input_signal(kFrequency, openmini::kSamplingRate);
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
@@ -77,7 +77,7 @@ TEST(Synthesizer, VcaRange) {
 /// - when in decay samples should be in a continuous downward slope
 /// - when in sustain samples should all be equal
 /// - when in release samples should be in a continuous downward slope
-TEST(Synthesizer, VcaTimings) {
+TEST(Vca, Timings) {
   const Sample kConstant(Fill(0.5f));
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
@@ -132,7 +132,7 @@ TEST(Synthesizer, VcaTimings) {
 
 
 /// @brief Modulates using a "click envelop" - with both timing parameters null
-TEST(Synthesizer, VcaClickEnvelop) {
+TEST(Vca, ClickEnvelop) {
   const float kFrequency(1000.0f);
   SinusGenerator input_signal(kFrequency, openmini::kSamplingRate);
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
