@@ -150,7 +150,7 @@ static const unsigned int kSignalDataPeriodsCount(32);
 /// @brief Arbitrary lowest allowed fundamental
 static const float kMinFundamentalNorm(10.0f / openmini::kSamplingRate);
 /// @brief Arbitrary highest allowed fundamental
-static const float kMaxFundamentalNorm(10000.0f / openmini::kSamplingRate);
+static const float kMaxFundamentalNorm(1000.0f / openmini::kSamplingRate);
 
 // Smaller performance test sets in debug
 #if (_BUILD_CONFIGURATION_DEBUG)
