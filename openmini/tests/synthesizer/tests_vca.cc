@@ -63,7 +63,7 @@ TEST(Synthesizer, VcaRange) {
           ) {
         modulator.TriggerOff();
       }
-      const Sample input(FillWithGenerator(input_signal));
+      const Sample input(FillWithFloatGenerator(input_signal));
       const Sample amplitude(Abs(modulator(input)));
       EXPECT_TRUE(LessEqual(0.0f - kEpsilon, amplitude));
       EXPECT_TRUE(GreaterEqual(1.0f + kEpsilon, amplitude));
@@ -152,22 +152,22 @@ TEST(Synthesizer, VcaClickEnvelop) {
     // Since vectorized we have to ignore (the length worst case) samples
     unsigned int i(0);
     while (i < 4) {
-      const Sample input(FillWithGenerator(input_signal));
+      const Sample input(FillWithFloatGenerator(input_signal));
       IGNORE(modulator(input));
       i += 1;
     }
     while (i <= kSustain) {
-      const Sample input(FillWithGenerator(input_signal));
+      const Sample input(FillWithFloatGenerator(input_signal));
       const Sample sample(modulator(input));
       EXPECT_TRUE(Equal(MulConst(kSustainLevel, input), sample));
       i += 1;
     }
     modulator.TriggerOff();
     // Same here, ignoring (the length worst case) samples, due to the release
-    const Sample input(FillWithGenerator(input_signal));
+    const Sample input(FillWithFloatGenerator(input_signal));
     IGNORE(modulator(input));
     while (i <= kSustain + kTail) {
-      const Sample input(FillWithGenerator(input_signal));
+      const Sample input(FillWithFloatGenerator(input_signal));
       const Sample sample(modulator(input));
       EXPECT_TRUE(Equal(Fill(0.0f), sample));
       i += 1;

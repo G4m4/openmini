@@ -92,7 +92,7 @@ static inline Sample FillOnLength(const float value) {
 }
 
 template <typename TypeGenerator>
-static inline Sample FillWithGenerator(TypeGenerator& generator) {
+static inline Sample FillWithFloatGenerator(TypeGenerator& generator) {
 #if (_USE_SSE)
   return Fill(generator(),
               generator(),
