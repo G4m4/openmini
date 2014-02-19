@@ -35,6 +35,8 @@
 #include "openmini/src/maths.h"
 #include "openmini/src/synthesizer/synthesizer_common.h"
 
+using openmini::IGNORE;
+
 // Using declarations for openmini maths stuff
 using openmini::Sample;
 using openmini::SampleRead;
@@ -49,6 +51,7 @@ using openmini::MulConst;
 using openmini::Abs;
 using openmini::Sgn;
 using openmini::Store;
+using openmini::Round;
 
 // Tests-specific maths (comparison operators) stuff
 
