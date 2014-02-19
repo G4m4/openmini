@@ -326,4 +326,7 @@ class SinusGenerator {
   double current_phase_;
 };
 
+/// @brief Round the input value to the given increment
+Sample RoundToIncrement(SampleRead input, const float increment);
+
 #endif  // OPENMINI_TESTS_TESTS_H_

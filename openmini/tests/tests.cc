@@ -70,3 +70,7 @@ float SinusGenerator::operator()(void) {
   current_phase_ += increment_;
   return out;
 }
+
+Sample RoundToIncrement(SampleRead input, const float increment) {
+  return MulConst(increment, Round(MulConst(1.0f / increment, input)));
+}
