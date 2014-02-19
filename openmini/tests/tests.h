@@ -215,6 +215,61 @@ float ComputePower(TypeGenerator& generator, const unsigned int length) {
   return AddHorizontal(power) / static_cast<float>(length);
 }
 
+/// @brief Helper structure for retrieving zero crossings informations
+template <typename TypeGenerator>
+struct ZeroCrossing {
+  ZeroCrossing(TypeGenerator& generator)
+      : generator_(generator),
+        // TODO(gm): this may introduces an additional zero crossing,
+        // it must be initialized to the first input value
+        previous_sgn_(0.0f),
+        cursor_(0) {
+    // Nothing to do here
+  }
+
+  /// @brief Get next zero crossing absolute index
+  unsigned int GetNextZeroCrossing(unsigned int max_length) {
+    while (cursor_ < max_length) {
+      int index_zc(GetZeroCrossingRelative(generator_()));
+      if (index_zc >= 0) {
+        const unsigned int out(index_zc + cursor_);
+        cursor_ += 4;
+        return out;
+      }
+      cursor_ += 4;
+    }
+    return max_length;
+  }
+
+  unsigned int Cursor(void) {
+    return cursor_;
+  }
+
+ private:
+  /// @brief Actual zero crossing detection method
+  ///
+  /// Beware, it cannot detect zero crossings closer than 4 samples!
+  /// TODO(gm): Fix it
+  ///
+  /// @return the (relative) index of the next zero crossing, or -1
+  int GetZeroCrossingRelative(Sample input) {
+    const Sample sign_v(Sgn(input));
+    for (unsigned int index(0); index < openmini::SampleSize; index += 1) {
+      const float current_sgn(GetByIndex(sign_v, index));
+      if (previous_sgn_ != current_sgn) {
+        previous_sgn_ = current_sgn;
+        return index;
+      }
+      previous_sgn_ = current_sgn;
+    }
+    return -1;
+  }
+
+  TypeGenerator generator_;
+  float previous_sgn_;
+  unsigned int cursor_;
+};
+
 /// @brief Compute zero crossings of a signal generator for the given length
 ///
 /// @param[in]    generator      Generator to compute value from
@@ -223,19 +278,14 @@ float ComputePower(TypeGenerator& generator, const unsigned int length) {
 /// @return zero crossings occurence for such length
 template <typename TypeGenerator>
 int ComputeZeroCrossing(TypeGenerator& generator, const unsigned int length) {
-  int zero_crossings(0);
-  float previous_sgn(0.0f);
-  for (unsigned int i(0); i < length; i += openmini::SampleSize) {
-    const Sample current_sgn_v(Sgn(generator()));
-    for (unsigned int index(0); index < openmini::SampleSize; index += 1) {
-      const float current_sgn = GetByIndex(current_sgn_v, index);
-      if (previous_sgn != current_sgn) {
-        zero_crossings += 1;
-      }
-      previous_sgn = current_sgn;
-    }
+  ZeroCrossing<TypeGenerator> zero_crossing(generator);
+  int out(0);
+  unsigned int zero_crossing_idx(zero_crossing.GetNextZeroCrossing(length));
+  while (zero_crossing_idx < length) {
+    out += 1;
+    zero_crossing_idx = zero_crossing.GetNextZeroCrossing(length);
   }
-  return zero_crossings;
+  return out;
 }
 
 /// @brief Basic click detection using derivative
