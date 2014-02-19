@@ -20,10 +20,13 @@
 
 #include "openmini/tests/tests.h"
 
+#include "openmini/src/generators/generators_common.h"
 #include "openmini/src/modulators/adsd.h"
 
 // Using declarations for tested generator
 using openmini::modulators::Adsd;
+// Using declaration for differentiator
+using openmini::generators::Differentiator;
 
 // Using declarations for allowed timings
 using openmini::kMinTime;
@@ -72,6 +75,27 @@ TEST(Modulators, AdsdRange) {
   }  // iterations?
 }
 
+/// @brief Used in the following test.
+/// TODO(gm): get rid of this by using a more robust system (std::functional)
+struct AdsdFunctor {
+  AdsdFunctor(Adsd& adsd)
+    : adsd_(adsd),
+      differentiator_() {
+    // Nothing to do here
+  }
+
+  Sample operator()(void) {
+    return differentiator_(FillWithFloatGenerator(adsd_));
+  }
+
+ private:
+  // No assignment operator for this class
+  AdsdFunctor& operator=(const AdsdFunctor& right);
+
+  Adsd& adsd_;
+  Differentiator differentiator_;
+};
+
 /// @brief Generates an envelop, check for its proper timings:
 /// - when in attack samples should be in a continuous upward slope
 /// - when in decay samples should be in a continuous downward slope
@@ -91,40 +115,35 @@ TEST(Modulators, AdsdTimings) {
     generator.SetParameters(kAttack, kDecay, kDecay, kSustainLevel);
 
     generator.TriggerOn();
-    unsigned int i(1);
-    // Envelops should all begin at zero!
-    float previous(generator());
-    EXPECT_EQ(0.0f, previous);
-    // Attack
-    while (i <= kAttack) {
-      const float sample(generator());
-      EXPECT_LE(previous, sample);
-      previous = sample;
-      i += 1;
+    std::vector<unsigned int> zero_crossing_indexes;
+
+    // TODO(gm): get rid of that
+    AdsdFunctor adsd_functor(generator);
+    ZeroCrossing<AdsdFunctor> zero_crossing(adsd_functor);
+    unsigned int kTriggerOnLength(kAttack + kDecay + kSustain);
+    unsigned int kTotalLength(kTriggerOnLength + kDecay + kTail);
+    // A tiny delay occurs due to differentiation and trigger unevenness
+    unsigned int kEpsilon(6);
+    unsigned int zero_crossing_idx(
+      zero_crossing.GetNextZeroCrossing(kTriggerOnLength));
+    while (zero_crossing_idx < kTriggerOnLength) {
+      zero_crossing_indexes.push_back(zero_crossing_idx);
+      zero_crossing_idx = zero_crossing.GetNextZeroCrossing(kTriggerOnLength);
     }
-    // Decay
-    while (i <= kAttack + kDecay) {
-      const float sample(generator());
-      EXPECT_GE(previous, sample);
-      previous = sample;
-      i += 1;
-    }
-    EXPECT_GE(previous, kSustainLevel);
-    // Sustain
-    while (i <= kAttack + kDecay + kSustain) {
-      const float sample(generator());
-      EXPECT_EQ(kSustainLevel, sample);
-      i += 1;
-    }
-    previous = kSustainLevel;
-    // Release
     generator.TriggerOff();
-    while (i <= kAttack + kDecay + kSustain + kDecay) {
-      const float sample(generator());
-      EXPECT_GE(previous, sample);
-      previous = sample;
-      i += 1;
+    while (zero_crossing_idx < kTotalLength) {
+      zero_crossing_idx = zero_crossing.GetNextZeroCrossing(kTotalLength);
+      zero_crossing_indexes.push_back(zero_crossing_idx);
     }
+    // Remove too close indexes
+    // TODO(gm): this should not have to be done,
+    // improve zero crossing detection
+    RemoveClose(&zero_crossing_indexes,
+                kEpsilon);
+    EXPECT_NEAR(kAttack, zero_crossing_indexes[1], kEpsilon);
+    EXPECT_NEAR(kAttack + kDecay, zero_crossing_indexes[2], kEpsilon);
+    EXPECT_NEAR(kTriggerOnLength, zero_crossing_indexes[3], kEpsilon);
+    EXPECT_NEAR(kTriggerOnLength + kDecay, zero_crossing_indexes[4], kEpsilon);
   }  // iterations?
 }
 

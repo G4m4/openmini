@@ -20,10 +20,13 @@
 
 #include "openmini/tests/tests.h"
 
+#include "openmini/src/generators/generators_common.h"
 #include "openmini/src/synthesizer/vca.h"
 
 // Using declarations for tested class
 using openmini::synthesizer::Vca;
+// Using declaration for differentiator
+using openmini::generators::Differentiator;
 
 /// @brief Time parameters allowed max
 static const unsigned int kMaxTime(kDataTestSetSize / 4);
@@ -72,7 +75,31 @@ TEST(Vca, Range) {
   }  // iterations?
 }
 
-/// @brief Modulates a constant, check for its proper timings:
+/// @brief Used in the following test.
+/// TODO(gm): get rid of this by using a more robust system (std::functional)
+struct VcaFunctor {
+  VcaFunctor(Vca& vca,
+             SampleRead constant)
+    : vca_(vca),
+      constant_(constant),
+      differentiator_() {
+    // Nothing to do here
+  }
+
+  Sample operator()(void) {
+    return differentiator_(vca_(constant_));
+  }
+
+ private:
+  // No assignment operator for this class
+  VcaFunctor& operator=(const VcaFunctor& right);
+
+  Vca& vca_;
+  const Sample constant_;
+  Differentiator differentiator_;
+};
+
+/// @brief Modulates a constant, check for its proper slopes:
 /// - when in attack samples should be in a continuous upward slope
 /// - when in decay samples should be in a continuous downward slope
 /// - when in sustain samples should all be equal
@@ -83,10 +110,18 @@ TEST(Vca, Timings) {
     IGNORE(iterations);
 
     // Random parameters
-    const unsigned int kAttack(kTimeDistribution(kRandomGenerator));
-    const unsigned int kDecay(kTimeDistribution(kRandomGenerator));
-    const unsigned int kSustain(kTimeDistribution(kRandomGenerator));
-    const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
+    // Although using multiple of the sample size is easier in order to get
+    // "right" sections (e.f. ones beginning/ending on samples)
+    const unsigned int kAttack(FindImmediateNextMultiple(
+      kTimeDistribution(kRandomGenerator),
+      openmini::SampleSize));
+    const unsigned int kDecay(FindImmediateNextMultiple(
+      kTimeDistribution(kRandomGenerator),
+      openmini::SampleSize));
+    const unsigned int kSustain(FindImmediateNextMultiple(
+      kTimeDistribution(kRandomGenerator),
+      openmini::SampleSize));
+    const float kSustainLevel( 0.00281843240);//kNormPosDistribution(kRandomGenerator));
 
     Vca modulator;
     modulator.SetAttack(kAttack);
@@ -94,42 +129,37 @@ TEST(Vca, Timings) {
     modulator.SetSustain(kSustainLevel);
 
     modulator.TriggerOn();
-    unsigned int i(openmini::SampleSize);
-    // Envelops should all begin at zero!
-    Sample previous(modulator(kConstant));
-    EXPECT_TRUE(Equal(0.0f, previous));
-    // Attack
-    while (i <= kAttack) {
-      const Sample sample(modulator(kConstant));
-      EXPECT_TRUE(LessEqual(previous, sample));
-      previous = sample;
-      i += openmini::SampleSize;
+    std::vector<unsigned int> zero_crossing_indexes;
+
+    // TODO(gm): get rid of that
+    VcaFunctor vca_functor(modulator, kConstant);
+    ZeroCrossing<VcaFunctor> zero_crossing(vca_functor);
+    unsigned int kTriggerOnLength(kAttack + kDecay + kSustain);
+    unsigned int kTotalLength(kTriggerOnLength + kDecay + kTail);
+    // 2-sample difference occurs due to differentiation and trigger unevenness
+    unsigned int kEpsilon(2);
+    unsigned int zero_crossing_idx(
+      zero_crossing.GetNextZeroCrossing(kTriggerOnLength));
+    while (zero_crossing_idx < kTriggerOnLength) {
+      zero_crossing_indexes.push_back(zero_crossing_idx);
+      zero_crossing_idx = zero_crossing.GetNextZeroCrossing(kTriggerOnLength);
     }
-    // Decay
-    while (i <= kAttack + kDecay) {
-      const Sample sample(modulator(kConstant));
-      EXPECT_TRUE(GreaterEqual(previous, sample));
-      previous = sample;
-      i += openmini::SampleSize;
-    }
-    // Sustain
-    while (i <= kAttack + kDecay + kSustain) {
-      const Sample sample(modulator(kConstant));
-      EXPECT_TRUE(Equal(MulConst(kSustainLevel, kConstant), sample));
-      i += openmini::SampleSize;
-    }
-    previous = MulConst(kSustainLevel, kConstant);
-    // Release
     modulator.TriggerOff();
-    while (i <= kAttack + kDecay + kSustain + kDecay) {
-      const Sample sample(modulator(kConstant));
-      EXPECT_TRUE(GreaterEqual(previous, sample));
-      previous = sample;
-      i += openmini::SampleSize;
+    while (zero_crossing_idx < kTotalLength) {
+      zero_crossing_idx = zero_crossing.GetNextZeroCrossing(kTotalLength);
+      zero_crossing_indexes.push_back(zero_crossing_idx);
     }
+    // Remove too close indexes
+    // TODO(gm): this should not have to be done,
+    // improve zero crossing detection
+    RemoveClose(&zero_crossing_indexes,
+                4);
+    EXPECT_NEAR(kAttack, zero_crossing_indexes[1], kEpsilon);
+    EXPECT_NEAR(kAttack + kDecay, zero_crossing_indexes[2], kEpsilon);
+    EXPECT_NEAR(kTriggerOnLength, zero_crossing_indexes[3], kEpsilon);
+    EXPECT_NEAR(kTriggerOnLength + kDecay, zero_crossing_indexes[4], kEpsilon);
   }  // iterations?
 }
-
 
 /// @brief Modulates using a "click envelop" - with both timing parameters null
 TEST(Vca, ClickEnvelop) {
