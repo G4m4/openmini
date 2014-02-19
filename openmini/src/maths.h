@@ -103,32 +103,27 @@ static inline Sample FillWithFloatGenerator(TypeGenerator& generator) {
 #endif  // (_USE_SSE)
 }
 
-#if (_USE_SSE)
 template<unsigned i>
 float GetByIndex(SampleRead value) {
+#if (_USE_SSE)
   ConverterFloatScalarVector converter;
   converter.sample_v = value;
   return converter.sample[i];
-}
 #else
-template<unsigned i>
-float GetByIndex(SampleRead value) {
   return value;
-}
 #endif  // (_USE_SSE)
+}
 
-#if (_USE_SSE)
 static inline float GetByIndex(SampleRead value, const unsigned i) {
+#if (_USE_SSE)
   ConverterFloatScalarVector converter;
   converter.sample_v = value;
   return converter.sample[i];
-}
 #else
-static inline float GetByIndex(SampleRead value, const unsigned i) {
   IGNORE(i);
   return value;
-}
 #endif  // (_USE_SSE)
+}
 
 static inline Sample Add(SampleRead left, SampleRead right) {
 #if (_USE_SSE)
