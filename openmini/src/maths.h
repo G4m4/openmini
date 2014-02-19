@@ -22,6 +22,8 @@
 #define OPENMINI_SRC_MATHS_H_
 
 #include <cmath>
+// std::min, std::max
+#include <algorithm>
 
 #include "openmini/src/configuration.h"
 
@@ -229,6 +231,36 @@ static inline Sample Revert(SampleRead value) {
   return _mm_shuffle_ps(value, value, _MM_SHUFFLE(0, 1, 2, 3));
 #else
   return value;
+#endif  // (_USE_SSE)
+}
+
+static inline Sample Min(SampleRead left, SampleRead right) {
+#if (_USE_SSE)
+  return _mm_min_ps(left, right);
+#else
+  return std::min(left, right);
+#endif  // (_USE_SSE)
+}
+
+static inline Sample Max(SampleRead left, SampleRead right) {
+#if (_USE_SSE)
+  return _mm_max_ps(left, right);
+#else
+  return std::max(left, right);
+#endif  // (_USE_SSE)
+}
+
+static inline Sample Round(SampleRead value) {
+#if (_USE_SSE)
+  const Sample kZero(_mm_setzero_ps());
+  const Sample kPlus(Fill(0.5f));
+  const Sample kMinus(Fill(-0.5f));
+  const Sample kPlusMask(_mm_and_ps(_mm_cmpge_ps(value, kZero), kPlus));
+  const Sample kMinusMask(_mm_and_ps(_mm_cmplt_ps(value, kZero), kMinus));
+  const Sample kAddMask(Add(kPlusMask, kMinusMask));
+  return Add(kAddMask, value);
+#else
+  return (value > 0.0f) ? (value + 0.5f) : (value - 0.5f);
 #endif  // (_USE_SSE)
 }
 
