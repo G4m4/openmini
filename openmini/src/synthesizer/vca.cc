@@ -62,7 +62,7 @@ Sample Vca::operator()(SampleRead input) {
   // the generator is actually known at compile-time,
   // so find an elegant way to statically do this
   return openmini::Mul(input,
-    FillWithGenerator(*(static_cast<modulators::Adsd*>(generator_))));
+    FillWithFloatGenerator(*(static_cast<modulators::Adsd*>(generator_))));
 }
 
 void Vca::SetAttack(const unsigned int attack) {
