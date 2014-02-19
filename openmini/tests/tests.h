@@ -233,10 +233,10 @@ struct ZeroCrossing {
       int index_zc(GetZeroCrossingRelative(generator_()));
       if (index_zc >= 0) {
         const unsigned int out(index_zc + cursor_);
-        cursor_ += 4;
+        cursor_ += openmini::SampleSize;
         return out;
       }
-      cursor_ += 4;
+      cursor_ += openmini::SampleSize;
     }
     return max_length;
   }
