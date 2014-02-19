@@ -71,7 +71,9 @@ void Mixer::SetVolume(const int vco_id, const float value) {
   ASSERT(vco_id >= 0);
   ASSERT(vco_id < kVCOsCount);
 
-  vcos_[vco_id].SetVolume(value);
+  // TODO(gm): actual oscillators volume management
+  const float actual_value(value / static_cast<float>(kVCOsCount));
+  vcos_[vco_id].SetVolume(actual_value);
 }
 
 void Mixer::SetWaveform(const int vco_id, const Waveform::Type value) {
