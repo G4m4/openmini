@@ -78,7 +78,7 @@ TEST(Vca, Range) {
 /// @brief Used in the following test.
 /// TODO(gm): get rid of this by using a more robust system (std::functional)
 struct VcaFunctor {
-  VcaFunctor(Vca& vca,
+  VcaFunctor(Vca* vca,
              SampleRead constant)
     : vca_(vca),
       constant_(constant),
@@ -87,14 +87,14 @@ struct VcaFunctor {
   }
 
   Sample operator()(void) {
-    return differentiator_(vca_(constant_));
+    return differentiator_(vca_->operator()(constant_));
   }
 
  private:
   // No assignment operator for this class
   VcaFunctor& operator=(const VcaFunctor& right);
 
-  Vca& vca_;
+  Vca* vca_;
   const Sample constant_;
   Differentiator differentiator_;
 };
@@ -121,7 +121,7 @@ TEST(Vca, Timings) {
     const unsigned int kSustain(FindImmediateNextMultiple(
       kTimeDistribution(kRandomGenerator),
       openmini::SampleSize));
-    const float kSustainLevel( 0.00281843240);//kNormPosDistribution(kRandomGenerator));
+    const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
 
     Vca modulator;
     modulator.SetAttack(kAttack);
@@ -132,7 +132,7 @@ TEST(Vca, Timings) {
     std::vector<unsigned int> zero_crossing_indexes;
 
     // TODO(gm): get rid of that
-    VcaFunctor vca_functor(modulator, kConstant);
+    VcaFunctor vca_functor(&modulator, kConstant);
     ZeroCrossing<VcaFunctor> zero_crossing(vca_functor);
     unsigned int kTriggerOnLength(kAttack + kDecay + kSustain);
     unsigned int kTotalLength(kTriggerOnLength + kDecay + kTail);

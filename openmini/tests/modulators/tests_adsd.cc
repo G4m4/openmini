@@ -78,21 +78,21 @@ TEST(Modulators, AdsdRange) {
 /// @brief Used in the following test.
 /// TODO(gm): get rid of this by using a more robust system (std::functional)
 struct AdsdFunctor {
-  AdsdFunctor(Adsd& adsd)
+  explicit AdsdFunctor(Adsd* adsd)
     : adsd_(adsd),
       differentiator_() {
     // Nothing to do here
   }
 
   Sample operator()(void) {
-    return differentiator_(FillWithFloatGenerator(adsd_));
+    return differentiator_(FillWithFloatGenerator(*adsd_));
   }
 
  private:
   // No assignment operator for this class
   AdsdFunctor& operator=(const AdsdFunctor& right);
 
-  Adsd& adsd_;
+  Adsd* adsd_;
   Differentiator differentiator_;
 };
 
@@ -118,7 +118,7 @@ TEST(Modulators, AdsdTimings) {
     std::vector<unsigned int> zero_crossing_indexes;
 
     // TODO(gm): get rid of that
-    AdsdFunctor adsd_functor(generator);
+    AdsdFunctor adsd_functor(&generator);
     ZeroCrossing<AdsdFunctor> zero_crossing(adsd_functor);
     unsigned int kTriggerOnLength(kAttack + kDecay + kSustain);
     unsigned int kTotalLength(kTriggerOnLength + kDecay + kTail);

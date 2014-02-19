@@ -26,9 +26,6 @@
 // Using declarations for tested class
 using openmini::synthesizer::Synthesizer;
 
-// Using directive (for parameters)
-using namespace openmini::synthesizer;
-
 /// @brief Play sound, check that something is generated,
 /// stop sound and check that we actually gets zeroes
 ///
@@ -44,7 +41,7 @@ TEST(Synthesizer, NoteOnNoteOff) {
   unsigned int sample_idx(0);
   float mean_square(0.0f);
   // We need to set the decay to zero if we want instant shutoff
-  synth.SetValue(Parameters::kDecayTime, 0.0f);
+  synth.SetValue(openmini::synthesizer::Parameters::kDecayTime, 0.0f);
   // Generating a signal during half the complete time
   synth.NoteOn(kMinKeyNote);
   while (sample_idx < kDataTestSetSize / 2) {
@@ -293,12 +290,14 @@ TEST(Synthesizer, OutputRange) {
   synth.NoteOn(kMinKeyNote);
   while (sample_idx < kDataTestSetSize) {
     // Random parameters value
-    for (unsigned int param_id(0); param_id < Parameters::kCount; ++param_id) {
+    for (unsigned int param_id(0);
+         param_id < openmini::synthesizer::Parameters::kCount;
+         ++param_id) {
       // For now oscillators waveform changing is not available while processing
       // TODO(gm): debug it (See #65)
-      if ((param_id != Parameters::kOsc1Waveform)
-          && (param_id != Parameters::kOsc2Waveform)
-          && (param_id != Parameters::kOsc3Waveform)) {
+      if ((param_id != openmini::synthesizer::Parameters::kOsc1Waveform)
+          && (param_id != openmini::synthesizer::Parameters::kOsc2Waveform)
+          && (param_id != openmini::synthesizer::Parameters::kOsc3Waveform)) {
         synth.SetValue(param_id, kNormPosDistribution(kRandomGenerator));
       }
     }
