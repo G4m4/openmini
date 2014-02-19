@@ -62,8 +62,7 @@ void Mixer::NoteOn(const unsigned int note) {
 void Mixer::NoteOff(const unsigned int note) {
   ASSERT(note >= openmini::kMinKeyNote);
   ASSERT(note <= openmini::kMaxKeyNote);
-
-  active_ = false;
+  // Nothing to do here for now
 }
 
 void Mixer::SetVolume(const int vco_id, const float value) {
