@@ -60,10 +60,18 @@ static inline bool IsMaskNull(SampleRead value) {
 #endif
 }
 
+static inline bool IsMaskFull(SampleRead value) {
+#if (_USE_SSE)
+  return 15 == _mm_movemask_ps(value);
+#else
+  return value == 1.0f;
+#endif
+}
+
 static inline bool GreaterThan(const float threshold, SampleRead value) {
 #if (_USE_SSE)
   const Sample test_result(_mm_cmpgt_ps(Fill(threshold), value));
-  return !IsMaskNull(test_result);
+  return IsMaskFull(test_result);
 #else
   return threshold > value;
 #endif
@@ -72,7 +80,7 @@ static inline bool GreaterThan(const float threshold, SampleRead value) {
 static inline bool GreaterEqual(const float threshold, SampleRead value) {
 #if (_USE_SSE)
   const Sample test_result(_mm_cmpge_ps(Fill(threshold), value));
-  return !IsMaskNull(test_result);
+  return IsMaskFull(test_result);
 #else
   return threshold >= value;
 #endif
@@ -81,14 +89,14 @@ static inline bool GreaterEqual(const float threshold, SampleRead value) {
 #if (_USE_SSE)
 static inline bool GreaterEqual(SampleRead threshold, SampleRead value) {
   const Sample test_result(_mm_cmpge_ps(threshold, value));
-  return !IsMaskNull(test_result);
+  return IsMaskFull(test_result);
 }
 #endif
 
 static inline bool LessThan(const float threshold, SampleRead value) {
 #if (_USE_SSE)
   const Sample test_result(_mm_cmplt_ps(Fill(threshold), value));
-  return !IsMaskNull(test_result);
+  return IsMaskFull(test_result);
 #else
   return threshold < value;
 #endif
@@ -97,7 +105,7 @@ static inline bool LessThan(const float threshold, SampleRead value) {
 static inline bool LessEqual(const float threshold, SampleRead value) {
 #if (_USE_SSE)
   const Sample test_result(_mm_cmple_ps(Fill(threshold), value));
-  return !IsMaskNull(test_result);
+  return IsMaskFull(test_result);
 #else
   return threshold <= value;
 #endif
@@ -106,14 +114,14 @@ static inline bool LessEqual(const float threshold, SampleRead value) {
 #if (_USE_SSE)
 static inline bool LessEqual(SampleRead threshold, SampleRead value) {
   const Sample test_result(_mm_cmple_ps(threshold, value));
-  return !IsMaskNull(test_result);
+  return IsMaskFull(test_result);
 }
 #endif
 
 static inline bool Equal(const float threshold, SampleRead value) {
 #if (_USE_SSE)
   const Sample test_result(_mm_cmpeq_ps(Fill(threshold), value));
-  return !IsMaskNull(test_result);
+  return IsMaskFull(test_result);
 #else
   return threshold == value;
 #endif
@@ -122,7 +130,7 @@ static inline bool Equal(const float threshold, SampleRead value) {
 #if (_USE_SSE)
 static inline bool Equal(SampleRead threshold, SampleRead value) {
   const Sample test_result(_mm_cmpeq_ps(threshold, value));
-  return !IsMaskNull(test_result);
+  return IsMaskFull(test_result);
 }
 #endif
 
