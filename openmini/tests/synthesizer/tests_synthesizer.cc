@@ -26,10 +26,14 @@
 // Using declarations for tested class
 using openmini::synthesizer::Synthesizer;
 
+// Using directive (for parameters)
+using namespace openmini::synthesizer;
+
 /// @brief Play sound, check that something is generated,
 /// stop sound and check that we actually gets zeroes
 ///
 /// Using default values everywhere (sampling rate, block size etc.)
+/// Except of course for the decay timing (set to 0)
 TEST(Synthesizer, NoteOnNoteOff) {
   // Random, weird block size
   const unsigned int kBlockSize(
@@ -39,6 +43,8 @@ TEST(Synthesizer, NoteOnNoteOff) {
 
   unsigned int sample_idx(0);
   float mean_square(0.0f);
+  // We need to set the decay to zero if we want instant shutoff
+  synth.SetValue(Parameters::kDecayTime, 0.0f);
   // Generating a signal during half the complete time
   synth.NoteOn(kMinKeyNote);
   while (sample_idx < kDataTestSetSize / 2) {
@@ -63,8 +69,7 @@ TEST(Synthesizer, NoteOnNoteOff) {
   }
   // The generated signal mean square is supposed to be null
   // ...Or almost null, since we now have filters in our synthesizer
-  // This is -100dBFS and should be ok.
-  const float kEpsilon(5e-4f);
+  const float kEpsilon(1e-4f);
   EXPECT_NEAR(0.0f, mean_square * 2.0f / kDataTestSetSize, kEpsilon);
 }
 
