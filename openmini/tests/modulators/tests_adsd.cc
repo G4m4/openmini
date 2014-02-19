@@ -223,7 +223,9 @@ TEST(Modulators, AdsdClick) {
     IGNORE(generator());
     while (i <= kSustain) {
       const float sample(generator());
-      EXPECT_FLOAT_EQ(kSustainLevel, sample);
+      // A (really tiny) epsilon is required here for imprecisions
+      const float kEpsilon(1e-7f);
+      EXPECT_NEAR(kSustainLevel, sample, kEpsilon);
       i += 1;
     }
     generator.TriggerOff();
