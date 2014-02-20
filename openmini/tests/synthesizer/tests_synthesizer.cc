@@ -267,6 +267,25 @@ TEST(Synthesizer, Perf48k) {
   EXPECT_TRUE(true);
 }
 
+/// @brief Process a fixed amount of data without changing anything
+/// to default parameters, only setting a note on - at 48kHz
+TEST(Synthesizer, Quality44k1) {
+  const float kOutFrequency(44100.0f);
+  std::vector<float> data(kDataTestSetSize);
+  Synthesizer synth;
+
+  unsigned int sample_idx(0);
+  synth.NoteOn(kMaxKeyNote);
+  synth.SetOutputSamplingFrequency(kOutFrequency);
+
+  while (sample_idx < kDataTestSetSize) {
+    synth.ProcessAudio(&data[sample_idx], openmini::kBlockSize);
+    sample_idx += openmini::kBlockSize;
+  }
+  const float kEpsilon(5.0f);
+  EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
+}
+
 /// @brief With any parameters value the output must stay within [-1.0, 1.0]
 ///
 /// Using random but fixed parameters for output stream
