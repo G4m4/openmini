@@ -191,7 +191,9 @@ TEST(Modulators, AdsdNullParameters) {
     }
     while (i <= kAttack + kDecay + kSustain) {
       const float sample(generator());
-      EXPECT_EQ(kSustainLevel, sample);
+      // A (really tiny) epsilon is required here for imprecisions
+      const float kNearEpsilon(1e-6f);
+      EXPECT_NEAR(kSustainLevel, sample, kNearEpsilon);
       i += 1;
     }
     generator.TriggerOff();
@@ -224,7 +226,7 @@ TEST(Modulators, AdsdClick) {
     while (i <= kSustain) {
       const float sample(generator());
       // A (really tiny) epsilon is required here for imprecisions
-      const float kEpsilon(1e-5f);
+      const float kEpsilon(1e-6f);
       EXPECT_NEAR(kSustainLevel, sample, kEpsilon);
       i += 1;
     }
