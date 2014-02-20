@@ -224,7 +224,7 @@ TEST(Modulators, AdsdClick) {
     while (i <= kSustain) {
       const float sample(generator());
       // A (really tiny) epsilon is required here for imprecisions
-      const float kEpsilon(1e-6f);
+      const float kEpsilon(1e-5f);
       EXPECT_NEAR(kSustainLevel, sample, kEpsilon);
       i += 1;
     }
