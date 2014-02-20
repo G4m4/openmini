@@ -130,7 +130,7 @@ TEST(Synthesizer, VaryingBlockSize) {
 
   unsigned int data_idx(0);
   while (data_idx < data.size()) {
-    const unsigned int kBlockSize(std::uniform_int_distribution<int>(1,
+    const unsigned int kBlockSize(std::uniform_int_distribution<unsigned int>(1,
                                     data.size() - data_idx)(kRandomGenerator));
     synth.ProcessAudio(&data[data_idx], kBlockSize);
     data_idx += kBlockSize;
@@ -206,7 +206,7 @@ TEST(Synthesizer, VaryingOutputFormat) {
 
   unsigned int data_idx(0);
   while (data_idx < data.size()) {
-    const unsigned int kBlockSize(std::uniform_int_distribution<int>(1,
+    const unsigned int kBlockSize(std::uniform_int_distribution<unsigned int>(1,
                                     data.size() - data_idx)(kRandomGenerator));
     const float kSamplingRate(std::uniform_real_distribution<float>(
                                 kMinSamplingRate, kMaxSamplingRate)

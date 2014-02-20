@@ -218,7 +218,7 @@ float ComputePower(TypeGenerator& generator, const unsigned int length) {
 /// @brief Helper structure for retrieving zero crossings informations
 template <typename TypeGenerator>
 struct ZeroCrossing {
-  ZeroCrossing(TypeGenerator& generator)
+  explicit ZeroCrossing(TypeGenerator& generator)
       : generator_(generator),
         // TODO(gm): this may introduces an additional zero crossing,
         // it must be initialized to the first input value
@@ -331,7 +331,7 @@ Sample RoundToIncrement(SampleRead input, const float increment);
 
 template <typename TypeValue>
 struct IsClose {
-  IsClose(const TypeValue threshold)
+  explicit IsClose(const TypeValue threshold)
      : threshold_(threshold) {
   }
   bool operator()(const TypeValue left, const TypeValue right) {

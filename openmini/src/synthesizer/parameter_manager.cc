@@ -107,7 +107,7 @@ const ParameterMeta& ParametersManager::GetMetadata(
 }
 
 unsigned int ParametersManager::ParametersCount(void) const {
-  return values_.size();
+  return static_cast<unsigned int>(values_.size());
 }
 
 bool ParametersManager::ParametersChanged(void) {

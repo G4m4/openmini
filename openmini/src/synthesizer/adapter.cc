@@ -62,7 +62,7 @@ void Adapter::TransferData(const float* const in_first,
                            const float* const in_last,
                            float* const out_first) {
   // Instead of a simple copy the resampling is done here
-  const unsigned int in_length(in_last - in_first);
+  const unsigned int in_length(static_cast<unsigned int>(in_last - in_first));
   if (in_length > 0) {
     interpolator_.Process(in_first,
                           in_length,
