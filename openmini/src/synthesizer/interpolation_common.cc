@@ -42,10 +42,11 @@ unsigned int ExpectedOutLength(const unsigned int input_length,
 }
 
 unsigned int RequiredInLength(const unsigned int output_length,
-                              const float ratio) {
+                              const float ratio,
+                              const double cursor) {
   // What we actually want is at least 1 sample of advance, except of course
   // if out_length * ratio is an integer
-  return CeilAndConvert<unsigned int>(ratio * output_length);
+  return CeilAndConvert<unsigned int>(cursor + ratio * output_length);
 }
 
 }  // namespace synthesizer

@@ -47,7 +47,7 @@ void Adapter::SetFrequencies(const float in_freq, const float out_freq) {
 // TODO(gm): simplify this mess with a better vocabulary!
 
 unsigned int Adapter::ComputeRequiredElements(const unsigned int size) const {
-  return RequiredInLength(size, Ratio());
+  return RequiredInLength(size, Ratio(), interpolator_.CursorPos());
 }
 
 unsigned int Adapter::ComputeMaxElements(const unsigned int size) const {

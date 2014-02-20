@@ -47,12 +47,18 @@ float Interpolator::Ratio(void) const {
   return ratio_;
 }
 
+double Interpolator::CursorPos(void) const {
+  return cursor_pos_;
+}
+
 void Interpolator::Process(const float* const input,
                            const unsigned int input_length,
                            float* const output,
                            const unsigned int output_length) {
   ASSERT(input != nullptr);
-  ASSERT(input_length >= RequiredInLength(output_length, ratio_) - 1);
+  ASSERT(input_length >= RequiredInLength(output_length,
+                                          ratio_,
+                                          cursor_pos_) - 1);
   ASSERT(output != nullptr);
   ASSERT(output_length > 0);
 
@@ -82,7 +88,7 @@ void Interpolator::Process(const float* const input,
       current_cursor += 1.0;
       context[0] = history_[0];
       context[1] = input[left_idx];
-      if (temp_cursor < 1.0) {
+      if (temp_cursor < -1.0) {
         left_idx = 0;
         current_cursor += 1.0;
         context[0] = history_[0];

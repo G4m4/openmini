@@ -77,8 +77,10 @@ unsigned int ExpectedOutLength(const unsigned int input_length,
 ///
 /// @param[in]  output_length    Number of elements t be retrieved
 /// @param[in]  ratio   Interpolation ratio ( > 1 meaning decimation)
+/// @param[in]  cursor   Interpolation internal cursor
 unsigned int RequiredInLength(const unsigned int output_length,
-                              const float ratio);
+                              const float ratio,
+                              const double cursor);
 
 }  // namespace synthesizer
 }  // namespace openmini

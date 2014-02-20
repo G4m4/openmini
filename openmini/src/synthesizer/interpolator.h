@@ -48,6 +48,9 @@ class Interpolator {
   /// @brief Resampling ratio getter
   float Ratio(void) const;
 
+  /// @brief Resampling internal cursor position getter
+  double CursorPos(void) const;
+
   /// @brief Interpolation function
   ///
   /// Based on previously set parameters (ratio, etc.), retrieve exactly

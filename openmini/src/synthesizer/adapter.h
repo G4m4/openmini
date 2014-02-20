@@ -88,6 +88,8 @@ class Adapter : public RingBuffer {
   /// @brief Based on input/output sampling frequencies,
   /// compute the current resampling ratio
   float Ratio(void) const;
+  /// @brief Retrieve the internal actual cursor pos
+  float CursorPos(void) const;
 
   Interpolator interpolator_;  ///< Internal resampler for frequencies matching
 };

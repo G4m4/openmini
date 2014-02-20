@@ -49,7 +49,8 @@ void Resampler::Pop(float* dest, const unsigned int count) {
   // First we pop all required data
   std::fill(internal_buf_.begin(), internal_buf_.end(), 0.0f);
   const unsigned int kRequiredSize(RequiredInLength(count,
-                                   interpolator_.Ratio()));
+                                                    interpolator_.Ratio(),
+                                                    interpolator_.CursorPos()));
   RingBuffer::Pop(&internal_buf_[0], kRequiredSize);
   // Then we interpolate it
   interpolator_.Process(&internal_buf_[0],
@@ -61,7 +62,9 @@ void Resampler::Pop(float* dest, const unsigned int count) {
 void Resampler::ResizeIfNeedBe(const unsigned int size) {
   // Check internal temporary buffer length
   const unsigned int kRequiredSize(
-    FindImmediateNextMultiple(RequiredInLength(size, interpolator_.Ratio()),
+    FindImmediateNextMultiple(RequiredInLength(size,
+                                               interpolator_.Ratio(),
+                                               interpolator_.CursorPos()),
                               openmini::kBlockSize));
   if (internal_buf_.size() < kRequiredSize) {
     internal_buf_.resize(kRequiredSize);
