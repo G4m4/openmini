@@ -94,6 +94,9 @@ void Synthesizer::NoteOff(const unsigned int note) {
 
 void Synthesizer::SetOutputSamplingFrequency(const float freq) {
   SamplingRate::Instance().Set(freq);
+  // Trigger changes to all parameters in order to take
+  // sampling frequency change into account
+  ParametersManager::ForceParametersProcess();
 }
 
 void Synthesizer::ProcessParameters(void) {
