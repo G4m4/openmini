@@ -147,6 +147,52 @@ TEST(Modulators, AdsdTimings) {
   }  // iterations?
 }
 
+/// @brief Check timings for long slopes
+///
+/// With the parameters used here, the slope is still supposed
+/// to be > FLT_EPSILON
+TEST(Modulators, AdsdLongTimings) {
+  const unsigned int kLongTime(kMaxTime);
+  const unsigned int kAttack(kLongTime);
+  const unsigned int kDecay(kLongTime);
+  const unsigned int kSustain(100);
+  const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
+
+  Adsd generator;
+  generator.SetParameters(kAttack, kDecay, kDecay, kSustainLevel);
+
+  generator.TriggerOn();
+  std::vector<unsigned int> zero_crossing_indexes;
+
+  // TODO(gm): get rid of that
+  AdsdFunctor adsd_functor(&generator);
+  ZeroCrossing<AdsdFunctor> zero_crossing(adsd_functor);
+  unsigned int kTriggerOnLength(kAttack + kDecay + kSustain);
+  unsigned int kTotalLength(kTriggerOnLength + kDecay + kTail);
+  // A tiny delay occurs due to differentiation and trigger unevenness
+  unsigned int kEpsilon(6);
+  unsigned int zero_crossing_idx(
+    zero_crossing.GetNextZeroCrossing(kTriggerOnLength));
+  while (zero_crossing_idx < kTriggerOnLength) {
+    zero_crossing_indexes.push_back(zero_crossing_idx);
+    zero_crossing_idx = zero_crossing.GetNextZeroCrossing(kTriggerOnLength);
+  }
+  generator.TriggerOff();
+  while (zero_crossing_idx < kTotalLength) {
+    zero_crossing_idx = zero_crossing.GetNextZeroCrossing(kTotalLength);
+    zero_crossing_indexes.push_back(zero_crossing_idx);
+  }
+  // Remove too close indexes
+  // TODO(gm): this should not have to be done,
+  // improve zero crossing detection
+  RemoveClose(&zero_crossing_indexes,
+              kEpsilon);
+  EXPECT_NEAR(kAttack, zero_crossing_indexes[1], kEpsilon);
+  EXPECT_NEAR(kAttack + kDecay, zero_crossing_indexes[2], kEpsilon);
+  EXPECT_NEAR(kTriggerOnLength, zero_crossing_indexes[3], kEpsilon);
+  EXPECT_NEAR(kTriggerOnLength + kDecay, zero_crossing_indexes[4], kEpsilon);
+}
+
 /// @brief Generates an envelop with one or both timing parameters null
 TEST(Modulators, AdsdNullParameters) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
