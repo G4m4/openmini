@@ -23,7 +23,6 @@
 
 #include "openmini/src/synthesizer/synthesizer.h"
 
-#include "openmini/src/synthesizer/mixer.h"
 #include "openmini/src/synthesizer/parameters.h"
 #include "openmini/src/synthesizer/synthesizer_common.h"
 
