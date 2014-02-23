@@ -143,7 +143,7 @@ void RingBuffer::Clear(void) {
   }
 }
 
-void RingBuffer::ResizeIfNeedBe(const unsigned int size) {
+void RingBuffer::Reserve(const unsigned int size) {
   // Taking into account the already existing data - the plain samples!
   // TODO(gm): Check that all successive size computation do not result in
   // too much data being allocated, or find a smart data size allocation scheme

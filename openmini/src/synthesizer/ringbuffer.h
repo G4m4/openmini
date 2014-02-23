@@ -72,7 +72,7 @@ class RingBuffer {
   /// at least "size" elements
   ///
   /// Resize if this is not the case.
-  virtual void ResizeIfNeedBe(const unsigned int size);
+  virtual void Reserve(const unsigned int size);
 
   /// @brief Returns true if the buffer is "usable"
   ///
