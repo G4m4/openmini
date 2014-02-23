@@ -227,7 +227,8 @@ TEST(Modulators, AdsdNullParameters) {
     }
     while (i <= kAttack + kDecay) {
       const float sample(generator());
-      EXPECT_GE(previous, sample);
+      // TODO(gm): this epsilon should not be here, remove it
+      EXPECT_GE(previous + 1e-6f, sample);
       previous = sample;
       i += 1;
     }
