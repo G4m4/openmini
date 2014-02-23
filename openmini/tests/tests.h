@@ -33,6 +33,7 @@
 #include "openmini/src/common.h"
 #include "openmini/src/configuration.h"
 #include "openmini/src/maths.h"
+#include "openmini/src/samplingrate.h"
 #include "openmini/src/synthesizer/synthesizer_common.h"
 
 using openmini::IGNORE;
@@ -52,6 +53,7 @@ using openmini::Abs;
 using openmini::Sgn;
 using openmini::Store;
 using openmini::Round;
+using openmini::SamplingRate;
 
 // Tests-specific maths (comparison operators) stuff
 
@@ -148,9 +150,9 @@ static const unsigned int kDataTestSetSize(32768);
 static const unsigned int kIterations(16);
 static const unsigned int kSignalDataPeriodsCount(32);
 /// @brief Arbitrary lowest allowed fundamental
-static const float kMinFundamentalNorm(10.0f / openmini::kSamplingRate);
+static const float kMinFundamentalNorm(10.0f / SamplingRate::Instance().Get());
 /// @brief Arbitrary highest allowed fundamental
-static const float kMaxFundamentalNorm(1000.0f / openmini::kSamplingRate);
+static const float kMaxFundamentalNorm(1000.0f / SamplingRate::Instance().Get());
 
 // Smaller performance test sets in debug
 #if (_BUILD_CONFIGURATION_DEBUG)

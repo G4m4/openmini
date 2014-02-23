@@ -40,7 +40,7 @@ static const unsigned int kTail(256);
 /// @brief Modulate a sinus, check for its range (must be within [-1.0 ; 1.0])
 TEST(Vca, Range) {
   const float kFrequency(1000.0f);
-  SinusGenerator input_signal(kFrequency, openmini::kSamplingRate);
+  SinusGenerator input_signal(kFrequency, SamplingRate::Instance().Get());
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
@@ -164,7 +164,7 @@ TEST(Vca, Timings) {
 /// @brief Modulates using a "click envelop" - with both timing parameters null
 TEST(Vca, ClickEnvelop) {
   const float kFrequency(1000.0f);
-  SinusGenerator input_signal(kFrequency, openmini::kSamplingRate);
+  SinusGenerator input_signal(kFrequency, SamplingRate::Instance().Get());
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 

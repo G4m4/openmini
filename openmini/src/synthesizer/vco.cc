@@ -43,7 +43,7 @@ Vco::~Vco() {
 
 void Vco::SetFrequency(const float frequency) {
   ASSERT(frequency > 0.0f);
-  ASSERT(frequency < openmini::kSamplingRateHalf);
+  ASSERT(frequency < SamplingRate::Instance().GetHalf());
 
   if (frequency != frequency_) {
     frequency_ = frequency;
@@ -82,7 +82,7 @@ Sample Vco::operator()(void) {
 void Vco::ProcessParameters(void) {
   ASSERT(generator_ != nullptr);
   if (update_) {
-    const float normalized_freq(frequency_ / openmini::kSamplingRate);
+    const float normalized_freq(frequency_ / SamplingRate::Instance().Get());
     generator_->SetFrequency(normalized_freq);
     update_ = false;
   }

@@ -26,7 +26,7 @@
 #include "openmini/src/synthesizer/limiter.h"
 #include "openmini/src/synthesizer/mixer.h"
 #include "openmini/src/synthesizer/parameter_manager.h"
-#include "openmini/src/synthesizer/resampler.h"
+#include "openmini/src/synthesizer/ringbuffer.h"
 #include "openmini/src/synthesizer/vca.h"
 #include "openmini/src/synthesizer/vcf.h"
 
@@ -79,7 +79,7 @@ class Synthesizer : public ParametersManager {
   Vcf filter_;  ///< Filter object
   Vca modulator_;  ///< Modulator object
   Limiter limiter_;  ///< Limiter object
-  Resampler buffer_;  ///< Adapter object for output audio stream matching
+  RingBuffer buffer_;  ///< Adapter object for output audio stream matching
 
   std::array<Sample, openmini::kBlockSize / SampleSize> internal_buf_;  ///< Internal memory
 };

@@ -28,6 +28,7 @@
 #include <cstdlib>
 
 #include "openmini/src/configuration.h"
+#include "openmini/src/samplingrate.h"
 
 // Flag _USE_SSE is defined in configuration.h, that's why this include
 // is done after the configuration.h include
@@ -66,20 +67,13 @@ template<typename Type> void IGNORE(const Type&) {}
 /// may be different from the one actually delivered at the output of the synth
 static const unsigned int kBlockSize = 64;
 
-/// @brief Sampling rate used for internal sound synthesis
-/// may be different from the one actually delivered at the output of the synth
-static const float kSamplingRate = 96000.0f;
-
-/// @brief Half of the above defined sampling rate : max reachable frequency
-static const float kSamplingRateHalf = kSamplingRate / 2.0f;
-
 /// @brief Min filter frequency (due to precision issues)
-static const float kMinFilterFreq = 10.0f / openmini::kSamplingRate;
+static const float kMinFilterFreq = 10.0f / SamplingRate::Instance().Get();
 
 /// @brief Max filter frequency (slightly lower than half the sampling
 /// frequency, due to precision issues)
-static const float kMaxFilterFreq = (openmini::kSamplingRateHalf - 10.0f)
-                                     / openmini::kSamplingRate;
+ static const float kMaxFilterFreq = (SamplingRate::Instance().GetHalf()
+				     - 10.0f) / SamplingRate::Instance().Get();
 
 /// @brief Arbitrary lowest allowed key note (= C1)
 static const unsigned int kMinKeyNote(24);
@@ -89,7 +83,7 @@ static const unsigned int kMaxKeyNote(96);
 /// @brief Arbitrary smallest allowed attack/decay/release time
 static const unsigned int kMinTime(0);
 /// @brief Arbitrary highest allowed attack/decay/release time
-static const unsigned int kMaxTime(static_cast<unsigned int>(kSamplingRate));
+ static const unsigned int kMaxTime(static_cast<unsigned int>(SamplingRate::Instance().Get()));
 
 /// @brief Standard value for Pi
 static const double Pi(3.14159265358979);

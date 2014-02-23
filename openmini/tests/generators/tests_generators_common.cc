@@ -166,7 +166,7 @@ TEST(Generators, DifferentiatedSawtooth) {
 
   // This is the sawtooth period e.g. each time the discontinuity occurs
   const int kPeriod(static_cast<int>(std::floor(kFrequency
-                                                * openmini::kSamplingRate)));
+                                                * SamplingRate::Instance().Get())));
   // The sawtooth is not perfect:
   // there may be a small DC offset for its derivative
   const float kThreshold(0.15f);

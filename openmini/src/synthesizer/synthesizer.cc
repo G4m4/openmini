@@ -23,6 +23,7 @@
 
 #include "openmini/src/synthesizer/synthesizer.h"
 
+#include "openmini/src/samplingrate.h"
 #include "openmini/src/synthesizer/parameters.h"
 #include "openmini/src/synthesizer/synthesizer_common.h"
 
@@ -92,7 +93,7 @@ void Synthesizer::NoteOff(const unsigned int note) {
 }
 
 void Synthesizer::SetOutputSamplingFrequency(const float freq) {
-  buffer_.SetFrequencies(openmini::kSamplingRate, freq);
+  SamplingRate::Instance().Set(freq);
 }
 
 void Synthesizer::ProcessParameters(void) {

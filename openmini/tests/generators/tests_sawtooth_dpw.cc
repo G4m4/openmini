@@ -134,9 +134,9 @@ TEST(Generators, SawtoothDPWNotes) {
     const unsigned int kDataLength(
        static_cast<unsigned int>(std::floor((0.5f / kFrequency)
                                             * kSignalDataPeriodsCount
-                                            * openmini::kSamplingRate)));
+                                            * SamplingRate::Instance().Get())));
     SawtoothDPW generator;
-    generator.SetFrequency(kFrequency / openmini::kSamplingRate);
+    generator.SetFrequency(kFrequency / SamplingRate::Instance().Get());
 
     // Due to rounding one or even two zero crossings may be lost/added
     const int kEpsilon(2);

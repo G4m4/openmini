@@ -34,6 +34,7 @@ source_group("synthesizer"
 
 # Sources
 set(OPENMINI_SRC
+  samplingrate.cc
   ${OPENMINI_FILTERS_SRC}
   ${OPENMINI_GENERATORS_SRC}
   ${OPENMINI_MODULATORS_SRC}
@@ -43,6 +44,7 @@ set(OPENMINI_HDR
   configuration.h
   common.h
   maths.h
+  samplingrate.h
   ${OPENMINI_FILTERS_HDR}
   ${OPENMINI_GENERATORS_HDR}
   ${OPENMINI_MODULATORS_HDR}

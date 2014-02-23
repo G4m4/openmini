@@ -172,7 +172,7 @@ TEST(Synthesizer, VaryingSamplingRate) {
   Synthesizer synth;
   const unsigned int kBlockSize(1024);
   const float kMinSamplingRate(10.0f);
-  const float kMaxSamplingRate(openmini::kSamplingRate);
+  const float kMaxSamplingRate(SamplingRate::Instance().Get());
 
   synth.NoteOn(kMinKeyNote);
 
@@ -200,7 +200,7 @@ TEST(Synthesizer, VaryingOutputFormat) {
   std::vector<float> data(kDataTestSetSize);
   Synthesizer synth;
   const float kMinSamplingRate(10.0f);
-  const float kMaxSamplingRate(openmini::kSamplingRate);
+  const float kMaxSamplingRate(SamplingRate::Instance().Get());
 
   synth.NoteOn(kMinKeyNote);
 
@@ -297,7 +297,7 @@ TEST(Synthesizer, Quality44k1) {
 //  std::vector<float> block(kBlockSize);
 //  // Random sampling frequency
 //  const float kSamplingFrequency(
-//    std::uniform_real_distribution<float>(8000, openmini::kSamplingRate)
+//    std::uniform_real_distribution<float>(8000, SamplingRate::Instance().Get())
 //      (kRandomGenerator));
 //
 //  // High limiter threshold

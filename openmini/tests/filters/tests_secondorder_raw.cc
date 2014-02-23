@@ -73,8 +73,8 @@ TEST(Filters, Passthrough) {
                 data.end(),
                 std::bind(kNormDistribution, kRandomGenerator));
   // Max cutoff frequency, in order to have a passthrough like filter
-  const float kFrequency((openmini::kSamplingRateHalf - 10.0f)
-                         / openmini::kSamplingRate);
+  const float kFrequency((SamplingRate::Instance().GetHalf() - 10.0f)
+                         / SamplingRate::Instance().Get());
   SecondOrderRaw filter;
 
   filter.SetParameters(kFrequency, kResonanceWithoutOverShoot);
