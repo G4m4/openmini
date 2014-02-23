@@ -60,6 +60,17 @@ else()
   message("System detected as Linux")
 endif()
 
+# Build configuration
+set(BUILD_IS_DEBUG
+    0)
+if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
+  set(BUILD_IS_DEBUG
+      1)
+  message("Build configuration set to Debug")
+else()
+  message("Build configuration set to Release")
+endif()
+
 # Functions
 
 # @brief For the specified target, append compiler flags to the existing ones
