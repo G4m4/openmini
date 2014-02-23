@@ -80,8 +80,6 @@ class Synthesizer : public ParametersManager {
   Vca modulator_;  ///< Modulator object
   Limiter limiter_;  ///< Limiter object
   RingBuffer buffer_;  ///< Adapter object for output audio stream matching
-
-  std::array<Sample, openmini::kBlockSize / SampleSize> internal_buf_;  ///< Internal memory
 };
 
 }  // namespace synthesizer

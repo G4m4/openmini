@@ -40,7 +40,7 @@ Synthesizer::Synthesizer(const float output_limit)
       modulator_(),
       limiter_(output_limit),
       buffer_() {
-  internal_buf_.fill(Fill(0.0f));
+  // Nothing to do here for now
 }
 
 void Synthesizer::ProcessAudio(float* const output,
@@ -55,15 +55,8 @@ void Synthesizer::ProcessAudio(float* const output,
   // Resizing the buffer if need be
   buffer_.Reserve(length);
 
-  // Actual amount of data to synthesize:
-  // closest multiple of SampleSize >= (required - existing)
   while (buffer_.Size() < length) {
-    // Processing in the internal buffer
-    for (unsigned int i(0); i < openmini::kBlockSize / SampleSize; ++i) {
-      internal_buf_[i] = limiter_(modulator_(filter_(mixer_())));
-    }
-    // Filling it
-    buffer_.Push(internal_buf_);
+    buffer_.Push(limiter_(modulator_(filter_(mixer_()))));
   }
   buffer_.Pop(output, length);
 }
