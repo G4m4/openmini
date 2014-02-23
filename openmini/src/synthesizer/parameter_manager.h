@@ -183,6 +183,9 @@ class ParametersManager {
   /// it should probably be called from within a dedicated "update" loop
   virtual void ProcessParameters(void) = 0;
 
+  /// @brief Force all parameters to be re-processed at next iteration
+  void ForceParametersProcess(void);
+
  private:
   /// @brief Assign to each parameter its default value
   void AssignDefault(void);

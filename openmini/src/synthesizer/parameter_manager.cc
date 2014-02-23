@@ -124,6 +124,12 @@ void ParametersManager::AssignDefault(void) {
   }
 }
 
+void ParametersManager::ForceParametersProcess(void) {
+  for (unsigned int i(0); i < Parameters::kCount; ++i) {
+    updated_parameters_.insert(i);
+  }
+}
+
 ParametersManager::UpdatedParametersIterator::UpdatedParametersIterator(
   const ParametersManager& manager)
     : manager_(manager),
