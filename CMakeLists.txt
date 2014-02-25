@@ -79,7 +79,7 @@ endif()
 # @param _FLAGS                 flags to set
 function(add_compiler_flags _TARGET_NAME _FLAGS)
   set_property(TARGET ${_TARGET_NAME}
-               APPEND PROPERTY COMPILE_FLAGS ${_FLAGS}
+               APPEND_STRING PROPERTY COMPILE_FLAGS ${_FLAGS}
                )
 endfunction(add_compiler_flags)
 
@@ -278,6 +278,8 @@ if(EXISTS ${GTEST_DIR})
   endif(MSVC)
 
   add_subdirectory(${GTEST_DIR} ${GTEST_BUILD_DIR})
+  # Not displaying gtest warnings
+  add_compiler_flags(gtest "-w")
 endif(EXISTS ${GTEST_DIR})
 
 
