@@ -28,6 +28,7 @@ Hence it may not really seems "pythonic" and not intended to be in any way.
 
 import numpy
 from scipy import signal
+from scipy import io
 
 def SinSynthesis(freq, sampling_freq):
     '''
@@ -90,3 +91,11 @@ def Diff(signal):
     Return the differentiated input signal
     '''
     return signal[1:len(signal)] - signal[0:len(signal) - 1]
+
+def WriteWav(signal, filename, sampling_rate):
+    '''
+    Save input signal as a wav file
+    '''
+    return io.wavfile.write(filename + ".wav",
+                            sampling_rate,
+                            (signal * 32768).astype(numpy.int16))

@@ -63,7 +63,7 @@ if __name__ == "__main__":
         print(utilities.PrintMetadata(metas))
         pylab.plot(signal[view_beginning:view_beginning + view_length:1], label=label)
         signals.append(signal)
-        scipy.io.wavfile.write(filename + ".wav", 48000.0, signal)
+        utilities.WriteWav(signal, filename, 96000.0)
 
     pylab.legend()
     pylab.show()
