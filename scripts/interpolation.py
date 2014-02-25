@@ -100,7 +100,7 @@ class Interpolate():
                     raise Exception("WTF?")
             if left_idx == in_length - 1.0:
                 context = [in_signal[left_idx], in_signal[left_idx]]
-            if left_idx == in_length:
+            if left_idx >= in_length:
                 raise Exception("WTF?")
 
             out_signal[current_out_idx] = self._ProcessSample(context,
@@ -127,14 +127,14 @@ def ExpectedOutLength(in_length, ratio):
     '''
     return int(math.ceil(in_length / ratio))
 
-def RequiredInLength(out_length, ratio):
+def RequiredInLength(out_length, ratio, cursor):
     '''
     Compute the required input data length in order to retrieve out_length elements,
     given the ratio
     '''
     # What we actually want is at least 1 sample of advance, except of course
     # if out_length * ratio is an integer
-    return int(math.ceil(out_length * ratio))
+    return int(math.ceil(out_length * ratio + cursor))
 
 if __name__ == "__main__":
     '''
@@ -144,11 +144,11 @@ if __name__ == "__main__":
     import pylab
     import utilities
 
-    sampling_freq = 48000.0
-    length = 64
+    sampling_freq = 96000.0
+    length = 2048
     # Normalized
     artifacts = 0.05
-    ratio = 0.27
+    ratio = 96000.0 / 44100.0
     out_length = ExpectedOutLength(length, ratio)
     base_freq = 2000
 
@@ -161,8 +161,8 @@ if __name__ == "__main__":
 
     in_data = numpy.copy(base_data)
     # Random artifacts are now made
-    for artifact in range(int(math.floor(artifacts * length))):
-        in_data[numpy.random.randint(0, length)] = 0.0
+#     for artifact in range(int(math.floor(artifacts * length))):
+#         in_data[numpy.random.randint(0, length)] = 0.0
 
     print(utilities.PrintMetadata(utilities.GetMetadata(base_data - in_data)))
 
@@ -174,13 +174,14 @@ if __name__ == "__main__":
     output_idx = 0
     min_block_size = 2
     out_data = numpy.zeros(out_length)
-    while input_idx < length - min_block_size:
-        block_size = numpy.random.randint(min_block_size, out_length - output_idx)
-        input_length = RequiredInLength(block_size, ratio)
+    block_size = 64
+    while input_idx < length - math.ceil(ratio * block_size):
+#         block_size = numpy.random.randint(min_block_size, out_length - output_idx)
+        input_length = RequiredInLength(block_size, ratio, resampler._cursor_pos)
         out_data[output_idx:output_idx + block_size] = resampler.Process(in_data[input_idx:input_idx + input_length],
                                                                          block_size)
-        input_idx += input_length
         output_idx += block_size
+        input_idx += input_length
 
     # Process in the other way
     resampler.Reset()
