@@ -203,6 +203,19 @@ static inline Sample Sgn(SampleRead value) {
 #endif  // (_USE_SSE)
 }
 
+static inline Sample SgnNoZero(SampleRead value) {
+#if (_USE_SSE)
+  const Sample kZero(_mm_setzero_ps());
+  const Sample kOne(Fill(1.0f));
+  const Sample kMinus(Fill(-1.0f));
+  const Sample kPlusMask(_mm_and_ps(_mm_cmpge_ps(value, kZero), kOne));
+  const Sample kMinusMask(_mm_and_ps(_mm_cmplt_ps(value, kZero), kMinus));
+  return Add(kPlusMask, kMinusMask);
+#else
+  return Sub((0.0f < value), (value < 0.0f));
+#endif  // (_USE_SSE)
+}
+
 static inline void Store(float* const buffer, SampleRead value) {
 #if (_USE_SSE)
   _mm_storeu_ps(buffer, value);

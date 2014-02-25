@@ -51,6 +51,7 @@ using openmini::Mul;
 using openmini::MulConst;
 using openmini::Abs;
 using openmini::Sgn;
+using openmini::SgnNoZero;
 using openmini::Store;
 using openmini::Round;
 using openmini::SamplingRate;
