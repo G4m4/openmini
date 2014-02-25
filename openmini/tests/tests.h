@@ -159,7 +159,7 @@ static const float kMaxFundamentalNorm(1000.0f / SamplingRate::Instance().Get())
 #if (_BUILD_CONFIGURATION_DEBUG)
 static const unsigned int kFilterDataPerfSetSize(16 * 1024);
 static const unsigned int kGeneratorDataPerfSetSize(16 * 1024);
-static const float kSynthesizerPerfSetLength(1.0f);
+static const float kSynthesizerPerfSetLength(0.1f);
 #else  // (_BUILD_CONFIGURATION_DEBUG)
 static const unsigned int kFilterDataPerfSetSize(16 * 1024 * 256);
 static const unsigned int kGeneratorDataPerfSetSize(16 * 1024 * 256);
