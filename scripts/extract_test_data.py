@@ -56,14 +56,19 @@ if __name__ == "__main__":
 
     signals = []
     for filename in files:
-        label = os.path.basename(filename)
-        print ("File '" + label + "': " + str(filename))
+        signal_label = os.path.basename(filename)
+        print ("File '" + signal_label + "': " + str(filename))
         signal = ExtractSignal(filename)
         metas = utilities.GetMetadata(signal)
         print(utilities.PrintMetadata(metas))
-        pylab.plot(signal[view_beginning:view_beginning + view_length:1], label=label)
+        pylab.plot(signal[view_beginning:view_beginning + view_length:1], label=signal_label)
         signals.append(signal)
         utilities.WriteWav(signal, filename, 96000.0)
 
     pylab.legend()
+
+    pylab.plot((utilities.Diff(signals[0]))[view_beginning:view_beginning + view_length:1])
+    print(numpy.max(utilities.Diff(signals[0])))
+    print(utilities.ZeroCrossings(utilities.Diff(signals[0])))
+#     pylab.plot((signals[1] - signals[0])[view_beginning:view_beginning + view_length:1])
     pylab.show()
