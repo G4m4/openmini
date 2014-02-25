@@ -106,7 +106,7 @@ const std::array<ParameterMeta, Parameters::kCount> kParametersMeta = {{
                 0,
                 "Filter Freq",
                 "Cutoff Frequency for the filter"),
-  ParameterMeta(0.0f,
+  ParameterMeta(1e-5f,
                 1.0f,
                 0.7f,
                 true,
