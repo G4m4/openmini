@@ -256,7 +256,7 @@ struct ZeroCrossing {
   ///
   /// @return the (relative) index of the next zero crossing, or -1
   int GetZeroCrossingRelative(Sample input) {
-    const Sample sign_v(Sgn(input));
+    const Sample sign_v(SgnNoZero(input));
     for (unsigned int index(0); index < openmini::SampleSize; index += 1) {
       const float current_sgn(GetByIndex(sign_v, index));
       if (previous_sgn_ != current_sgn) {
