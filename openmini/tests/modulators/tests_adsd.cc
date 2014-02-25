@@ -135,11 +135,6 @@ TEST(Modulators, AdsdTimings) {
       zero_crossing_idx = zero_crossing.GetNextZeroCrossing(kTotalLength);
       zero_crossing_indexes.push_back(zero_crossing_idx);
     }
-    // Remove too close indexes
-    // TODO(gm): this should not have to be done,
-    // improve zero crossing detection
-    RemoveClose(&zero_crossing_indexes,
-                kEpsilon);
     EXPECT_NEAR(kAttack, zero_crossing_indexes[1], kEpsilon);
     EXPECT_NEAR(kAttack + kDecay, zero_crossing_indexes[2], kEpsilon);
     EXPECT_NEAR(kTriggerOnLength, zero_crossing_indexes[3], kEpsilon);
@@ -170,7 +165,7 @@ TEST(Modulators, AdsdLongTimings) {
   unsigned int kTriggerOnLength(kAttack + kDecay + kSustain);
   unsigned int kTotalLength(kTriggerOnLength + kDecay + kTail);
   // A tiny delay occurs due to differentiation and trigger unevenness
-  unsigned int kEpsilon(6);
+  unsigned int kEpsilon(4);
   unsigned int zero_crossing_idx(
     zero_crossing.GetNextZeroCrossing(kTriggerOnLength));
   while (zero_crossing_idx < kTriggerOnLength) {
@@ -182,11 +177,6 @@ TEST(Modulators, AdsdLongTimings) {
     zero_crossing_idx = zero_crossing.GetNextZeroCrossing(kTotalLength);
     zero_crossing_indexes.push_back(zero_crossing_idx);
   }
-  // Remove too close indexes
-  // TODO(gm): this should not have to be done,
-  // improve zero crossing detection
-  RemoveClose(&zero_crossing_indexes,
-              kEpsilon);
   EXPECT_NEAR(kAttack, zero_crossing_indexes[1], kEpsilon);
   EXPECT_NEAR(kAttack + kDecay, zero_crossing_indexes[2], kEpsilon);
   EXPECT_NEAR(kTriggerOnLength, zero_crossing_indexes[3], kEpsilon);
