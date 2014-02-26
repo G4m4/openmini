@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''
 @file filter_secondorderraw.py
-@brief Common definitions for all filters
+@brief Simple prototype of a 2nd order lowpass using Biquad DF1
 @author gm
 @copyright gm 2013
 

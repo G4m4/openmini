@@ -33,7 +33,7 @@ static const float kResonanceWithoutOverShoot(0.7f);
 
 /// @brief Filters a random signal, check for mean close to the one
 /// of the input signal (no DC offset introduced)
-TEST(Filters, OutputMean) {
+TEST(Filters, SecondOrderRawOutputMean) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
     // Creating random data
@@ -67,7 +67,7 @@ TEST(Filters, OutputMean) {
 /// @brief Filters a random signal with max frequency cutoff
 /// (half the sampling rate) and default Q (0.7)
 /// Check for minimal output/input error
-TEST(Filters, Passthrough) {
+TEST(Filters, SecondOrderRawPassthrough) {
   std::vector<float> data(kDataTestSetSize);
   std::generate(data.begin(),
                 data.end(),
