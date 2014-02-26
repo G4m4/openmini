@@ -279,7 +279,7 @@ if(EXISTS ${GTEST_DIR})
 
   add_subdirectory(${GTEST_DIR} ${GTEST_BUILD_DIR})
   # Not displaying gtest warnings
-  add_compiler_flags(gtest "-w")
+  add_compiler_flags(gtest " -w")
 endif(EXISTS ${GTEST_DIR})
 
 
