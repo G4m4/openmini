@@ -212,7 +212,7 @@ static inline Sample SgnNoZero(SampleRead value) {
   const Sample kMinusMask(_mm_and_ps(_mm_cmplt_ps(value, kZero), kMinus));
   return Add(kPlusMask, kMinusMask);
 #else
-  return Sub((0.0f < value), (value < 0.0f));
+  return Sub((0.0f <= value), (value < 0.0f));
 #endif  // (_USE_SSE)
 }
 
