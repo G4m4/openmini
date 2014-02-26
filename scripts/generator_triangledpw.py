@@ -69,10 +69,11 @@ if __name__ == "__main__":
     '''
     import numpy
     import pylab
+    import utilities
 
-    freq = 352.0
-    sampling_freq = 48000
-    length = 512
+    sampling_freq = 96000
+    freq = 0.000153496352 * sampling_freq
+    length = 104237
 
     generator = TriangleDPW(sampling_freq)
     generator.SetFrequency(freq)
@@ -80,6 +81,13 @@ if __name__ == "__main__":
     for idx, _ in enumerate(generated_data):
         generated_data[idx] = generator.ProcessSample()
 
+    differentiator = Differentiator()
+    diff_data = numpy.zeros(len(generated_data))
+    for idx, sample in enumerate(generated_data):
+        diff_data[idx] = differentiator.ProcessSample(sample)
+
+    print(utilities.ZeroCrossings(generated_data))
     pylab.plot(generated_data)
+    pylab.plot(diff_data)
     pylab.show()
     
