@@ -45,8 +45,8 @@ float NoteToFrequency(const unsigned int key_number) {
   return std::pow(2.0f, exponent) * 440.0f;
 }
 
-unsigned int FindImmediateNextMultiple(const unsigned int input,
-                                       const unsigned int multiple) {
+unsigned int GetNextMultiple(const unsigned int input,
+                             const unsigned int multiple) {
   ASSERT(multiple != 0);
   ASSERT(input != 0);
   const int remainder(input % multiple);

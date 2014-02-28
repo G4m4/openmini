@@ -112,13 +112,13 @@ TEST(Vca, Timings) {
     // Random parameters
     // Although using multiple of the sample size is easier in order to get
     // "right" sections (e.f. ones beginning/ending on samples)
-    const unsigned int kAttack(FindImmediateNextMultiple(
+    const unsigned int kAttack(GetNextMultiple(
       kTimeDistribution(kRandomGenerator),
       openmini::SampleSize));
-    const unsigned int kDecay(FindImmediateNextMultiple(
+    const unsigned int kDecay(GetNextMultiple(
       kTimeDistribution(kRandomGenerator),
       openmini::SampleSize));
-    const unsigned int kSustain(FindImmediateNextMultiple(
+    const unsigned int kSustain(GetNextMultiple(
       kTimeDistribution(kRandomGenerator),
       openmini::SampleSize));
     const float kSustainLevel(kNormPosDistribution(kRandomGenerator));

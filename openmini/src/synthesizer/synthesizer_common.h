@@ -69,8 +69,9 @@ float NoteToFrequency(const unsigned int key_number);
 ///
 /// @param[in]   input     Number to be rounded from
 /// @param[in]   multiple  Multiple to be rounded to
-unsigned int FindImmediateNextMultiple(const unsigned int input,
-                                       const unsigned int multiple);
+unsigned int GetNextMultiple(const unsigned int input,
+                             const unsigned int multiple);
+
 
 /// @brief Find the offset to add to the number to get it to the next
 /// immediate multiple

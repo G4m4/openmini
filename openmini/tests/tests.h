@@ -145,7 +145,7 @@ using openmini::IGNORE;
 using openmini::kMinKeyNote;
 using openmini::kMaxKeyNote;
 using openmini::synthesizer::NoteToFrequency;
-using openmini::synthesizer::FindImmediateNextMultiple;
+using openmini::synthesizer::GetNextMultiple;
 
 static const unsigned int kDataTestSetSize(32768);
 static const unsigned int kIterations(16);

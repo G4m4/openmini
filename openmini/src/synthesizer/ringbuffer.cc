@@ -30,7 +30,7 @@ namespace synthesizer {
 
 RingBuffer::RingBuffer(const unsigned int capacity)
     : data_(nullptr),
-      capacity_(FindImmediateNextMultiple(capacity, openmini::kBlockSize)),
+      capacity_(GetNextMultiple(capacity, openmini::kBlockSize)),
       size_(0),
       writing_position_(0),
       reading_position_(0) {
@@ -171,7 +171,7 @@ void RingBuffer::Resize(const unsigned int size) {
   ASSERT(size > 0);
 
   // TODO(gm): this should probably be moved into ComputeCapacity()
-  const unsigned int actual_capacity(FindImmediateNextMultiple(size,
+  const unsigned int actual_capacity(GetNextMultiple(size,
                                      openmini::SampleSize)
   // This is the offset required in order to make future left space
   // a multiple of SampleSize.

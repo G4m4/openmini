@@ -100,7 +100,7 @@ TEST(Synthesizer, Reupdate) {
 /// The generated sound should stay OK
 TEST(Synthesizer, SmallBlockSize) {
   const unsigned int kBlockSize(openmini::SampleSize * 2 - 1);
-  const unsigned int kDataSize(FindImmediateNextMultiple(kDataTestSetSize,
+  const unsigned int kDataSize(GetNextMultiple(kDataTestSetSize,
                                                          kBlockSize));
   std::vector<float> data(kDataSize);
   Synthesizer synth;
