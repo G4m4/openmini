@@ -26,6 +26,9 @@
 // Using declarations for tested class
 using openmini::synthesizer::Synthesizer;
 
+// Using declarations for parameters metadata
+using openmini::synthesizer::Parameters::kParametersMeta;
+
 /// @brief Play sound, check that something is generated,
 /// stop sound and check that we actually gets zeroes
 ///
@@ -321,3 +324,76 @@ TEST(Synthesizer, OutputRange) {
   }
 }
 
+/// @brief With all parameters value set to their min,
+/// check output quality e.g. range & clicks
+TEST(Synthesizer, ParametersMin) {
+  // Random block size
+  const unsigned int kBlockSize(
+    std::uniform_int_distribution<int>(32, 4096)(kRandomGenerator));
+  std::vector<float> block(kBlockSize);
+  // Random sampling frequency
+  const float kSamplingFrequency(
+    std::uniform_real_distribution<float>(8000, SamplingRate::Instance().Get())
+      (kRandomGenerator));
+  std::vector<float> data(kDataTestSetSize);
+
+  Synthesizer synth;
+  synth.SetOutputSamplingFrequency(kSamplingFrequency);
+
+  unsigned int sample_idx(0);
+  synth.NoteOn(kMinKeyNote);
+  while (sample_idx < kDataTestSetSize - block.size()) {
+    // Random parameters value
+    for (unsigned int param_id(0);
+         param_id < openmini::synthesizer::Parameters::kCount;
+         ++param_id) {
+      synth.SetValue(param_id, 0.0f);
+    }
+
+    synth.ProcessAudio(&data[sample_idx], block.size());
+    for (unsigned int i(0); i < block.size(); ++i) {
+      EXPECT_GE(1.0f, block[i]);
+      EXPECT_LE(-1.0f, block[i]);
+    }
+    sample_idx += block.size();
+  }
+  const float kEpsilon(5.0f);
+  EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
+}
+
+/// @brief With all parameters value set to their max,
+/// check output quality e.g. range & clicks
+TEST(Synthesizer, ParametersMax) {
+  // Random block size
+  const unsigned int kBlockSize(
+    std::uniform_int_distribution<int>(32, 4096)(kRandomGenerator));
+  std::vector<float> block(kBlockSize);
+  // Random sampling frequency
+  const float kSamplingFrequency(
+    std::uniform_real_distribution<float>(8000, SamplingRate::Instance().Get())
+      (kRandomGenerator));
+  std::vector<float> data(kDataTestSetSize);
+
+  Synthesizer synth;
+  synth.SetOutputSamplingFrequency(kSamplingFrequency);
+
+  unsigned int sample_idx(0);
+  synth.NoteOn(kMinKeyNote);
+  while (sample_idx < kDataTestSetSize - block.size()) {
+    // Random parameters value
+    for (unsigned int param_id(0);
+         param_id < openmini::synthesizer::Parameters::kCount;
+         ++param_id) {
+      synth.SetValue(param_id, 1.0f);
+    }
+
+    synth.ProcessAudio(&data[sample_idx], block.size());
+    for (unsigned int i(0); i < block.size(); ++i) {
+      EXPECT_GE(1.0f, block[i]);
+      EXPECT_LE(-1.0f, block[i]);
+    }
+    sample_idx += block.size();
+  }
+  const float kEpsilon(5.0f);
+  EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
+}
