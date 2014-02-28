@@ -153,7 +153,8 @@ static const unsigned int kSignalDataPeriodsCount(32);
 /// @brief Arbitrary lowest allowed fundamental
 static const float kMinFundamentalNorm(10.0f / SamplingRate::Instance().Get());
 /// @brief Arbitrary highest allowed fundamental
-static const float kMaxFundamentalNorm(1000.0f / SamplingRate::Instance().Get());
+static const float kMaxFundamentalNorm(1000.0f
+                                       / SamplingRate::Instance().Get());
 
 // Smaller performance test sets in debug
 #if (_BUILD_CONFIGURATION_DEBUG)

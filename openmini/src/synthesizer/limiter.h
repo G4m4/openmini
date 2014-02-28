@@ -32,7 +32,7 @@ namespace synthesizer {
 class Limiter {
  public:
   /// @brief Default constructor
-  Limiter(const float threshold = 1.0f);
+  explicit Limiter(const float threshold = 1.0f);
   ~Limiter();
 
   /// @brief Process function for one sample

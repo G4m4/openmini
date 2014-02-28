@@ -40,6 +40,7 @@ Sample SecondOrderRaw::operator()(SampleRead sample) {
   // the Direct Form 2, although usually more efficient, has issues with
   // time-varying parameters
 
+#if (_USE_SSE)
   // Vector = (x_{n}, x_{n + 1}, x_{n + 2}, x_{n + 3})
   // previous = (x_{n - 1}, x_{n}, x_{n + 1}, x_{n + 2})
   // last = (x_{n - 2}, x_{n - 1}, x_{n}, x_{n + 1})
@@ -53,7 +54,6 @@ Sample SecondOrderRaw::operator()(SampleRead sample) {
   // All weighted inputs cumulated sum
   const Sample tmp_sum(Add(Add(current, previous_gain), last_gain));
 
-#if (_USE_SSE)
   const float oldest_out(GetByIndex<0>(tmp_sum)
                          + history_[2] * coeffs_[2]
                          + history_[3] * coeffs_[3]);
@@ -70,7 +70,9 @@ Sample SecondOrderRaw::operator()(SampleRead sample) {
   const Sample history(TakeEachRightHalf(out, sample));
   Store(history_.data(), history);
 #else
-  const float out(tmp_sum
+  const float out(gain_ * sample
+                  + history_[0] * coeffs_[0]
+                  + history_[1] * coeffs_[1]
                   + history_[2] * coeffs_[2]
                   + history_[3] * coeffs_[3]);
   history_[0] = history_[1];

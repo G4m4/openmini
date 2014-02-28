@@ -27,7 +27,7 @@ namespace synthesizer {
 
 Limiter::Limiter(const float threshold)
     : threshold_neg_(Fill(-threshold)),
-      threshold_pos_(Fill(threshold)){
+      threshold_pos_(Fill(threshold)) {
   // Nothing to do here for now
 }
 

@@ -41,7 +41,7 @@ class Synthesizer : public ParametersManager {
   /// The output max amplitude can be set here - everything above it is clipped
   ///
   /// @param[in]  output_limit    Max absolute output amplitude
-  Synthesizer(const float output_limit = 1.0f);
+  explicit Synthesizer(const float output_limit = 1.0f);
 
   /// @brief Process function for one buffer
   ///

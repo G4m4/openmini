@@ -72,8 +72,8 @@ static const float kMinFilterFreq = 10.0f / SamplingRate::Instance().Get();
 
 /// @brief Max filter frequency (slightly lower than half the sampling
 /// frequency, due to precision issues)
- static const float kMaxFilterFreq = (SamplingRate::Instance().GetHalf()
-				     - 10.0f) / SamplingRate::Instance().Get();
+static const float kMaxFilterFreq = (SamplingRate::Instance().GetHalf() - 10.0f)
+                                    / SamplingRate::Instance().Get();
 
 /// @brief Arbitrary lowest allowed key note (= C1)
 static const unsigned int kMinKeyNote(24);
@@ -83,7 +83,8 @@ static const unsigned int kMaxKeyNote(96);
 /// @brief Arbitrary smallest allowed attack/decay/release time
 static const unsigned int kMinTime(0);
 /// @brief Arbitrary highest allowed attack/decay/release time
- static const unsigned int kMaxTime(static_cast<unsigned int>(SamplingRate::Instance().Get()));
+static const unsigned int kMaxTime(static_cast<unsigned int>(
+                                     SamplingRate::Instance().Get()));
 
 /// @brief Standard value for Pi
 static const double Pi(3.14159265358979);
