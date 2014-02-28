@@ -55,6 +55,18 @@ unsigned int GetNextMultiple(const unsigned int input,
   return input + multiple - remainder;
 }
 
+unsigned int GetPrevMultiple(const unsigned int input,
+                             const unsigned int multiple) {
+  ASSERT(multiple != 0);
+  // Can't reuse GetNextMultiple(): we want this function to return the input
+  // if it's already a multiple
+  const int remainder(input % multiple);
+  if (0 == remainder) {
+    return input;
+  }
+  return input - remainder;
+}
+
 unsigned int GetOffsetFromNextMultiple(const unsigned int input,
                                        const unsigned int multiple) {
   return input % multiple;

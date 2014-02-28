@@ -72,6 +72,12 @@ float NoteToFrequency(const unsigned int key_number);
 unsigned int GetNextMultiple(const unsigned int input,
                              const unsigned int multiple);
 
+/// @brief Find the biggest multiple smaller than the given number
+///
+/// @param[in]   input     Number to be rounded from
+/// @param[in]   multiple  Multiple to be rounded to
+unsigned int GetPrevMultiple(const unsigned int input,
+                             const unsigned int multiple);
 
 /// @brief Find the offset to add to the number to get it to the next
 /// immediate multiple
