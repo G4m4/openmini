@@ -154,7 +154,8 @@ if __name__ == "__main__":
          out_data_vectorized[idx + 3]) = lowpass_v.Process4Samples(current_vector)
         idx += 4
 
-    pylab.plot(in_data)
-    pylab.plot(out_data)
-    pylab.plot(out_data_vectorized)
+    pylab.plot(in_data, label="in")
+    pylab.plot(out_data, label="out")
+    pylab.plot(out_data_vectorized, label="out_v")
+    pylab.legend()
     pylab.show()
