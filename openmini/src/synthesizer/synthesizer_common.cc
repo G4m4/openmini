@@ -48,7 +48,6 @@ float NoteToFrequency(const unsigned int key_number) {
 unsigned int GetNextMultiple(const unsigned int input,
                              const unsigned int multiple) {
   ASSERT(multiple != 0);
-  ASSERT(input != 0);
   const int remainder(input % multiple);
   if (0 == remainder) {
     return input;
