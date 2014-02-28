@@ -23,6 +23,7 @@
 
 // std::generate
 #include <algorithm>
+#include <array>
 // std::bind
 #include <functional>
 #include <random>
