@@ -91,45 +91,39 @@ void RingBuffer::Pop(float* dest, const unsigned int count) {
 
 void RingBuffer::Push(SampleRead value) {
   ASSERT(IsGood());
-  ASSERT(capacity_ - writing_position_ >= openmini::SampleSize);
 
-  Store(&data_[writing_position_], value);
-
-  writing_position_ += openmini::SampleSize;
-  writing_position_ = writing_position_ % capacity_;
-  size_ += openmini::SampleSize;
+  // TODO(gm): optimize out this
+  float tmp[openmini::SampleSize];
+  Store(&tmp[0], value);
+  return Push(&tmp[0], openmini::SampleSize);
 }
 
-void RingBuffer::Push(
-    const std::array<Sample, openmini::kBlockSize / SampleSize>& src) {
+void RingBuffer::Push(const float* const src, const unsigned int count) {
   ASSERT(IsGood());
-  ASSERT(openmini::kBlockSize > 0);
-  ASSERT((Capacity() - Size()) >= src.size());
-
+  ASSERT(count > 0);
+  ASSERT(count <= Capacity() - Size());
   // Length of the "right" part: from writing cursor to the buffer end
   const unsigned int right_part_size(std::min(capacity_ - writing_position_,
-                                              openmini::kBlockSize));
-
+                                              count));
   // Length of the "left" part: from the buffer beginning
   // to the last element to be pushed
-  const unsigned int left_part_size(openmini::kBlockSize - right_part_size);
+  const unsigned int left_part_size(count - right_part_size);
 
-  // Copying the first part
-  CopyFloatArray(&data_[writing_position_],
-                 &src[0],
-                 right_part_size);
+  //  Copying the first part
+  std::copy(&src[0],
+            &src[right_part_size],
+            &data_[writing_position_]);
   if (0 != left_part_size) {
-    // copy the second part (if there is one)
-    CopyFloatArray(&data_[0],
-                   &src[right_part_size / openmini::SampleSize],
-                   left_part_size);
+    //  copy the second part (if there is one)
+    std::copy(&src[right_part_size],
+              &src[right_part_size + left_part_size],
+              &data_[0]);
   }
 
-  writing_position_ += openmini::kBlockSize;
+  writing_position_ += count;
   writing_position_ = writing_position_ % capacity_;
-  size_ += openmini::kBlockSize;
-  // These are the actual raw value (e.g. this is a plain buffer overflow check)
-  ASSERT(size_ <= capacity_);
+
+  size_ += count;
 }
 
 void RingBuffer::Clear(void) {
@@ -147,7 +141,9 @@ void RingBuffer::Reserve(const unsigned int size) {
   // Taking into account the already existing data - the plain samples!
   // TODO(gm): Check that all successive size computation do not result in
   // too much data being allocated, or find a smart data size allocation scheme
-  const unsigned int actual_capacity(ComputeRequiredElements(size) + size_);
+  const unsigned int actual_capacity(ComputeRequiredElements(size)
+                                     + GetNextMultiple(size_,
+                                                       openmini::SampleSize));
   if (actual_capacity > Capacity()) {
     return Resize(actual_capacity);
   }
