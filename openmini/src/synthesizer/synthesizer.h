@@ -25,7 +25,7 @@
 
 #include "openmini/src/synthesizer/limiter.h"
 #include "openmini/src/synthesizer/mixer.h"
-#include "openmini/src/synthesizer/parameter_manager.h"
+#include "openmini/src/synthesizer/parameters_manager.h"
 #include "openmini/src/synthesizer/ringbuffer.h"
 #include "openmini/src/synthesizer/vca.h"
 #include "openmini/src/synthesizer/vcf.h"

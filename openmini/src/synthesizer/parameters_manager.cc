@@ -24,7 +24,7 @@
 #include <algorithm>
 
 #include "openmini/src/common.h"
-#include "openmini/src/synthesizer/parameter_manager.h"
+#include "openmini/src/synthesizer/parameters_manager.h"
 #include "openmini/src/synthesizer/synthesizer_common.h"
 
 namespace openmini {
