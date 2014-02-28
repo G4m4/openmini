@@ -58,8 +58,7 @@ TEST(Filters, SecondOrderRawOutputMean) {
   }  // iterations?
 }
 
-/// @brief Filters a random signal with max frequency cutoff
-/// (half the sampling rate) and default Q (0.7)
+/// @brief Filters a random signal with max frequency cutoff and default Q
 /// Check for minimal output/input error
 TEST(Filters, SecondOrderRawPassthrough) {
   SecondOrderRaw filter;
@@ -96,7 +95,6 @@ TEST(Filters, SecondOrderRawRange) {
 }
 
 /// @brief Filters random data (performance test)
-/// @brief Generates a signal (performance tests)
 TEST(Filters, SecondOrderRawPerf) {
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
