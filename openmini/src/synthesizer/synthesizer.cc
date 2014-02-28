@@ -34,7 +34,7 @@ namespace synthesizer {
 static const unsigned int kDefaultBlockSize(512);
 
 Synthesizer::Synthesizer(const float output_limit)
-    : ParametersManager(),
+    : ParametersManager(Parameters::kParametersMeta),
       mixer_(),
       filter_(),
       modulator_(),

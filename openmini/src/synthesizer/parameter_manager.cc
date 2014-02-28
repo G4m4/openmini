@@ -62,9 +62,10 @@ int UnnormalizedToInt(const float unnormalized) {
   return FloorAndConvert<int>(unnormalized);
 }
 
-ParametersManager::ParametersManager()
+ParametersManager::ParametersManager(
+  const std::array<ParameterMeta, Parameters::kCount>& params)
     : updated_parameters_(),
-      metadatas_(Parameters::kParametersMeta) {
+      metadatas_(params) {
   AssignDefault();
 }
 

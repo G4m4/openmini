@@ -91,8 +91,9 @@ class ParametersManager {
  public:
   /// @brief Default constructor:
   /// initialization done with static parameter descriptors data,
-  /// but parameter values memory is dynamically allocated
-  ParametersManager();
+  /// parameter values memory static too
+  ParametersManager(
+    const std::array<ParameterMeta, Parameters::kCount>& params);
   /// @brief Default destructor
   virtual ~ParametersManager();
 
