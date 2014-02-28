@@ -26,7 +26,6 @@ namespace synthesizer {
 ParameterMeta::ParameterMeta(float min,
                              float max,
                              float default_value,
-                             bool is_normalized,
                              int sig_figs,
                              int cardinality,
                              const std::string& name,
@@ -34,7 +33,6 @@ ParameterMeta::ParameterMeta(float min,
     : min_(min),
       max_(max),
       default_value_(default_value),
-      is_normalized_(is_normalized),
       sig_figs_(sig_figs),
       cardinality_(cardinality),
       name_(name),
@@ -56,9 +54,6 @@ int ParameterMeta::sig_figs(void) const {
 }
 int ParameterMeta::cardinality(void) const {
   return cardinality_;
-}
-bool ParameterMeta::is_normalized(void) const {
-  return is_normalized_;
 }
 const std::string& ParameterMeta::name(void) const {
   return name_;

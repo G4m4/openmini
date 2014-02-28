@@ -41,19 +41,12 @@ Vcf::~Vcf() {
 }
 
 void Vcf::SetFrequency(const float frequency) {
-  ASSERT(frequency >= 0.0f);
-  ASSERT(frequency <= 1.0f);
+  ASSERT(frequency >= kMinFilterFreq);
+  ASSERT(frequency <= kMaxFilterFreq);
 
-  // De-normalization
   // TODO(gm): find a way to do this generically
-  const float actual_freq(frequency * (Parameters::kParametersMeta[Parameters::kFilterFreq].max()
-                                       - Parameters::kParametersMeta[Parameters::kFilterFreq].min())
-                          + Parameters::kParametersMeta[Parameters::kFilterFreq].min());
-  ASSERT(actual_freq >= kMinFilterFreq);
-  ASSERT(actual_freq <= kMaxFilterFreq);
-  // TODO(gm): find a way to do this generically
-  if (actual_freq != frequency_) {
-    frequency_ = actual_freq;
+  if (frequency != frequency_) {
+    frequency_ = frequency;
     update_ = true;
   }
 }

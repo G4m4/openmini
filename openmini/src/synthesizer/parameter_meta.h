@@ -34,14 +34,13 @@ namespace synthesizer {
 class ParameterMeta {
  public:
   /// @brief Default constructor, allowing members initialisation
-  explicit ParameterMeta(float min,
-                         float max,
-                         float default_value,
-                         bool is_normalized,
-                         int sig_figs,
-                         int cardinality,
-                         const std::string& name,
-                         const std::string& description);
+  explicit ParameterMeta(float min = 0.0f,
+                         float max = 1.0f,
+                         float default_value = 0.5f,
+                         int sig_figs = 1,
+                         int cardinality = 0,
+                         const std::string& name = "Name",
+                         const std::string& description = "Description");
 
   /// Getters
 
@@ -50,7 +49,6 @@ class ParameterMeta {
   float default_value(void) const;
   int sig_figs(void) const;
   int cardinality(void) const;
-  bool is_normalized(void) const;
   const std::string& name(void) const;
   const std::string& description(void) const;
 
@@ -61,8 +59,6 @@ class ParameterMeta {
   const float min_;  ///< Parameter lower bound
   const float max_;  ///< Parameter higher bound
   const float default_value_;  ///< Default (initialization) value
-  const bool is_normalized_;  ///< True if the user can only interact with the
-                              /// parameter using values within [0.0f ; 1.0f]
   const int sig_figs_;  ///< Digits used to represent the parameter
   const int cardinality_;  ///< Number of elements the parameter can take,
                            /// 0 if continuous

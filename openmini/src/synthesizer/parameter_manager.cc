@@ -78,12 +78,8 @@ void ParametersManager::SetValue(const int parameter_id, const float value) {
   ASSERT(parameter_id < static_cast<int>(values_.size()));
 
   const ParameterMeta& metadata(GetMetadata(parameter_id));
-  // If the parameter is normalized, then we have to pass through normalization
-  if (metadata.is_normalized()) {
-    values_[parameter_id] = NormalizedToStored(value, metadata);
-  } else {
-    values_[parameter_id] = value;
-  }
+  // The parameter is normalized, we have to pass through normalization
+  values_[parameter_id] = NormalizedToStored(value, metadata);
   updated_parameters_.insert(parameter_id);
 }
 
@@ -91,14 +87,10 @@ float ParametersManager::GetValue(const int parameter_id) const {
   ASSERT(parameter_id >= 0);
   ASSERT(parameter_id < static_cast<int>(values_.size()));
 
-  const float value(values_[parameter_id]);
+  const float value(GetRawValue(parameter_id));
   const ParameterMeta& metadata(GetMetadata(parameter_id));
-  // If the parameter is normalized, then we have to pass through normalization
-  if (metadata.is_normalized()) {
-    return StoredToNormalized(value, metadata);
-  } else {
-    return value;
-  }
+  // The parameter is normalized, we have to pass through normalization
+  return StoredToNormalized(value, metadata);
 }
 
 const ParameterMeta& ParametersManager::GetMetadata(
@@ -129,6 +121,13 @@ void ParametersManager::ForceParametersProcess(void) {
   for (unsigned int i(0); i < Parameters::kCount; ++i) {
     updated_parameters_.insert(i);
   }
+}
+
+float ParametersManager::GetRawValue(const int parameter_id) const {
+  ASSERT(parameter_id >= 0);
+  ASSERT(parameter_id < static_cast<int>(values_.size()));
+
+  return values_[parameter_id];
 }
 
 ParametersManager::UpdatedParametersIterator::UpdatedParametersIterator(

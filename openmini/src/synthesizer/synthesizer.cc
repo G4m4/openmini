@@ -99,15 +99,17 @@ void Synthesizer::ProcessParameters(void) {
       const int parameter_id(iter.GetID());
       switch (parameter_id) {
         case(Parameters::kOsc1Volume): {
-          mixer_.SetVolume(0, GetValue(Parameters::kOsc1Volume));
+          // Note that we feed here the "raw" (unnormalized) value
+          // This is the same below
+          mixer_.SetVolume(0, GetRawValue(Parameters::kOsc1Volume));
           break;
         }
         case(Parameters::kOsc2Volume): {
-          mixer_.SetVolume(1, GetValue(Parameters::kOsc2Volume));
+          mixer_.SetVolume(1, GetRawValue(Parameters::kOsc2Volume));
           break;
         }
         case(Parameters::kOsc3Volume): {
-          mixer_.SetVolume(2, GetValue(Parameters::kOsc3Volume));
+          mixer_.SetVolume(2, GetRawValue(Parameters::kOsc3Volume));
           break;
         }
         case(Parameters::kOsc1Waveform): {
@@ -126,11 +128,11 @@ void Synthesizer::ProcessParameters(void) {
           break;
         }
         case(Parameters::kFilterFreq): {
-          filter_.SetFrequency(GetValue(Parameters::kFilterFreq));
+          filter_.SetFrequency(GetRawValue(Parameters::kFilterFreq));
           break;
         }
         case(Parameters::kFilterQ): {
-          filter_.SetQFactor(GetValue(Parameters::kFilterQ));
+          filter_.SetQFactor(GetRawValue(Parameters::kFilterQ));
           break;
         }
         case(Parameters::kAttackTime): {
@@ -144,7 +146,7 @@ void Synthesizer::ProcessParameters(void) {
           break;
         }
         case(Parameters::kSustainLevel): {
-          modulator_.SetSustain(GetValue(Parameters::kSustainLevel));
+          modulator_.SetSustain(GetRawValue(Parameters::kSustainLevel));
           break;
         }
         default: {

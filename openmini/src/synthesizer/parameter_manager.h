@@ -187,6 +187,13 @@ class ParametersManager {
   /// @brief Force all parameters to be re-processed at next iteration
   void ForceParametersProcess(void);
 
+  /// @brief Get raw parameter value (unnormalized)
+  ///
+  /// For internal use only, the user should always get normalized values
+  ///
+  /// @param[in]   parameter_id     ID of the parameter to be retrieved
+  virtual float GetRawValue(const int parameter_id) const;
+
  private:
   /// @brief Assign to each parameter its default value
   void AssignDefault(void);
@@ -207,15 +214,11 @@ class ParametersManager {
 template <typename TypeOutput>
 TypeOutput ParametersManager::GetDiscreteValue(const int parameter_id) const {
   const float value(GetValue(parameter_id));
-  int int_value(UnnormalizedToInt(value));
   const ParameterMeta& metadata(GetMetadata(parameter_id));
-  // If the parameter is normalized, then we have to pass through normalization
-  if (metadata.is_normalized()) {
-    // Note that "normalized parameter" does not mean that the stored value
-    // is actually normalized - it means that the interface to access it
-    // is normalized
-    int_value = NormalizedToInt(value, metadata);
-  }
+  // Note that "normalized parameter" does not mean that the stored value
+  // is actually normalized - it means that the interface to access it
+  // is normalized
+  const int int_value(NormalizedToInt(value, metadata));
   return static_cast<TypeOutput>(int_value);
 }
 
