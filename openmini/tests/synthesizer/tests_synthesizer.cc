@@ -286,46 +286,38 @@ TEST(Synthesizer, Quality44k1) {
   EXPECT_FALSE(ClickWasFound(&data[1], data.size() - 1, kEpsilon));
 }
 
-// TODO(gm): Activate this test
 /// @brief With any parameters value the output must stay within [-1.0, 1.0]
 ///
 /// Using random but fixed parameters for output stream
-//TEST(Synthesizer, OutputRange) {
-//  // Random block size
-//  const unsigned int kBlockSize(
-//    std::uniform_int_distribution<int>(32, 4096)(kRandomGenerator));
-//  std::vector<float> block(kBlockSize);
-//  // Random sampling frequency
-//  const float kSamplingFrequency(
-//    std::uniform_real_distribution<float>(8000, SamplingRate::Instance().Get())
-//      (kRandomGenerator));
-//
-//  // High limiter threshold
-//  const float kLimiterThreshold(2.0f);
-//
-//  Synthesizer synth(kLimiterThreshold);
-//  synth.SetOutputSamplingFrequency(kSamplingFrequency);
-//
-//  unsigned int sample_idx(0);
-//  synth.NoteOn(kMinKeyNote);
-//  while (sample_idx < kDataTestSetSize) {
-//    // Random parameters value
-//    for (unsigned int param_id(0);
-//         param_id < openmini::synthesizer::Parameters::kCount;
-//         ++param_id) {
-//      // For now oscillators waveform changing is not available while processing
-//      // TODO(gm): debug it (See #65)
-//      if ((param_id != openmini::synthesizer::Parameters::kOsc1Waveform)
-//          && (param_id != openmini::synthesizer::Parameters::kOsc2Waveform)
-//          && (param_id != openmini::synthesizer::Parameters::kOsc3Waveform)) {
-//        synth.SetValue(param_id, kNormPosDistribution(kRandomGenerator));
-//      }
-//    }
-//    synth.ProcessAudio(&block[0], block.size());
-//    for (unsigned int i(0); i < block.size(); ++i) {
-//      EXPECT_GE(1.0f, block[i]);
-//      EXPECT_LE(-1.0f, block[i]);
-//    }
-//    sample_idx += kBlockSize;
-//  }
-//}
+TEST(Synthesizer, OutputRange) {
+  // Random block size
+  const unsigned int kBlockSize(
+    std::uniform_int_distribution<int>(32, 4096)(kRandomGenerator));
+  std::vector<float> block(kBlockSize);
+  // Random sampling frequency
+  const float kSamplingFrequency(
+    std::uniform_real_distribution<float>(8000, SamplingRate::Instance().Get())
+      (kRandomGenerator));
+
+  Synthesizer synth;
+  synth.SetOutputSamplingFrequency(kSamplingFrequency);
+
+  unsigned int sample_idx(0);
+  synth.NoteOn(kMinKeyNote);
+  while (sample_idx < kDataTestSetSize) {
+    // Random parameters value
+    for (unsigned int param_id(0);
+         param_id < openmini::synthesizer::Parameters::kCount;
+         ++param_id) {
+      synth.SetValue(param_id, kNormPosDistribution(kRandomGenerator));
+    }
+
+    synth.ProcessAudio(&block[0], block.size());
+    for (unsigned int i(0); i < block.size(); ++i) {
+      EXPECT_GE(1.0f, block[i]);
+      EXPECT_LE(-1.0f, block[i]);
+    }
+    sample_idx += kBlockSize;
+  }
+}
+
