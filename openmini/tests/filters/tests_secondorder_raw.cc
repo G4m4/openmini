@@ -25,8 +25,10 @@
 // Using declarations for tested filter
 using openmini::filters::SecondOrderRaw;
 
-/// @brief Maximum possible resonance without overshoot due to oscillations
-static const float kResonanceWithoutOverShoot(0.7f);
+/// @brief Frequency parameter to be set in order to have a near-passthrough
+static const float kPassthroughFrequency(0.4998f);
+/// @brief Resonance parameter to be set in order to have a near-passthrough
+static const float kPassthroughResonance(0.7f);
 
 /// @brief Filters a random signal, check for mean close to the one
 /// of the input signal (no DC offset introduced)
@@ -38,8 +40,7 @@ TEST(Filters, SecondOrderRawOutputMean) {
     const float kFrequency(kFreqDistribution(kRandomGenerator));
     SecondOrderRaw filter;
 
-    filter.SetParameters(kFrequency, kResonanceWithoutOverShoot);
-
+    filter.SetParameters(kFrequency, kPassthroughResonance);
     Sample expected_mean(Fill(0.0f));
     Sample actual_mean(Fill(0.0f));
     for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
@@ -61,12 +62,9 @@ TEST(Filters, SecondOrderRawOutputMean) {
 /// (half the sampling rate) and default Q (0.7)
 /// Check for minimal output/input error
 TEST(Filters, SecondOrderRawPassthrough) {
-  // Max cutoff frequency, in order to have a passthrough like filter
-  const float kFrequency((SamplingRate::Instance().GetHalf() - 10.0f)
-                         / SamplingRate::Instance().Get());
   SecondOrderRaw filter;
 
-  filter.SetParameters(kFrequency, kResonanceWithoutOverShoot);
+  filter.SetParameters(kPassthroughFrequency, kPassthroughResonance);
 
   Sample diff_mean(Fill(0.0f));
   for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
@@ -89,7 +87,7 @@ TEST(Filters, SecondOrderRawPerf) {
 
     const float kFrequency(kFreqDistribution(kRandomGenerator));
     SecondOrderRaw filter;
-    filter.SetParameters(kFrequency, kResonanceWithoutOverShoot);
+    filter.SetParameters(kFrequency, kPassthroughResonance);
 
     unsigned int sample_idx(0);
     while (sample_idx < kFilterDataPerfSetSize) {
