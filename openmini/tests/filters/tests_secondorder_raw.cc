@@ -79,6 +79,22 @@ TEST(Filters, SecondOrderRawPassthrough) {
   EXPECT_NEAR(kExpected, kActual, kEpsilon);
 }
 
+/// @brief Check output range behaviour with max Q parameter without overshoot
+TEST(Filters, SecondOrderRawRange) {
+  SecondOrderRaw filter;
+
+  filter.SetParameters(kPassthroughFrequency, kPassthroughResonance);
+
+  // Very high Epsilon due to this filter implementation
+  const float kEpsilon(1e-1f);
+  for (unsigned int i(0); i < kDataTestSetSize; i += openmini::SampleSize) {
+    const Sample input(Fill(kNormDistribution(kRandomGenerator)));
+    const Sample filtered(filter(input));
+    EXPECT_TRUE(GreaterEqual(1.0f, Add(filtered, Fill(-kEpsilon))));
+    EXPECT_TRUE(LessEqual(-1.0f, Add(filtered, Fill(kEpsilon))));
+  }
+}
+
 /// @brief Filters random data (performance test)
 /// @brief Generates a signal (performance tests)
 TEST(Filters, SecondOrderRawPerf) {
