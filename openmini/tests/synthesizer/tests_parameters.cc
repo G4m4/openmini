@@ -71,7 +71,7 @@ TEST(Parameters, SetGetNormalized) {
                 values.end(),
                 std::bind(kNormPosDistribution, kRandomGenerator));
 
-  const std::array<ParameterMeta, kTestParamsCount> TestParametersMeta;
+  const std::array<ParameterMeta, kTestParamsCount> TestParametersMeta{{}};
   TestParametersManager manager(TestParametersMeta);
 
   for (unsigned int param_id(0); param_id < kTestParamsCount; ++param_id) {
