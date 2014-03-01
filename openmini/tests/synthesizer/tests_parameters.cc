@@ -54,7 +54,7 @@ class TestParametersManager : public ParametersManager {
 };
 
 /// @brief Parameters bounds random distribution
-static const std::uniform_real_distribution<float> kBoundsDistribution(
+static std::uniform_real_distribution<float> kBoundsDistribution(
                                                      -10000.0f, 10000.0f);
 
 /// @brief Due to intermediate computation the parameters value set-and-get
