@@ -6,7 +6,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install libgtest-dev
   - sudo apt-get install valgrind
-  - sudo apt-get -y install libfreetype6-dev libx11-dev libxinerama-dev1 libxcursor-dev mesa-common-dev libasound2-dev freeglut3-dev libxcomposite-dev
+  - sudo apt-get install libfreetype6-dev libx11-dev libxinerama-dev libxcursor-dev mesa-common-dev libasound2-dev freeglut3-dev libxcomposite-dev
   - git clone --depth=1 https://github.com/julianstorer/JUCE.git
 before_script:
   - export GTEST_ROOT=/usr/src/gtest
