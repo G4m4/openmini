@@ -158,8 +158,11 @@ endfunction(set_target_mt)
 option(OPENMINI_HAS_GTEST "Allowing to use GTest framework (should be present into environment variable GTEST_ROOT." OFF)
 message(STATUS "GTest framework: ${OPENMINI_HAS_GTEST}")
 
-option(OPENMINI_HAS_JUCE "Allowing to use Juce framework (should be present into environment variable JUCE_ROOT, and the VST SDK into VST_ROOT)." OFF)
+option(OPENMINI_HAS_JUCE "Allowing to use Juce framework (should be present into environment variable JUCE_ROOT)." OFF)
 message(STATUS "Juce framework: ${OPENMINI_HAS_JUCE}")
+
+option(OPENMINI_HAS_VST "Allowing to use VST SDK (should be present into environment variable VST_ROOT)." OFF)
+message(STATUS "VST framework: ${OPENMINI_HAS_VST}")
 
 option(OPENMINI_ENABLE_COVERAGE "Enables coverage build (using gcov)." OFF)
 message(STATUS "Coverage: ${OPENMINI_ENABLE_COVERAGE}")

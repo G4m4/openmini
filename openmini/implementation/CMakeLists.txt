@@ -12,5 +12,9 @@ endif ()
 # Mac OS X being the default case for Juce, nothing more to declare
 
 add_subdirectory(common)
-add_subdirectory(plugin)
+
+if (${OPENMINI_HAS_VST} STREQUAL "ON")
+  add_subdirectory(plugin)
+endif (${OPENMINI_HAS_VST} STREQUAL "ON")
+
 add_subdirectory(standalone)
