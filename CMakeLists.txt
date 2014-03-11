@@ -265,7 +265,7 @@ endif (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
 
 # Google Test framework
 set(GTEST_DIR
-  $ENV{GTEST_ROOT}
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/gtest
 )
 set(GTEST_BUILD_DIR
   ${CMAKE_CURRENT_BINARY_DIR}/gtest
@@ -288,7 +288,7 @@ endif(EXISTS ${GTEST_DIR})
 
 # JUCE
 set(JUCE_DIR
-  $ENV{JUCE_ROOT}
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/juce
 )
 set(JUCE_BUILD_DIR
   ${CMAKE_CURRENT_BINARY_DIR}/juce

@@ -1,0 +1,6 @@
+[submodule "externals/gtest"]
+	path = externals/gtest
+	url = https://chromium.googlesource.com/external/googletest.git
+[submodule "externals/juce"]
+	path = externals/juce
+	url = git://github.com/julianstorer/JUCE.git

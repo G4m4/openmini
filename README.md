@@ -40,13 +40,10 @@ Building OpenMini tests
 -----------------------
 
 Tests are using the [Google Test Framework](http://code.google.com/p/googletest/).
-To build the test, set the environment variable GTEST_ROOT to the directory where you put the GTest sources.
-On Linux, this can be done as follows:
+To retrieve the library files in order to build tests, the following must be done from the root folder:
 
-    sudo apt-get install libgtest-dev
-    export GTEST_ROOT=/usr/src/gtest
-
-On Windows, this is done by going to Control Panel->System->Advanced system settings->Environment variables.
+    git submodule init
+    git submodule update
 
 Once this is done, you only have to set the flag OPENMINI_HAS_GTEST to ON (caps matters) when invoking cmake:
 
@@ -55,16 +52,12 @@ Once this is done, you only have to set the flag OPENMINI_HAS_GTEST to ON (caps 
 Building OpenMini implementations
 ---------------------------------
 
-"Implementation" means here the plugins as well as a standalone version of OpenMini.
-Both are made using the [JUCE framework](https://github.com/julianstorer/JUCE).
-To build the implementations, set the environment variable JUCE_ROOT to the directory where you put the JUCE sources.
-On Linux, this can be done as follows~:
+"Implementation" means here the plugins as well as a standalone version of OpenMini. Both are made using the [JUCE framework](https://github.com/julianstorer/JUCE), referenced as a git submodule.
 
-    cd ~/
-    mkdir juce
-    cd juce
-    git clone --depth 1 git://github.com/julianstorer/JUCE.git
-    export JUCE_ROOT=~/juce/
+To retrieve the JUCE files in order to build implementation, the following must be done from the root folder:
+
+    git submodule init
+    git submodule update
 
 JUCE requires a few additional dependencies:
 
@@ -77,13 +70,12 @@ JUCE requires a few additional dependencies:
     sudo apt-get -y install freeglut3-dev
     sudo apt-get -y install libxcomposite-dev
 
-Lastly, if you wish to build the VST plugin, you will have to get the (proprietary) [Steinberg VST SDK](http://www.steinberg.net/en/company/developer.html) and set the environment variable VST_ROOT to its location.
-
 Once all of this is done, you only have to set the flag OPENMINI_HAS_JUCE to ON (caps matters) when invoking cmake:
 
     cmake -DOPENMINI_HAS_JUCE=ON ../
 
-Note that both these flags can be used simultaneously.
+Eventually, if you wish to build the VST plugin, you will have to get the (proprietary) [Steinberg VST SDK](http://www.steinberg.net/en/company/developer.html) and set the environment variable VST_ROOT to its location.
+Then set the flag OPENMINI_HAS_VST to ON (caps matters) when invoking cmake.
 
 License
 ==================================
