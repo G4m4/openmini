@@ -71,7 +71,8 @@ TEST(Parameters, SetGetNormalized) {
                 values.end(),
                 std::bind(kNormPosDistribution, kRandomGenerator));
 
-  const std::array<ParameterMeta, kTestParamsCount> TestParametersMeta{{}};
+  // Should be "TestParametersMeta{{}}" but msvc (2012) does not like it yet.
+  const std::array<ParameterMeta, kTestParamsCount> TestParametersMeta = {{}};
   TestParametersManager manager(TestParametersMeta);
 
   for (unsigned int param_id(0); param_id < kTestParamsCount; ++param_id) {
