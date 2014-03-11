@@ -4,17 +4,15 @@ compiler:
   - gcc
 before_install:
   - sudo apt-get update
-  - sudo apt-get install libgtest-dev
   - sudo apt-get install valgrind
   - sudo apt-get install libfreetype6-dev libx11-dev libxinerama-dev libxcursor-dev mesa-common-dev libasound2-dev freeglut3-dev libxcomposite-dev
-  - git clone --depth=1 https://github.com/julianstorer/JUCE.git
 before_script:
-  - export GTEST_ROOT=/usr/src/gtest
-  - export JUCE_ROOT=$(pwd)
+  - git submodule init
+  - git submodule update
 script:
   - mkdir build
   - cd build
-  - cmake -DOPENMINI_HAS_GTEST=ON -DOPENMINI_HAS_JUCE=ON -DOPENMINI_ENABLE_SIMD=OFF ..
+  - cmake -DOPENMINI_HAS_GTEST=ON -DOPENMINI_HAS_JUCE=ON -DOPENMINI_HAS_VST=OFF -DOPENMINI_ENABLE_SIMD=OFF ..
   - make clean
   - make
   - valgrind --leak-check=full --track-origins=yes ./openmini/tests/openmini_tests
