@@ -7,27 +7,13 @@ include_directories(
 
 include_directories(
   ${OPENMINI_INCLUDE_DIR}
+  ${SOUNDTAILOR_INCLUDE_DIR}
 )
 
 # Include all subdirectories tests source files
-add_subdirectory(filters)
-add_subdirectory(generators)
-add_subdirectory(modulators)
 add_subdirectory(synthesizer)
 
 # Group sources
-source_group("filters"
-  FILES
-  ${OPENMINI_FILTERS_TESTS_SRC}
-)
-source_group("generators"
-  FILES
-  ${OPENMINI_GENERATORS_TESTS_SRC}
-)
-source_group("modulators"
-  FILES
-  ${OPENMINI_MODULATORS_TESTS_SRC}
-)
 source_group("synthesizer"
   FILES
   ${OPENMINI_SYNTHESIZER_TESTS_SRC}
@@ -37,9 +23,6 @@ source_group("synthesizer"
 set(OPENMINI_TESTS_SRC
     main.cc
     tests.cc
-    ${OPENMINI_FILTERS_TESTS_SRC}
-    ${OPENMINI_GENERATORS_TESTS_SRC}
-    ${OPENMINI_MODULATORS_TESTS_SRC}
     ${OPENMINI_SYNTHESIZER_TESTS_SRC}
 )
 set(OPENMINI_TESTS_HDR

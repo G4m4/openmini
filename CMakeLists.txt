@@ -263,6 +263,21 @@ endif (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
 # Various includes
 
 
+# SoundTailor
+set(SOUNDTAILOR_DIR
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/soundtailor
+)
+set(SOUNDTAILOR_BUILD_DIR
+  ${CMAKE_CURRENT_BINARY_DIR}/soundtailor
+)
+set(SOUNDTAILOR_INCLUDE_DIR
+  ${SOUNDTAILOR_DIR}
+)
+if(EXISTS ${SOUNDTAILOR_DIR})
+  add_subdirectory(${SOUNDTAILOR_DIR} ${SOUNDTAILOR_BUILD_DIR})
+endif(EXISTS ${SOUNDTAILOR_DIR})
+
+
 # Google Test framework
 set(GTEST_DIR
   ${CMAKE_CURRENT_SOURCE_DIR}/externals/gtest
