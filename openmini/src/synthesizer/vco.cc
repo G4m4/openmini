@@ -20,8 +20,9 @@
 
 #include "openmini/src/synthesizer/vco.h"
 
-#include "openmini/src/generators/generator_base.h"
-#include "openmini/src/generators/factory.h"
+#include "soundtailor/src/generators/generator_base.h"
+
+#include "openmini/src/synthesizer/generator_factory.h"
 
 namespace openmini {
 namespace synthesizer {
@@ -62,8 +63,8 @@ void Vco::SetVolume(const float volume) {
 void Vco::SetWaveform(const Waveform::Type value) {
   // This is temporary
   if (value != waveform_) {
-    generators::Generator_Base* temp = generators::CreateGenerator(value,
-                                                                   generator_);
+    ::soundtailor::generators::Generator_Base* temp
+      = generators::CreateGenerator(value, generator_);
     ASSERT(temp != nullptr);
     generators::DestroyGenerator(generator_);
     generator_ = temp;

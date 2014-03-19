@@ -25,12 +25,12 @@
 #include "openmini/src/common.h"
 #include "openmini/src/maths.h"
 
-// Internal forward declarations
-namespace openmini {
+// SoundTailor forward declarations
+namespace soundtailor {
 namespace filters {
 class Filter_Base;
 }  // namespace filters
-}  // namespace openmini
+}  // namespace soundtailor
 
 namespace openmini {
 namespace synthesizer {
@@ -68,7 +68,8 @@ class Vcf {
   // No assignment operator for this class
   Vcf& operator=(const Vcf& right);
 
-  filters::Filter_Base* filter_;  ///< Internal filter
+  // TODO(gm): polymorphism probably no longer useful here
+  soundtailor::filters::Filter_Base* filter_;  ///< Internal filter
   float frequency_; ///< Frequency of the filter (non-normalized, in Hz).
                     /// (due to asynchronous update,
                     ///< it may as well be the frequency to be applied soon)

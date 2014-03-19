@@ -26,12 +26,12 @@
 #include "openmini/src/common.h"
 #include "openmini/src/maths.h"
 
-// Internal forward declarations
-namespace openmini {
+// SoundTailor forward declarations
+namespace soundtailor {
 namespace generators {
 class Generator_Base;
 }  // namespace generators
-}  // namespace openmini
+}  // namespace soundtailor
 
 namespace openmini {
 namespace synthesizer {
@@ -73,7 +73,7 @@ class Vco {
   // No assignment operator for this class
   Vco& operator=(const Vco& right);
 
-  generators::Generator_Base* generator_;  ///< Internal generator
+  soundtailor::generators::Generator_Base* generator_;  ///< Internal generator
   float volume_; ///< Volume of the generator (due to asynchronous update,
                  ///< it may as well be the volume to be applied soon
   float frequency_; ///< Frequency of the generator (non-normalized, in Hz).

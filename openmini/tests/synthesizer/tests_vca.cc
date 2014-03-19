@@ -20,13 +20,15 @@
 
 #include "openmini/tests/tests.h"
 
-#include "openmini/src/generators/generators_common.h"
+// For the Differentiator
+// TODO(gm): do not use SoundTailor Differentiator here
+#include "soundtailor/src/generators/generators_common.h"
+
 #include "openmini/src/synthesizer/vca.h"
 
 // Using declarations for tested class
 using openmini::synthesizer::Vca;
-// Using declaration for differentiator
-using openmini::generators::Differentiator;
+using soundtailor::generators::Differentiator;
 
 /// @brief Time parameters allowed max
 static const unsigned int kMaxTime(kDataTestSetSize / 4);

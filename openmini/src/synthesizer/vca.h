@@ -24,14 +24,13 @@
 #define OPENMINI_SRC_SYNTHESIZER_VCA_H_
 
 #include "openmini/src/common.h"
-#include "openmini/src/maths.h"
 
-// Internal forward declarations
-namespace openmini {
+// SoundTailor forward declarations
+namespace soundtailor {
 namespace modulators {
 class EnvelopGenerator_Base;
 }  // namespace modulators
-}  // namespace openmini
+}  // namespace soundtailor
 
 namespace openmini {
 namespace synthesizer {
@@ -95,7 +94,8 @@ class Vca {
   // No assignment operator for this class
   Vca& operator=(const Vca& right);
 
-  modulators::EnvelopGenerator_Base* generator_;  ///< Envelop generator
+  // TODO(gm): polymorphism probably no longer useful here
+  soundtailor::modulators::EnvelopGenerator_Base* generator_;  ///< Envelop generator
   unsigned int attack_; ///< Envelop attack time (due to asynchronous update,
                         ///< it may as well be the value to be applied soon
   unsigned int decay_; ///< Envelop decay time (due to asynchronous update,

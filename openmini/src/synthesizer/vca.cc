@@ -20,16 +20,16 @@
 
 #include "openmini/src/synthesizer/vca.h"
 
-#include "openmini/src/modulators/envelopgenerator_base.h"
-#include "openmini/src/modulators/adsd.h"
-#include "openmini/src/modulators/factory.h"
+#include "soundtailor/src/maths.h"
+#include "soundtailor/src/modulators/adsd.h"
+#include "soundtailor/src/modulators/envelopgenerator_base.h"
 
 namespace openmini {
 namespace synthesizer {
 
 Vca::Vca()
-  : // Default on Triangle
-    generator_(modulators::CreateEnvelopGenerator()),
+  : // TODO(gm): use a factory?
+    generator_(new soundtailor::modulators::Adsd()),
     attack_(0),
     decay_(0),
     release_(0),
@@ -40,7 +40,7 @@ Vca::Vca()
 
 Vca::~Vca() {
   ASSERT(generator_ != nullptr);
-  modulators::DestroyEnvelopGenerator(generator_);
+  delete generator_;
 }
 
 void Vca::TriggerOn(void) {
@@ -61,8 +61,20 @@ Sample Vca::operator()(SampleRead input) {
   // TODO(gm): this cast should not be done:
   // the generator is actually known at compile-time,
   // so find an elegant way to statically do this
-  return openmini::Mul(input,
-    FillWithFloatGenerator(*(static_cast<modulators::Adsd*>(generator_))));
+  // TODO(gm): SoundTailor should output only Samples
+  // TODO(gm): The SoundTailor Math header should probably not be used here
+#if (_USE_SSE)
+  const Sample envelop(soundtailor::Fill(
+    static_cast<soundtailor::modulators::Adsd*>(generator_)->operator()(),
+    static_cast<soundtailor::modulators::Adsd*>(generator_)->operator()(),
+    static_cast<soundtailor::modulators::Adsd*>(generator_)->operator()(),
+    static_cast<soundtailor::modulators::Adsd*>(generator_)->operator()()));
+#else
+  const Sample envelop(soundtailor::Fill(
+    static_cast<soundtailor::modulators::Adsd*>(generator_)->operator()()));
+#endif  // _USE_SSE
+
+  return soundtailor::Mul(input, envelop);
 }
 
 void Vca::SetAttack(const unsigned int attack) {

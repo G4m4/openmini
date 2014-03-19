@@ -20,15 +20,16 @@
 
 #include "openmini/src/synthesizer/vcf.h"
 
-#include "openmini/src/filters/factory.h"
-#include "openmini/src/filters/filter_base.h"
+#include "soundtailor/src/filters/filter_base.h"
+#include "soundtailor/src/filters/secondorder_raw.h"
+
 #include "openmini/src/synthesizer/parameters.h"
 
 namespace openmini {
 namespace synthesizer {
 
 Vcf::Vcf()
-  : filter_(filters::CreateFilter()),
+  : filter_(new soundtailor::filters::SecondOrderRaw()),
     frequency_(0.0f),
     qfactor_(0.0f),
     update_(false) {
@@ -37,7 +38,7 @@ Vcf::Vcf()
 
 Vcf::~Vcf() {
   ASSERT(filter_ != nullptr);
-  filters::DestroyFilter(filter_);
+  delete filter_;
 }
 
 void Vcf::SetFrequency(const float frequency) {
