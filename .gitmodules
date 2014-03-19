@@ -4,3 +4,6 @@
 [submodule "externals/juce"]
 	path = externals/juce
 	url = git://github.com/julianstorer/JUCE.git
+[submodule "externals/soundtailor"]
+	path = externals/soundtailor
+	url = https://github.com/G4m4/soundtailor.git

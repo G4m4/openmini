@@ -42,6 +42,7 @@ if (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
   target_link_libraries(openmini_tests
     openmini_lib
     gtest_main
+    soundtailor_lib
   )
   add_test(openmini_coverage
     openmini_tests
@@ -50,5 +51,6 @@ else()
   target_link_libraries(openmini_tests
     openmini_lib
     gtest_main
+    soundtailor_lib
   )
 endif (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
