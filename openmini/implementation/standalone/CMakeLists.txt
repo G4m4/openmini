@@ -103,6 +103,7 @@ endif(${COMPILER_IS_MSVC})
 if (${SYSTEM_IS_LINUX})
   target_link_libraries(openmini
                         openmini_lib
+                        soundtailor_lib
                         ${CMAKE_DL_LIBS}
                         ${FREETYPE_LIBRARIES}
                         pthread
@@ -110,7 +111,8 @@ if (${SYSTEM_IS_LINUX})
                         asound)
 else()
   target_link_libraries(openmini
-                        openmini_lib)
+                        openmini_lib
+                        soundtailor_lib)
 endif(${SYSTEM_IS_LINUX})
 
 set_target_mt(openmini)

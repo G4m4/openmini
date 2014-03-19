@@ -108,6 +108,7 @@ if (${SYSTEM_IS_MACOSX})
 endif (${SYSTEM_IS_MACOSX})
 
 target_link_libraries(openmini_vst
-                      openmini_lib)
+                      openmini_lib
+                      soundtailor_lib)
 
 set_target_mt(openmini_vst)
