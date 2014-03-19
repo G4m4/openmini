@@ -58,13 +58,12 @@ TEST(Vca, Range) {
     const float kEpsilon(1e-4f);
 
     modulator.TriggerOn();
+    bool trigged_off(false);
     unsigned int i(0);
     while (i < kAttack + kDecay * 2 + kTail) {
-      if ((i >= kAttack + kDecay + kSustain)
-          && ((openmini::modulators::kSustain == modulator.GetCurrentSection())
-          || (openmini::modulators::kDecay == modulator.GetCurrentSection()))
-          ) {
+      if ((i >= kAttack + kDecay + kSustain) && (!trigged_off)) {
         modulator.TriggerOff();
+        trigged_off = true;
       }
       const Sample input(FillWithFloatGenerator(input_signal));
       const Sample amplitude(Abs(modulator(input)));

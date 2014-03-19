@@ -104,9 +104,5 @@ void Vca::ProcessParameters(void) {
   }
 }
 
-modulators::Section Vca::GetCurrentSection(void) const {
-  return generator_->GetCurrentSection();
-}
-
 }  // namespace synthesizer
 }  // namespace openmini
