@@ -29,8 +29,6 @@ set(OPENMINI_HDR
 
 # Target
 add_library(openmini_lib
-  # Straightforward use of soundtailor sources
-  ${SOUNDTAILOR_SRC}
   ${OPENMINI_SRC}
   ${OPENMINI_HDR}
 )
