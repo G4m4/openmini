@@ -37,6 +37,7 @@
 #include "openmini/src/samplingrate.h"
 #include "openmini/src/synthesizer/synthesizer_common.h"
 
+using openmini::ASSERT;
 using openmini::IGNORE;
 
 // Using declarations for openmini maths stuff

@@ -31,7 +31,7 @@ NormFrequencyDistribution::NormFrequencyDistribution(void)
 bool ClickWasFound(const float* buffer,
                    const unsigned int length,
                    const float epsilon) {
-  ASSERT(buffer);
+  ASSERT(buffer != nullptr);
   ASSERT(length > 0);
   ASSERT(epsilon > 1.0f);
 
