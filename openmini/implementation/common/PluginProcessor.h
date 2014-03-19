@@ -31,7 +31,7 @@
 /// @brief Plugin "processor" class
 ///
 /// Contains all audio, presets and Midi stuff
-class OpenMiniAudioProcessor  : public AudioProcessor,
+class OpenMiniAudioProcessor  : public juce::AudioProcessor,
                                 public juce::ChangeBroadcaster {
  public:
   OpenMiniAudioProcessor();
