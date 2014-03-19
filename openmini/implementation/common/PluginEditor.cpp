@@ -30,6 +30,9 @@
 #include "openmini/src/common.h"
 #include "openmini/src/synthesizer/parameters.h"
 
+// Using directives for OpenMini stuff
+using openmini::ASSERT;
+
 OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
     OpenMiniAudioProcessor* owner)
     : AudioProcessorEditor(owner),
