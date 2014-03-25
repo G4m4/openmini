@@ -170,6 +170,13 @@ message(STATUS "Coverage: ${OPENMINI_ENABLE_COVERAGE}")
 option(OPENMINI_ENABLE_SIMD "Allowing to use SIMD instructions: SSE on x86, etc." OFF)
 message(STATUS "Simd instructions use: ${OPENMINI_ENABLE_SIMD}")
 
+
+# Routing options to SoundTailor library
+if(${OPENMINI_ENABLE_SIMD} STREQUAL "ON")
+  set(SOUNDTAILOR_ENABLE_SIMD
+      ON)
+endif(${OPENMINI_ENABLE_SIMD} STREQUAL "ON")
+
 # Project-wide various options
 if (${COMPILER_IS_MSVC})
   # Multithreaded build
