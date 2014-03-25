@@ -75,8 +75,8 @@ static const float kMinFilterFreq = 10.0f / SamplingRate::Instance().Get();
 static const float kMaxFilterFreq = (SamplingRate::Instance().GetHalf() - 10.0f)
                                     / SamplingRate::Instance().Get();
 
-/// @brief Arbitrary lowest allowed key note (= C1)
-static const unsigned int kMinKeyNote(24);
+/// @brief Arbitrary lowest allowed key note (= C0)
+static const unsigned int kMinKeyNote(12);
 /// @brief Arbitrary highest allowed key note (= C7)
 static const unsigned int kMaxKeyNote(96);
 
