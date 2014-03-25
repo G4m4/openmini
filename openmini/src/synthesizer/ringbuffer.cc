@@ -138,6 +138,8 @@ void RingBuffer::Clear(void) {
 }
 
 void RingBuffer::Reserve(const unsigned int size) {
+  ASSERT(IsGood());
+
   // Taking into account the already existing data - the plain samples!
   // TODO(gm): Check that all successive size computation do not result in
   // too much data being allocated, or find a smart data size allocation scheme
@@ -164,6 +166,7 @@ unsigned int RingBuffer::Size(void) const {
 }
 
 void RingBuffer::Resize(const unsigned int size) {
+  ASSERT(IsGood());
   ASSERT(size > 0);
 
   // TODO(gm): this should probably be moved into ComputeCapacity()
