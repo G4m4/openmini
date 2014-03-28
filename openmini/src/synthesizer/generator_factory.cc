@@ -32,31 +32,31 @@ namespace generators {
 soundtailor::generators::Generator_Base* CreateGenerator(
   const Waveform::Type waveform,
   const float phase) {
-  ASSERT(phase <= 1.0f);
-  ASSERT(phase >= -1.0f);
+  OPENMINI_ASSERT(phase <= 1.0f);
+  OPENMINI_ASSERT(phase >= -1.0f);
   switch (waveform) {
     case(Waveform::kTriangle): {
       void* ptr(Allocate(sizeof(soundtailor::generators::TriangleDPW)));
-      ASSERT(ptr != nullptr);
+      OPENMINI_ASSERT(ptr != nullptr);
       return new (ptr) soundtailor::generators::TriangleDPW(phase);
     }
     case(Waveform::kSawtooth): {
       void* ptr(Allocate(sizeof(soundtailor::generators::SawtoothDPW)));
-      ASSERT(ptr != nullptr);
+      OPENMINI_ASSERT(ptr != nullptr);
       return new (ptr) soundtailor::generators::SawtoothDPW(phase);
     }
     default: {
       // Should never happen
-      ASSERT(false);
+      OPENMINI_ASSERT(false);
     }
   }
   // Should never happen
-  ASSERT(false);
+  OPENMINI_ASSERT(false);
   return nullptr;
 }
 
 void DestroyGenerator(soundtailor::generators::Generator_Base* generator) {
-  ASSERT(generator != nullptr);
+  OPENMINI_ASSERT(generator != nullptr);
 
   // Beware, this is not safe! (explicit call to base destructor
   // -> possible leaks in the child!)

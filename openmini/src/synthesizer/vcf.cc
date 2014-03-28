@@ -33,17 +33,17 @@ Vcf::Vcf()
     frequency_(0.0f),
     qfactor_(0.0f),
     update_(false) {
-  ASSERT(filter_ != nullptr);
+  OPENMINI_ASSERT(filter_ != nullptr);
 }
 
 Vcf::~Vcf() {
-  ASSERT(filter_ != nullptr);
+  OPENMINI_ASSERT(filter_ != nullptr);
   delete filter_;
 }
 
 void Vcf::SetFrequency(const float frequency) {
-  ASSERT(frequency >= kMinFilterFreq);
-  ASSERT(frequency <= kMaxFilterFreq);
+  OPENMINI_ASSERT(frequency >= kMinFilterFreq);
+  OPENMINI_ASSERT(frequency <= kMaxFilterFreq);
 
   // TODO(gm): find a way to do this generically
   if (frequency != frequency_) {
@@ -53,8 +53,8 @@ void Vcf::SetFrequency(const float frequency) {
 }
 
 void Vcf::SetQFactor(const float qfactor) {
-  ASSERT(qfactor <= 100.0f);
-  ASSERT(qfactor >= 0.0f);
+  OPENMINI_ASSERT(qfactor <= 100.0f);
+  OPENMINI_ASSERT(qfactor >= 0.0f);
 
   // TODO(gm): find a way to do this generically
   if (qfactor != qfactor_) {
@@ -64,13 +64,13 @@ void Vcf::SetQFactor(const float qfactor) {
 }
 
 Sample Vcf::operator()(SampleRead sample) {
-  ASSERT(filter_ != nullptr);
+  OPENMINI_ASSERT(filter_ != nullptr);
   ProcessParameters();
   return (*filter_)(sample);
 }
 
 void Vcf::ProcessParameters(void) {
-  ASSERT(filter_ != nullptr);
+  OPENMINI_ASSERT(filter_ != nullptr);
   if (update_) {
     filter_->SetParameters(frequency_, qfactor_);
     update_ = false;

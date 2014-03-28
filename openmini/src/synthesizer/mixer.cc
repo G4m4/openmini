@@ -48,8 +48,8 @@ Sample Mixer::operator()(void) {
 }
 
 void Mixer::NoteOn(const unsigned int note) {
-  ASSERT(note >= openmini::kMinKeyNote);
-  ASSERT(note <= openmini::kMaxKeyNote);
+  OPENMINI_ASSERT(note >= openmini::kMinKeyNote);
+  OPENMINI_ASSERT(note <= openmini::kMaxKeyNote);
 
   const float frequency(NoteToFrequency(note));
   VcoIterator iter(this);
@@ -60,15 +60,15 @@ void Mixer::NoteOn(const unsigned int note) {
 }
 
 void Mixer::NoteOff(const unsigned int note) {
-  ASSERT(note >= openmini::kMinKeyNote);
-  ASSERT(note <= openmini::kMaxKeyNote);
+  OPENMINI_ASSERT(note >= openmini::kMinKeyNote);
+  OPENMINI_ASSERT(note <= openmini::kMaxKeyNote);
   // Nothing to do here for now
 }
 
 void Mixer::SetVolume(const int vco_id, const float value) {
   // TODO(gm): actual parameters management
-  ASSERT(vco_id >= 0);
-  ASSERT(vco_id < kVCOsCount);
+  OPENMINI_ASSERT(vco_id >= 0);
+  OPENMINI_ASSERT(vco_id < kVCOsCount);
 
   // TODO(gm): actual oscillators volume management
   const float actual_value(value / static_cast<float>(kVCOsCount));
@@ -77,8 +77,8 @@ void Mixer::SetVolume(const int vco_id, const float value) {
 
 void Mixer::SetWaveform(const int vco_id, const Waveform::Type value) {
   // TODO(gm): actual parameters management
-  ASSERT(vco_id >= 0);
-  ASSERT(vco_id < kVCOsCount);
+  OPENMINI_ASSERT(vco_id >= 0);
+  OPENMINI_ASSERT(vco_id < kVCOsCount);
 
   vcos_[vco_id].SetWaveform(value);
 }
@@ -86,7 +86,7 @@ void Mixer::SetWaveform(const int vco_id, const Waveform::Type value) {
 Mixer::VcoIterator::VcoIterator(Mixer* mixer_to_iterate)
     : mixer_(mixer_to_iterate),
       iterator_(mixer_to_iterate->vcos_.begin()) {
-  ASSERT(mixer_ != nullptr);
+  OPENMINI_ASSERT(mixer_ != nullptr);
 }
 
 bool Mixer::VcoIterator::Next() {

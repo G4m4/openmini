@@ -37,7 +37,6 @@
 #include "openmini/src/samplingrate.h"
 #include "openmini/src/synthesizer/synthesizer_common.h"
 
-using openmini::ASSERT;
 using openmini::IGNORE;
 
 // Using declarations for openmini maths stuff
@@ -372,7 +371,7 @@ struct IsContinuous {
   IsContinuous(const float threshold, const float previous)
       : threshold_(threshold),
         previous_(previous) {
-    ASSERT(threshold >= 0.0f);
+    OPENMINI_ASSERT(threshold >= 0.0f);
   }
 
   /// @brief Check next sample continuity

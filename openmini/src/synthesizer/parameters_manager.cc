@@ -34,16 +34,16 @@ float StoredToNormalized(const float stored_value,
                          const ParameterMeta& metadata) {
   const float ratio(metadata.max() - metadata.min());
   const float normalized((stored_value - metadata.min()) / ratio);
-  ASSERT(normalized >= 0.0f);
-  ASSERT(normalized <= 1.0f);
+  OPENMINI_ASSERT(normalized >= 0.0f);
+  OPENMINI_ASSERT(normalized <= 1.0f);
 
   return normalized;
 }
 
 float NormalizedToStored(const float normalized,
                          const ParameterMeta& metadata) {
-  ASSERT(normalized >= 0.0f);
-  ASSERT(normalized <= 1.0f);
+  OPENMINI_ASSERT(normalized >= 0.0f);
+  OPENMINI_ASSERT(normalized <= 1.0f);
 
   const float ratio(metadata.max() - metadata.min());
   return normalized * ratio + metadata.min();
@@ -51,8 +51,8 @@ float NormalizedToStored(const float normalized,
 
 int NormalizedToInt(const float normalized,
                     const ParameterMeta& metadata) {
-  ASSERT(normalized >= 0.0f);
-  ASSERT(normalized <= 1.0f);
+  OPENMINI_ASSERT(normalized >= 0.0f);
+  OPENMINI_ASSERT(normalized <= 1.0f);
 
   return std::min(metadata.cardinality() - 1,
                   FloorAndConvert<int>(normalized * metadata.cardinality()));
@@ -74,8 +74,8 @@ ParametersManager::~ParametersManager() {
 }
 
 void ParametersManager::SetValue(const int parameter_id, const float value) {
-  ASSERT(parameter_id >= 0);
-  ASSERT(parameter_id < static_cast<int>(values_.size()));
+  OPENMINI_ASSERT(parameter_id >= 0);
+  OPENMINI_ASSERT(parameter_id < static_cast<int>(values_.size()));
 
   const ParameterMeta& metadata(GetMetadata(parameter_id));
   // The parameter is normalized, we have to pass through normalization
@@ -84,8 +84,8 @@ void ParametersManager::SetValue(const int parameter_id, const float value) {
 }
 
 float ParametersManager::GetValue(const int parameter_id) const {
-  ASSERT(parameter_id >= 0);
-  ASSERT(parameter_id < static_cast<int>(values_.size()));
+  OPENMINI_ASSERT(parameter_id >= 0);
+  OPENMINI_ASSERT(parameter_id < static_cast<int>(values_.size()));
 
   const float value(GetRawValue(parameter_id));
   const ParameterMeta& metadata(GetMetadata(parameter_id));
@@ -95,7 +95,7 @@ float ParametersManager::GetValue(const int parameter_id) const {
 
 const ParameterMeta& ParametersManager::GetMetadata(
     const int parameter_id) const {
-  ASSERT(parameter_id < static_cast<int>(values_.size()));
+  OPENMINI_ASSERT(parameter_id < static_cast<int>(values_.size()));
   return metadatas_[parameter_id];
 }
 
@@ -124,8 +124,8 @@ void ParametersManager::ForceParametersProcess(void) {
 }
 
 float ParametersManager::GetRawValue(const int parameter_id) const {
-  ASSERT(parameter_id >= 0);
-  ASSERT(parameter_id < static_cast<int>(values_.size()));
+  OPENMINI_ASSERT(parameter_id >= 0);
+  OPENMINI_ASSERT(parameter_id < static_cast<int>(values_.size()));
 
   return values_[parameter_id];
 }

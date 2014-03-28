@@ -35,28 +35,28 @@ Vca::Vca()
     release_(0),
     sustain_level_(0.0f),
     update_(false) {
-  ASSERT(generator_ != nullptr);
+  OPENMINI_ASSERT(generator_ != nullptr);
 }
 
 Vca::~Vca() {
-  ASSERT(generator_ != nullptr);
+  OPENMINI_ASSERT(generator_ != nullptr);
   delete generator_;
 }
 
 void Vca::TriggerOn(void) {
-  ASSERT(generator_ != nullptr);
+  OPENMINI_ASSERT(generator_ != nullptr);
   ProcessParameters();
   generator_->TriggerOn();
 }
 
 void Vca::TriggerOff(void) {
-  ASSERT(generator_ != nullptr);
+  OPENMINI_ASSERT(generator_ != nullptr);
   ProcessParameters();
   generator_->TriggerOff();
 }
 
 Sample Vca::operator()(SampleRead input) {
-  ASSERT(generator_ != nullptr);
+  OPENMINI_ASSERT(generator_ != nullptr);
   ProcessParameters();
   // TODO(gm): this cast should not be done:
   // the generator is actually known at compile-time,
@@ -99,8 +99,8 @@ void Vca::SetRelease(const unsigned int release) {
 }
 
 void Vca::SetSustain(const float sustain_level) {
-  ASSERT(sustain_level <= 1.0f);
-  ASSERT(sustain_level >= 0.0f);
+  OPENMINI_ASSERT(sustain_level <= 1.0f);
+  OPENMINI_ASSERT(sustain_level >= 0.0f);
 
   if (sustain_level != sustain_level_) {
     sustain_level_ = sustain_level;
@@ -109,7 +109,7 @@ void Vca::SetSustain(const float sustain_level) {
 }
 
 void Vca::ProcessParameters(void) {
-  ASSERT(generator_ != nullptr);
+  OPENMINI_ASSERT(generator_ != nullptr);
   if (update_) {
     generator_->SetParameters(attack_, decay_, release_, sustain_level_);
     update_ = false;

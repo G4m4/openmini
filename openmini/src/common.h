@@ -55,10 +55,10 @@ template<typename Type> void IGNORE(const Type&) {}
 
 /// @brief Asserts condition == true
 #if(_BUILD_CONFIGURATION_DEBUG)
-  static inline void ASSERT(const bool condition) {assert(condition);}
+  #define OPENMINI_ASSERT(_condition_) (assert((_condition_)))
 #else
   // Maps to "assume" in release configuration for better optimization
-  static inline void ASSERT(const bool condition) {ASSUME(condition);}
+  #define OPENMINI_ASSERT(_condition_) {::openmini::ASSUME((_condition_));}
 #endif
 
 // Fixed globals for synthesis
@@ -152,7 +152,7 @@ static inline void* Allocate(const size_t size) {
     // Posix stuff
     void* memory(nullptr);
     posix_memalign(&memory, SampleSizeBytes, size);
-    ASSERT(memory != nullptr);
+    OPENMINI_ASSERT(memory != nullptr);
     return memory;
   #else
     return aligned_alloc(SampleSizeBytes, size);

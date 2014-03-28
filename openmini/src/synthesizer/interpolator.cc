@@ -39,7 +39,7 @@ Interpolator::~Interpolator() {
 }
 
 void Interpolator::SetRatio(const float ratio) {
-  ASSERT(ratio > 0.0f);
+  OPENMINI_ASSERT(ratio > 0.0f);
   ratio_ = ratio;
 }
 
@@ -55,12 +55,12 @@ void Interpolator::Process(const float* const input,
                            const unsigned int input_length,
                            float* const output,
                            const unsigned int output_length) {
-  ASSERT(input != nullptr);
-  ASSERT(input_length >= RequiredInLength(output_length,
+  OPENMINI_ASSERT(input != nullptr);
+  OPENMINI_ASSERT(input_length >= RequiredInLength(output_length,
                                           ratio_,
                                           cursor_pos_) - 1);
-  ASSERT(output != nullptr);
-  ASSERT(output_length > 0);
+  OPENMINI_ASSERT(output != nullptr);
+  OPENMINI_ASSERT(output_length > 0);
 
   unsigned int current_out_idx(0);
   double temp_cursor(cursor_pos_);
@@ -101,7 +101,7 @@ void Interpolator::Process(const float* const input,
       context[1] = input[left_idx];
     }
     // Should never happen
-    ASSERT(left_idx != input_length);
+    OPENMINI_ASSERT(left_idx != input_length);
 
     output[current_out_idx] = this->operator()<LinearInterpolation>(
                                 context,

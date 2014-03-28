@@ -31,9 +31,9 @@ NormFrequencyDistribution::NormFrequencyDistribution(void)
 bool ClickWasFound(const float* buffer,
                    const unsigned int length,
                    const float epsilon) {
-  ASSERT(buffer != nullptr);
-  ASSERT(length > 0);
-  ASSERT(epsilon > 1.0f);
+  OPENMINI_ASSERT(buffer != nullptr);
+  OPENMINI_ASSERT(length > 0);
+  OPENMINI_ASSERT(epsilon > 1.0f);
 
   // Compute mean derivative
   float mean_derivative(0.0f);
@@ -56,9 +56,9 @@ bool ClickWasFound(const float* buffer,
 SinusGenerator::SinusGenerator(const float freq, const float sampling_freq)
     : increment_(2.0 * openmini::Pi * freq / sampling_freq),
       current_phase_(0.0) {
-  ASSERT(freq > 0.0f);
-  ASSERT(sampling_freq > 0.0f);
-  ASSERT(freq <= sampling_freq / 2.0f);
+  OPENMINI_ASSERT(freq > 0.0f);
+  OPENMINI_ASSERT(sampling_freq > 0.0f);
+  OPENMINI_ASSERT(freq <= sampling_freq / 2.0f);
 }
 
 SinusGenerator::~SinusGenerator() {

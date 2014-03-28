@@ -45,8 +45,8 @@ Synthesizer::Synthesizer(const float output_limit)
 
 void Synthesizer::ProcessAudio(float* const output,
                                const unsigned int length) {
-  ASSERT(output != nullptr);
-  ASSERT(length > 0);
+  OPENMINI_ASSERT(output != nullptr);
+  OPENMINI_ASSERT(length > 0);
 
   // First, zeroing the output
   std::fill(&output[0], &output[length], 0.0f);
@@ -62,8 +62,8 @@ void Synthesizer::ProcessAudio(float* const output,
 }
 
 void Synthesizer::NoteOn(const unsigned int note) {
-  ASSERT(note >= openmini::kMinKeyNote);
-  ASSERT(note <= openmini::kMaxKeyNote);
+  OPENMINI_ASSERT(note >= openmini::kMinKeyNote);
+  OPENMINI_ASSERT(note <= openmini::kMaxKeyNote);
 
   // This has to be done BEFORE sending trigger messages;
   // Indeed things may have changed since last audio process!
@@ -74,8 +74,8 @@ void Synthesizer::NoteOn(const unsigned int note) {
 }
 
 void Synthesizer::NoteOff(const unsigned int note) {
-  ASSERT(note >= openmini::kMinKeyNote);
-  ASSERT(note <= openmini::kMaxKeyNote);
+  OPENMINI_ASSERT(note >= openmini::kMinKeyNote);
+  OPENMINI_ASSERT(note <= openmini::kMaxKeyNote);
 
   // This has to be done BEFORE sending trigger messages;
   // Indeed things may have changed since last audio process!
@@ -151,7 +151,7 @@ void Synthesizer::ProcessParameters(void) {
         }
         default: {
           // Should never happen
-          ASSERT(false);
+          OPENMINI_ASSERT(false);
         }
       }
     } while (iter.Next());

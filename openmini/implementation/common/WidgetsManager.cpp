@@ -26,9 +26,6 @@
 
 #include "openmini/implementation/common/PluginEditor.h"
 
-// Using directives for OpenMini stuff
-using openmini::ASSERT;
-
 WidgetsManager::WidgetsManager(
     const std::array<ParameterMeta, Parameters::kCount>& params) {
   // TODO(gm): try to move this into the constructor initializer list
@@ -84,7 +81,7 @@ void WidgetsManager::sliderDragEnded(juce::Slider* slider) {
 void WidgetsManager::changeListenerCallback(
     juce::ChangeBroadcaster *source) {
   // No other change broacaster than the processor for now!
-  ASSERT(&(getEditor()) == source);
+  OPENMINI_ASSERT(&(getEditor()) == source);
   // Update UI components without sending back
   // notifications to the processor
   for (int param_id(0);
@@ -99,9 +96,9 @@ void WidgetsManager::changeListenerCallback(
 int WidgetsManager::getParamId(const juce::Slider* slider) const {
   // TODO(gm): this cast should not even occur - we should have a Widget* here.
   const Widget* widget(dynamic_cast<const Widget*>(slider));
-  ASSERT(widget != nullptr);
+  OPENMINI_ASSERT(widget != nullptr);
   const int param_id(widgets_.indexOf(widget));
-  ASSERT(param_id >= 0);
+  OPENMINI_ASSERT(param_id >= 0);
   return param_id;
 }
 

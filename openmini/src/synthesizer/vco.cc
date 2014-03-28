@@ -35,17 +35,17 @@ Vco::Vco()
     last_(Fill(0.0f)),
     waveform_(Waveform::kTriangle),
     update_(false) {
-  ASSERT(generator_ != nullptr);
+  OPENMINI_ASSERT(generator_ != nullptr);
 }
 
 Vco::~Vco() {
-  ASSERT(generator_ != nullptr);
+  OPENMINI_ASSERT(generator_ != nullptr);
   generators::DestroyGenerator(generator_);
 }
 
 void Vco::SetFrequency(const float frequency) {
-  ASSERT(frequency > 0.0f);
-  ASSERT(frequency < SamplingRate::Instance().GetHalf());
+  OPENMINI_ASSERT(frequency > 0.0f);
+  OPENMINI_ASSERT(frequency < SamplingRate::Instance().GetHalf());
 
   if (frequency != frequency_) {
     frequency_ = frequency;
@@ -54,8 +54,8 @@ void Vco::SetFrequency(const float frequency) {
 }
 
 void Vco::SetVolume(const float volume) {
-  ASSERT(volume <= 1.0f);
-  ASSERT(volume >= 0.0f);
+  OPENMINI_ASSERT(volume <= 1.0f);
+  OPENMINI_ASSERT(volume >= 0.0f);
 
   // Volume should be managed as any other parameter (e.g. as frequency)
   volume_ = volume;
@@ -66,7 +66,7 @@ void Vco::SetWaveform(const Waveform::Type value) {
   if (value != waveform_) {
     ::soundtailor::generators::Generator_Base* temp
       = generators::CreateGenerator(value, GetLast(last_));
-    ASSERT(temp != nullptr);
+    OPENMINI_ASSERT(temp != nullptr);
     generators::DestroyGenerator(generator_);
     generator_ = temp;
     waveform_ = value;
@@ -79,14 +79,14 @@ void Vco::SetWaveform(const Waveform::Type value) {
 }
 
 Sample Vco::operator()(void) {
-  ASSERT(generator_ != nullptr);
+  OPENMINI_ASSERT(generator_ != nullptr);
   ProcessParameters();
   last_ = openmini::MulConst(volume_, (*generator_)());
   return last_;
 }
 
 void Vco::ProcessParameters(void) {
-  ASSERT(generator_ != nullptr);
+  OPENMINI_ASSERT(generator_ != nullptr);
   if (update_) {
     const float normalized_freq(frequency_ / SamplingRate::Instance().Get());
     generator_->SetFrequency(normalized_freq);

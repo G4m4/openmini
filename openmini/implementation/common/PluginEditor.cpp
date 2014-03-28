@@ -30,9 +30,6 @@
 #include "openmini/src/common.h"
 #include "openmini/src/synthesizer/parameters.h"
 
-// Using directives for OpenMini stuff
-using openmini::ASSERT;
-
 OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
     OpenMiniAudioProcessor* owner)
     : AudioProcessorEditor(owner),
@@ -85,7 +82,7 @@ void OpenMiniAudioProcessorEditor::changeListenerCallback(
     juce::ChangeBroadcaster *source) {
   OpenMiniAudioProcessor* proc(getProcessor());
   // No other change broacaster than the processor for now!
-  ASSERT(source == proc);
+  OPENMINI_ASSERT(source == proc);
   // Inform all UI subcomponents of any change
   sendChangeMessage();
 }

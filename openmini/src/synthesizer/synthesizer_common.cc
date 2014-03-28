@@ -35,7 +35,7 @@ bool IsInteger(const float value) {
 }
 
 bool IsMultipleOf(const unsigned int value, const unsigned int multiple) {
-  ASSERT(multiple > 0);
+  OPENMINI_ASSERT(multiple > 0);
 
   return value % multiple == 0;
 }
@@ -47,7 +47,7 @@ float NoteToFrequency(const unsigned int key_number) {
 
 unsigned int GetNextMultiple(const unsigned int input,
                              const unsigned int multiple) {
-  ASSERT(multiple != 0);
+  OPENMINI_ASSERT(multiple != 0);
   const int remainder(input % multiple);
   if (0 == remainder) {
     return input;
@@ -57,7 +57,7 @@ unsigned int GetNextMultiple(const unsigned int input,
 
 unsigned int GetPrevMultiple(const unsigned int input,
                              const unsigned int multiple) {
-  ASSERT(multiple != 0);
+  OPENMINI_ASSERT(multiple != 0);
   // Can't reuse GetNextMultiple(): we want this function to return the input
   // if it's already a multiple
   const int remainder(input % multiple);

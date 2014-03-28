@@ -34,7 +34,7 @@ RingBuffer::RingBuffer(const unsigned int capacity)
       size_(0),
       writing_position_(0),
       reading_position_(0) {
-  ASSERT(capacity > 0);
+  OPENMINI_ASSERT(capacity > 0);
   data_ = static_cast<float*>(Allocate(capacity_ * sizeof(*data_)));
   std::fill(&data_[0],
             &data_[capacity_],
@@ -47,8 +47,8 @@ RingBuffer::~RingBuffer() {
 }
 
 void RingBuffer::Pop(float* dest, const unsigned int count) {
-  ASSERT(IsGood());
-  ASSERT(count > 0);
+  OPENMINI_ASSERT(IsGood());
+  OPENMINI_ASSERT(count > 0);
 
   // Is zero padding required ?
   // Using "ints" here cause count may be < size, or the opposite
@@ -90,7 +90,7 @@ void RingBuffer::Pop(float* dest, const unsigned int count) {
 }
 
 void RingBuffer::Push(SampleRead value) {
-  ASSERT(IsGood());
+  OPENMINI_ASSERT(IsGood());
 
   // TODO(gm): optimize out this
   float tmp[openmini::SampleSize];
@@ -99,9 +99,9 @@ void RingBuffer::Push(SampleRead value) {
 }
 
 void RingBuffer::Push(const float* const src, const unsigned int count) {
-  ASSERT(IsGood());
-  ASSERT(count > 0);
-  ASSERT(count <= Capacity() - Size());
+  OPENMINI_ASSERT(IsGood());
+  OPENMINI_ASSERT(count > 0);
+  OPENMINI_ASSERT(count <= Capacity() - Size());
   // Length of the "right" part: from writing cursor to the buffer end
   const unsigned int right_part_size(std::min(capacity_ - writing_position_,
                                               count));
@@ -138,7 +138,7 @@ void RingBuffer::Clear(void) {
 }
 
 void RingBuffer::Reserve(const unsigned int size) {
-  ASSERT(IsGood());
+  OPENMINI_ASSERT(IsGood());
 
   // Taking into account the already existing data - the plain samples!
   // TODO(gm): Check that all successive size computation do not result in
@@ -156,18 +156,18 @@ bool RingBuffer::IsGood(void) const {
 }
 
 unsigned int RingBuffer::Capacity(void) const {
-  ASSERT(IsGood());
+  OPENMINI_ASSERT(IsGood());
   return capacity_;
 }
 
 unsigned int RingBuffer::Size(void) const {
-  ASSERT(IsGood());
+  OPENMINI_ASSERT(IsGood());
   return ComputeMaxElements(size_);
 }
 
 void RingBuffer::Resize(const unsigned int size) {
-  ASSERT(IsGood());
-  ASSERT(size > 0);
+  OPENMINI_ASSERT(IsGood());
+  OPENMINI_ASSERT(size > 0);
 
   // TODO(gm): this should probably be moved into ComputeCapacity()
   const unsigned int actual_capacity(GetNextMultiple(size,
@@ -178,7 +178,7 @@ void RingBuffer::Resize(const unsigned int size) {
     + GetOffsetFromNextMultiple(size_, openmini::SampleSize));
   const unsigned int max_fill_count(std::min(size_, actual_capacity));
   float* temp(static_cast<float*>(Allocate(actual_capacity * sizeof(*data_))));
-  ASSERT(temp != nullptr);
+  OPENMINI_ASSERT(temp != nullptr);
   std::fill(&temp[0],
             &temp[actual_capacity],
             0.0f);

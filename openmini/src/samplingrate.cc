@@ -37,7 +37,7 @@ float SamplingRate::GetHalf(void) const {
 }
 
 void SamplingRate::Set(const float sampling_rate) {
-  ASSERT(sampling_rate > 0.0f);
+  OPENMINI_ASSERT(sampling_rate > 0.0f);
   sampling_rate_ = sampling_rate;
 }
 
