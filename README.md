@@ -2,7 +2,7 @@ OpenMini - Open homage to Minimoog
 ==================================
 
 OpenMini is a modern C++ implementation of a Minimoog-like digital synthesizer.
-It aims at showing a simple, cross-platform yet efficient implementation of state of the art low-aliasing audio synthesis algorithms.
+It rely on the [SoundTailor library](https://github.com/G4m4/soundtailor) which provide a simple, cross-platform yet efficient implementation of state of the art low-aliasing audio synthesis algorithms.
 
 As its main goal is education, information sharing and (hopefully) inspiring other people to hack and spread audio synthesis tools and art, it is licensed under GPLv3 license.
 It basically means that every one can use, copy and modify it with the sole condition that the source code must be made public.
@@ -10,9 +10,7 @@ It basically means that every one can use, copy and modify it with the sole cond
 Organization
 ------------
 
-OpenMini is organized in third parts as follows:
-- A "generators" part, offering numerous signal generators for various forms (sin, square, triangle...) each one implemented using differents algorithms (DPW, BLIT-derived methods...)
-A lot of these algorithms theory comes from Institute for the 'Digital Sound Generation' online book, published by the Computer Music and Sound Technology. The implementation itself is first prototyped in Python - scripts are made public in OpenMini, under the same license.
+OpenMini is organized in two parts as follows:
 - A "synthesizer" part, which is the actual synthesizer boilerplate - managing synthesis algorithms parameterization, user input and so on.
 - An "implementation" part, relying heavily on the open source [JUCE framework](http://www.juce.com/), wraps the latter synthesizer into an actual audio plugin that can easily be used in various audio editor. For now only VST is available, RTAS should follow. Lastly, a standalone version is available using the same code as the plugin but without any dependencies to the proprietary Steinberg's VST SDK.
 
