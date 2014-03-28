@@ -39,12 +39,12 @@ namespace generators {
 /// The user is responsible for the destruction of the created object
 ///
 /// @param[in]  waveform    Waveform of the signal generator to be created
-/// @param[in]  previous    Previous generator to copy parameters from
+/// @param[in]  phase   Phase to initialize the new generator to
 ///
 /// @return a pointer to the created generator
 soundtailor::generators::Generator_Base* CreateGenerator(
   const Waveform::Type waveform,
-  const soundtailor::generators::Generator_Base* previous = nullptr);
+  const float phase = 0.0f);
 
 void DestroyGenerator(soundtailor::generators::Generator_Base* generator);
 

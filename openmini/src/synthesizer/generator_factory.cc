@@ -31,13 +31,9 @@ namespace generators {
 
 soundtailor::generators::Generator_Base* CreateGenerator(
   const Waveform::Type waveform,
-  const soundtailor::generators::Generator_Base* previous) {
-  float phase(0.0f);
-  if (previous) {
-    phase = previous->Phase();
-    ASSERT(phase <= 1.0f);
-    ASSERT(phase >= -1.0f);
-  }
+  const float phase) {
+  ASSERT(phase <= 1.0f);
+  ASSERT(phase >= -1.0f);
   switch (waveform) {
     case(Waveform::kTriangle): {
       void* ptr(Allocate(sizeof(soundtailor::generators::TriangleDPW)));
