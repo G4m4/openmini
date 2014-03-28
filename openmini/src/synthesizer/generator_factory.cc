@@ -50,6 +50,9 @@ soundtailor::generators::Generator_Base* CreateGenerator(
       ASSERT(false);
     }
   }
+  // Should never happen
+  ASSERT(false);
+  return nullptr;
 }
 
 void DestroyGenerator(soundtailor::generators::Generator_Base* generator) {
