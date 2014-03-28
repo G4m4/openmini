@@ -46,6 +46,8 @@ using openmini::SampleRead;
 using openmini::Fill;
 using openmini::FillWithFloatGenerator;
 using openmini::GetByIndex;
+using openmini::GetFirst;
+using openmini::GetLast;
 using openmini::Add;
 using openmini::AddHorizontal;
 using openmini::Sub;
@@ -56,6 +58,7 @@ using openmini::Sgn;
 using openmini::SgnNoZero;
 using openmini::Store;
 using openmini::Round;
+using openmini::RotateOnRight;
 using openmini::SamplingRate;
 
 // Tests-specific maths (comparison operators) stuff
@@ -359,5 +362,36 @@ void RemoveClose(TypeContainer* container, const TypeValue threshold) {
                                IsClose<TypeValue>(threshold)),
                    container->end());
 }
+
+/// @brief Helper structure for checking a signal continuity
+struct IsContinuous {
+  /// @brief Default constructor
+  ///
+  /// @param[in]  threshold   Max difference between two consecutive samples
+  /// @param[in]  previous   First sample initialization
+  IsContinuous(const float threshold, const float previous)
+      : threshold_(threshold),
+        previous_(previous) {
+    ASSERT(threshold >= 0.0f);
+  }
+
+  /// @brief Check next sample continuity
+  ///
+  /// @param[in]  input   Sample to be tested
+  bool operator()(SampleRead input) {
+    const float before_diff(GetLast(input));
+    const Sample prev(RotateOnRight(input,
+                                    previous_));
+    const Sample after_diff(Sub(input, prev));
+    previous_ = before_diff;
+    if (LessThan(threshold_, Abs(after_diff))) {
+      return false;
+    }
+    return true;
+  }
+
+  float threshold_;
+  float previous_;
+};
 
 #endif  // OPENMINI_TESTS_TESTS_H_
