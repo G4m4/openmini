@@ -23,6 +23,7 @@ set(OPENMINI_SRC
 set(OPENMINI_HDR
   configuration.h
   common.h
+  maths.h
   samplingrate.h
   ${OPENMINI_SYNTHESIZER_HDR}
 )
