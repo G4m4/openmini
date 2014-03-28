@@ -116,6 +116,22 @@ float GetByIndex(SampleRead value) {
 #endif  // (_USE_SSE)
 }
 
+static inline float GetFirst(SampleRead value) {
+#if (_USE_SSE)
+  return GetByIndex<0>(value);
+#else
+  return value;
+#endif  // (_USE_SSE)
+}
+
+static inline float GetLast(SampleRead value) {
+#if (_USE_SSE)
+  return GetByIndex<3>(value);
+#else
+  return value;
+#endif  // (_USE_SSE)
+}
+
 static inline float GetByIndex(SampleRead value, const unsigned i) {
 #if (_USE_SSE)
   ConverterFloatScalarVector converter;
