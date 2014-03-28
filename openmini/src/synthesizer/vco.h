@@ -78,6 +78,7 @@ class Vco {
                  ///< it may as well be the volume to be applied soon
   float frequency_; ///< Frequency of the generator (non-normalized, in Hz).
                     ///< Same as above.
+  Sample last_; ///< Last computed sample
   Waveform::Type waveform_;  ///< Waveform of the generator. Same as above.
   bool update_;  ///< True if any parameter was updated since the last call to
                  ///< ProcessParameters()

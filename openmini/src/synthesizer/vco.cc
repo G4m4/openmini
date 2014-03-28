@@ -32,6 +32,7 @@ Vco::Vco()
     generator_(generators::CreateGenerator(Waveform::kTriangle)),
     volume_(1.0f),
     frequency_(0.0f),
+    last_(Fill(0.0f)),
     waveform_(Waveform::kTriangle),
     update_(false) {
   ASSERT(generator_ != nullptr);
@@ -64,20 +65,24 @@ void Vco::SetWaveform(const Waveform::Type value) {
   // This is temporary
   if (value != waveform_) {
     ::soundtailor::generators::Generator_Base* temp
-      = generators::CreateGenerator(value, generator_);
+      = generators::CreateGenerator(value, GetLast(last_));
     ASSERT(temp != nullptr);
     generators::DestroyGenerator(generator_);
     generator_ = temp;
     waveform_ = value;
-    // Process parameters!
+    // Force parameters processing!
     update_ = true;
+    ProcessParameters();
+    // Explicit call to generators "take last change into account"
+    generator_->ProcessParameters();
   }
 }
 
 Sample Vco::operator()(void) {
   ASSERT(generator_ != nullptr);
   ProcessParameters();
-  return openmini::MulConst(volume_, (*generator_)());
+  last_ = openmini::MulConst(volume_, (*generator_)());
+  return last_;
 }
 
 void Vco::ProcessParameters(void) {
