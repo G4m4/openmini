@@ -33,7 +33,6 @@
 OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
     OpenMiniAudioProcessor* owner)
     : AudioProcessorEditor(owner),
-      owner_(owner),
       widgets_manager_(openmini::synthesizer::Parameters::kParametersMeta),
       keyboard_(owner->keyboard_state_,
                 juce::MidiKeyboardComponent::horizontalKeyboard),

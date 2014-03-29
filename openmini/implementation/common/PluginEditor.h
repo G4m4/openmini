@@ -60,7 +60,6 @@ class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
   OpenMiniAudioProcessor* getProcessor() const;
 
  private:
-  OpenMiniAudioProcessor* owner_;
   WidgetsManager widgets_manager_;
   juce::MidiKeyboardComponent keyboard_;
   juce::TextEditor debug_infos_;
