@@ -81,6 +81,33 @@ class VCF(object):
 
         return out
 
+    def Process4Samples(self, vector):
+        '''
+        Actual process function - vectorized version
+        The frequency change is actually decimated by a factor 4 here
+        '''
+        kMAXFREQ = 20000 / self._modulator._sampling_rate
+        dry = [0.0, 0.0, 0.0, 0.0]
+        wet = [0.0, 0.0, 0.0, 0.0]
+        out = [0.0, 0.0, 0.0, 0.0]
+        self._modulator.ProcessSample()
+        self._modulator.ProcessSample()
+        self._modulator.ProcessSample()
+        modulation = self._modulator.ProcessSample()
+        contour = modulation * (kMAXFREQ - self._frequency) + self._frequency
+        self._wet_filter.SetParameters(contour, self._resonance)
+        for idx, sample in enumerate(vector):
+            # First, process the input through the dry filter
+            dry[idx] = self._dry_filter.ProcessSample(sample)
+            # Then through the wet (contour'd) filter
+    #         if self._modulator._section == 2:
+    #             print "toto"
+            wet[idx] = self._wet_filter.ProcessSample(sample)
+            # And mix
+            out[idx] = (1.0 - self._amount) * dry[idx] + self._amount * wet[idx]
+
+        return out
+
 if __name__ == "__main__":
     '''
     Various tests/sandbox
@@ -108,7 +135,7 @@ if __name__ == "__main__":
     amount = 0.5
 
     view_beginning = 0
-    view_length = length
+    view_length = 4096
 
     in_data = numpy.zeros(length)
     contour_data = numpy.zeros(length)
@@ -128,6 +155,7 @@ if __name__ == "__main__":
 #     print(out_string)
 
     out_data = numpy.zeros(length)
+    out_vec_data = numpy.zeros(length)
 
     vcf = VCF(filter_secondorderraw.SecondOrderRaw,
               modulator_adsd.ADSD,
@@ -139,16 +167,45 @@ if __name__ == "__main__":
     vcf.TriggerOn()
     for idx, _ in enumerate(in_data):
         out_data[idx] = vcf.ProcessSample(in_data[idx])
-        contour_data[idx] = vcf._contour
-        dry_data[idx] = vcf._dry
-        wet_data[idx] = vcf._wet
+#         contour_data[idx] = vcf._contour
+#         dry_data[idx] = vcf._dry
+#         wet_data[idx] = vcf._wet
+
+    vcf_vec = VCF(filter_secondorderraw.SecondOrderRaw,
+                  modulator_adsd.ADSD,
+                  sampling_freq)
+    vcf_vec.SetParameters(filter_freq, resonance,
+                          attack, decay, sustain_level, decay,
+                          amount)
+
+    vcf_vec.TriggerOn()
+    idx = 0
+    while idx < len(in_data) - 1:
+        in_vec = [in_data[idx],
+                  in_data[idx + 1],
+                  in_data[idx + 2],
+                  in_data[idx + 3]]
+        (out_vec_data[idx],
+        out_vec_data[idx + 1],
+        out_vec_data[idx + 2],
+        out_vec_data[idx + 3]) = vcf_vec.Process4Samples(in_vec)
+        idx += 4
+#         contour_data[idx] = vcf._co ntour
+#         dry_data[idx] = vcf._dry
+#         wet_data[idx] = vcf._wet
 
     utilities.WriteWav(out_data, "contour_filter", sampling_freq)
+    utilities.WriteWav(out_vec_data, "contour_filter_vec", sampling_freq)
 
-    pylab.plot(in_data[view_beginning:view_beginning + view_length], label="in")
-    pylab.plot(out_data[view_beginning:view_beginning + view_length], label="out")
-    pylab.plot(contour_data[view_beginning:view_beginning + view_length], label="contour")
-    pylab.plot(dry_data[view_beginning:view_beginning + view_length], label="dry")
-    pylab.plot(wet_data[view_beginning:view_beginning + view_length], label="wet")
+    print(utilities.PrintMetadata(utilities.GetMetadata(out_vec_data - out_data)))
+
+#     pylab.plot(in_data[view_beginning:view_beginning + view_length], label="in")
+#     pylab.plot(out_data[view_beginning:view_beginning + view_length], label="out")
+#     pylab.plot(out_vec_data[view_beginning:view_beginning + view_length], label="out_vec")
+#     pylab.plot(out_data[view_beginning:view_beginning + view_length], label="out")
+    pylab.plot((out_vec_data - out_data)[view_beginning:view_beginning + view_length], label="out_vec")
+#     pylab.plot(contour_data[view_beginning:view_beginning + view_length], label="contour")
+#     pylab.plot(dry_data[view_beginning:view_beginning + view_length], label="dry")
+#     pylab.plot(wet_data[view_beginning:view_beginning + view_length], label="wet")
     pylab.legend()
     pylab.show()
