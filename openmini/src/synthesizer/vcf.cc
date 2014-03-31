@@ -20,6 +20,9 @@
 
 #include "openmini/src/synthesizer/vcf.h"
 
+// std::min
+#include <algorithm>
+
 #include "soundtailor/src/filters/filter_base.h"
 #include "soundtailor/src/filters/secondorder_raw.h"
 
@@ -146,7 +149,10 @@ void Vcf::ProcessParameters(void) {
 }
 
 float Vcf::ComputeContour(void) {
-  const float base_value(contour_gen_());
+  // TODO(gm): Decide if accumulation is allowed for filter contour generator
+  const float base_value(std::max(0.0f, std::min(1.0f, contour_gen_())));
+  OPENMINI_ASSERT(base_value >= 0.0f);
+  OPENMINI_ASSERT(base_value <= 1.0f);
   // Update modulation as much as the filter itself will be updated
   // TODO(gm): this should be simpler when the envelop generator outputs Sample
   for (unsigned int i(1); i < openmini::SampleSize; ++i) {
