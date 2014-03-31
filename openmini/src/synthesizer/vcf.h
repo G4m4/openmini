@@ -71,12 +71,6 @@ class Vcf {
   ///
   /// @param[in]  decay    Decay time for the envelop
   void SetDecay(const unsigned int decay);
-  /// @brief Set the given release time
-  ///
-  /// The parameter is not normalized here - the unit is "samples"
-  ///
-  /// @param[in]  attack    Release time for the envelop
-  void SetRelease(const unsigned int release);
   /// @brief Set the given sustain level
   ///
   /// The parameter is normalized here, supposed to be within [0.0f ; 1.0f]
@@ -112,8 +106,6 @@ class Vcf {
   unsigned int attack_; ///< Envelop attack time (due to asynchronous update,
                         ///< it may as well be the value to be applied soon
   unsigned int decay_; ///< Envelop decay time (due to asynchronous update,
-                        ///< Same as above.
-  unsigned int release_; ///< Envelop release time (due to asynchronous update,
                         ///< Same as above.
   float sustain_level_; ///< Envelop sustain level (normalized).
                         ///< Same as above.

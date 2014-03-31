@@ -32,7 +32,6 @@ Vca::Vca()
     generator_(new soundtailor::modulators::Adsd()),
     attack_(0),
     decay_(0),
-    release_(0),
     sustain_level_(0.0f),
     update_(false) {
   OPENMINI_ASSERT(generator_ != nullptr);
@@ -94,15 +93,6 @@ void Vca::SetDecay(const unsigned int decay) {
   }
 }
 
-void Vca::SetRelease(const unsigned int release) {
-  OPENMINI_ASSERT(release <= kMaxTime);
-
-  if (release != release_) {
-    release_ = release;
-    update_ = true;
-  }
-}
-
 void Vca::SetSustain(const float sustain_level) {
   OPENMINI_ASSERT(sustain_level <= 1.0f);
   OPENMINI_ASSERT(sustain_level >= 0.0f);
@@ -116,7 +106,7 @@ void Vca::SetSustain(const float sustain_level) {
 void Vca::ProcessParameters(void) {
   OPENMINI_ASSERT(generator_ != nullptr);
   if (update_) {
-    generator_->SetParameters(attack_, decay_, release_, sustain_level_);
+    generator_->SetParameters(attack_, decay_, decay_, sustain_level_);
     update_ = false;
   }
 }
