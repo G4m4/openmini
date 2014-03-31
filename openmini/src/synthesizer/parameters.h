@@ -44,6 +44,10 @@ enum Type {
   kAttackTime,
   kDecayTime,
   kSustainLevel,
+  kContourAttack,
+  kContourDecay,
+  kContourSustain,
+  kContourAmount,
   kCount
 };
 
@@ -126,7 +130,35 @@ const std::array<ParameterMeta, Parameters::kCount> kParametersMeta = {{
                 1,
                 0,
                 "Sustain Level",
-                "Envelop generator sustain level")
+                "Envelop generator sustain level"),
+  ParameterMeta(static_cast<float>(kMinTime),
+                static_cast<float>(kMaxTime),
+                0.5f,
+                1,
+                kMaxTime - kMinTime,
+                "Contour Attack Time",
+                "Filter contour attack time"),
+  ParameterMeta(static_cast<float>(kMinTime),
+                static_cast<float>(kMaxTime),
+                0.5f,
+                1,
+                kMaxTime - kMinTime,
+                "Contour Decay Time",
+                "Filter contour decay time"),
+  ParameterMeta(0.0f,
+                1.0f,
+                0.5f,
+                1,
+                0,
+                "Contour Sustain Level",
+                "Filter contour sustain level"),
+  ParameterMeta(0.0f,
+                1.0f,
+                0.5f,
+                1,
+                0,
+                "Contour Amount",
+                "Filter contour dry/wet tuning")
 }};
 
 }  // namespace Parameters
