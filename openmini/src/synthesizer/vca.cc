@@ -78,6 +78,7 @@ Sample Vca::operator()(SampleRead input) {
 }
 
 void Vca::SetAttack(const unsigned int attack) {
+  OPENMINI_ASSERT(attack <= kMaxTime);
   if (attack != attack_) {
     attack_ = attack;
     update_ = true;
@@ -85,6 +86,8 @@ void Vca::SetAttack(const unsigned int attack) {
 }
 
 void Vca::SetDecay(const unsigned int decay) {
+  OPENMINI_ASSERT(decay <= kMaxTime);
+
   if (decay != decay_) {
     decay_ = decay;
     update_ = true;
@@ -92,6 +95,8 @@ void Vca::SetDecay(const unsigned int decay) {
 }
 
 void Vca::SetRelease(const unsigned int release) {
+  OPENMINI_ASSERT(release <= kMaxTime);
+
   if (release != release_) {
     release_ = release;
     update_ = true;
