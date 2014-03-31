@@ -78,7 +78,7 @@ class WidgetsManager : public juce::Component,
   /// @brief Margin (vertical & horizontal) between widgets
   static const int kWidgetMargin = 10;
   /// @brief Height of each widgets column
-  static const int kColumnHeight = 200;
+  static const int kColumnHeight = 250;
   /// @brief Width of each widgets column
   static const int kColumnWidth = 200;
 };
