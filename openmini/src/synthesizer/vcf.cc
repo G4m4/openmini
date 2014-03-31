@@ -33,7 +33,6 @@ Vcf::Vcf()
     wet_filter_(new soundtailor::filters::SecondOrderRaw()),
     attack_(0),
     decay_(0),
-    release_(0),
     sustain_level_(0.0f),
     frequency_(0.0f),
     resonance_(0.0f),
@@ -102,16 +101,6 @@ void Vcf::SetDecay(const unsigned int decay) {
   }
 }
 
-void Vcf::SetRelease(const unsigned int release) {
-  OPENMINI_ASSERT(release <= kMaxTime);
-
-  // TODO(gm): find a way to do this generically
-  if (release != release_) {
-    release_ = release;
-    update_ = true;
-  }
-}
-
 void Vcf::SetSustain(const float sustain_level) {
   OPENMINI_ASSERT(sustain_level <= 1.0f);
   OPENMINI_ASSERT(sustain_level >= 0.0f);
@@ -151,7 +140,7 @@ void Vcf::ProcessParameters(void) {
   if (update_) {
     dry_filter_->SetParameters(frequency_, resonance_);
     wet_filter_->SetParameters(frequency_, resonance_);
-    contour_gen_.SetParameters(attack_, decay_, release_, sustain_level_);
+    contour_gen_.SetParameters(attack_, decay_, decay_, sustain_level_);
     update_ = false;
   }
 }
