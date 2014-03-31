@@ -113,8 +113,8 @@ void Vcf::SetSustain(const float sustain_level) {
 }
 
 void Vcf::SetAmount(const float amount) {
-  OPENMINI_ASSERT(amount <= 0.0f);
-  OPENMINI_ASSERT(amount >= 1.0f);
+  OPENMINI_ASSERT(amount <= 1.0f);
+  OPENMINI_ASSERT(amount >= 0.0f);
 
   // TODO(gm): find a way to do this generically
   if (amount != amount_) {
