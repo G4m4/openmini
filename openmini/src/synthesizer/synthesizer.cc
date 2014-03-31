@@ -149,6 +149,24 @@ void Synthesizer::ProcessParameters(void) {
           modulator_.SetSustain(GetRawValue(Parameters::kSustainLevel));
           break;
         }
+        case(Parameters::kContourAttack): {
+          filter_.SetAttack(
+            GetDiscreteValue<unsigned int>(Parameters::kContourAttack));
+          break;
+        }
+        case(Parameters::kContourDecay): {
+          filter_.SetDecay(
+            GetDiscreteValue<unsigned int>(Parameters::kContourDecay));
+          break;
+        }
+        case(Parameters::kContourSustain): {
+          filter_.SetSustain(GetRawValue(Parameters::kContourSustain));
+          break;
+        }
+        case(Parameters::kContourAmount): {
+          filter_.SetAmount(GetRawValue(Parameters::kContourAmount));
+          break;
+        }
         default: {
           // Should never happen
           OPENMINI_ASSERT(false);
