@@ -131,8 +131,8 @@ void Synthesizer::ProcessParameters(void) {
           filter_.SetFrequency(GetRawValue(Parameters::kFilterFreq));
           break;
         }
-        case(Parameters::kFilterQ): {
-          filter_.SetQFactor(GetRawValue(Parameters::kFilterQ));
+        case(Parameters::kFilterResonance): {
+          filter_.SetResonance(GetRawValue(Parameters::kFilterResonance));
           break;
         }
         case(Parameters::kAttackTime): {

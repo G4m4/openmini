@@ -51,12 +51,14 @@ class Vcf {
   ///
   /// @param[in]    frequency         Frequency to set the filter to
   void SetFrequency(const float frequency);
-  /// @brief Set the filter to the given q factor
+  /// @brief Set the filter to the given resonance
   ///
-  /// This is not normalized, Q factor within [0.0f ; 100.0f]
+  /// This is not normalized, resonance within [0.0f ; 100.0f]
   ///
-  /// @param[in]    qfactor         Q factor to set the filter to
-  void SetQFactor(const float qfactor);
+  /// @param[in]  resonance   Resonance to set the filter to
+  void SetResonance(const float resonance);
+  ///
+  ///
   /// @brief Actual process function for one sample
   Sample operator()(SampleRead sample);
   /// @brief Update internal generator parameters
@@ -73,7 +75,7 @@ class Vcf {
   float frequency_; ///< Frequency of the filter (non-normalized, in Hz).
                     /// (due to asynchronous update,
                     ///< it may as well be the frequency to be applied soon)
-  float qfactor_; ///< Q factor of the filter
+  float resonance_; ///< Resonance of the filter
                   ///< Same as above.
   bool update_;  ///< True if any parameter was updated since the last call to
                  ///< ProcessParameters()

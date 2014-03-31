@@ -31,7 +31,7 @@ namespace synthesizer {
 Vcf::Vcf()
   : filter_(new soundtailor::filters::SecondOrderRaw()),
     frequency_(0.0f),
-    qfactor_(0.0f),
+    resonance_(0.0f),
     update_(false) {
   OPENMINI_ASSERT(filter_ != nullptr);
 }
@@ -52,13 +52,16 @@ void Vcf::SetFrequency(const float frequency) {
   }
 }
 
-void Vcf::SetQFactor(const float qfactor) {
-  OPENMINI_ASSERT(qfactor <= 100.0f);
-  OPENMINI_ASSERT(qfactor >= 0.0f);
+void Vcf::SetResonance(const float resonance) {
+  OPENMINI_ASSERT(resonance <= 100.0f);
+  OPENMINI_ASSERT(resonance >= 0.0f);
 
   // TODO(gm): find a way to do this generically
-  if (qfactor != qfactor_) {
-    qfactor_ = qfactor;
+  if (resonance != resonance_) {
+    resonance_ = resonance;
+    update_ = true;
+  }
+}
     update_ = true;
   }
 }
