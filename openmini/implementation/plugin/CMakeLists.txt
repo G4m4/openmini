@@ -22,6 +22,7 @@ include_directories(
   ${OPENMINI_INCLUDE_DIR}
   # This is required since Juce-generated files are looking for files there
   ${OPENMINI_PLUGIN_DIR}/vst
+  ${SOUNDTAILOR_INCLUDE_DIR}
 )
 
 # Source files declaration
