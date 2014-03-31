@@ -57,8 +57,8 @@ TEST(Vco, SmoothWaveformChange) {
 
     vco.SetFrequency(kFrequency * SamplingRate::Instance().Get());
 
-    // A small epsilon is added for differentiation imprecisions
-    const float kMaxDelta(4.0f * kFrequency + 5e-5f);
+    // Allowing 20% of margin on the max delta for differentiation imprecisions
+    const float kMaxDelta(4.0f * kFrequency * 1.2f);
 
     unsigned int i(openmini::SampleSize);
     Sample input(Fill(0.0f));
