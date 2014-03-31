@@ -372,14 +372,15 @@ TEST(Synthesizer, ParametersMax) {
   const float kSamplingFrequency(
     std::uniform_real_distribution<float>(8000, SamplingRate::Instance().Get())
       (kRandomGenerator));
-  std::vector<float> data(kDataTestSetSize);
+  const unsigned int kDataLength(GetNextMultiple(kDataTestSetSize, kBlockSize));
+  std::vector<float> data(kDataLength);
 
   Synthesizer synth;
   synth.SetOutputSamplingFrequency(kSamplingFrequency);
 
   unsigned int sample_idx(0);
   synth.NoteOn(kMinKeyNote);
-  while (sample_idx < kDataTestSetSize - block.size()) {
+  while (sample_idx < kDataLength) {
     // Random parameters value
     for (unsigned int param_id(0);
          param_id < openmini::synthesizer::Parameters::kCount;
