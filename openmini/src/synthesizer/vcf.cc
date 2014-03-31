@@ -29,16 +29,25 @@ namespace openmini {
 namespace synthesizer {
 
 Vcf::Vcf()
-  : filter_(new soundtailor::filters::SecondOrderRaw()),
+  : dry_filter_(new soundtailor::filters::SecondOrderRaw()),
+    wet_filter_(new soundtailor::filters::SecondOrderRaw()),
+    attack_(0),
+    decay_(0),
+    release_(0),
+    sustain_level_(0.0f),
     frequency_(0.0f),
     resonance_(0.0f),
+    amount_(0.0f),
     update_(false) {
-  OPENMINI_ASSERT(filter_ != nullptr);
+  OPENMINI_ASSERT(dry_filter_ != nullptr);
+  OPENMINI_ASSERT(wet_filter_ != nullptr);
 }
 
 Vcf::~Vcf() {
-  OPENMINI_ASSERT(filter_ != nullptr);
-  delete filter_;
+  OPENMINI_ASSERT(dry_filter_ != nullptr);
+  OPENMINI_ASSERT(wet_filter_ != nullptr);
+  delete dry_filter_;
+  delete wet_filter_;
 }
 
 void Vcf::SetFrequency(const float frequency) {
@@ -62,22 +71,91 @@ void Vcf::SetResonance(const float resonance) {
     update_ = true;
   }
 }
+
+void Vcf::SetAttack(const unsigned int attack) {
+  OPENMINI_ASSERT(attack <= kMaxTime);
+
+  // TODO(gm): find a way to do this generically
+  if (attack != attack_) {
+    attack_ = attack;
+    update_ = true;
+  }
+}
+
+void Vcf::SetDecay(const unsigned int decay) {
+  OPENMINI_ASSERT(decay <= kMaxTime);
+
+  // TODO(gm): find a way to do this generically
+  if (decay != decay_) {
+    decay_ = decay;
+    update_ = true;
+  }
+}
+
+void Vcf::SetRelease(const unsigned int release) {
+  OPENMINI_ASSERT(release <= kMaxTime);
+
+  // TODO(gm): find a way to do this generically
+  if (release != release_) {
+    release_ = release;
+    update_ = true;
+  }
+}
+
+void Vcf::SetSustain(const float sustain_level) {
+  OPENMINI_ASSERT(sustain_level <= 1.0f);
+  OPENMINI_ASSERT(sustain_level >= 0.0f);
+
+  // TODO(gm): find a way to do this generically
+  if (sustain_level != sustain_level_) {
+    sustain_level_ = sustain_level;
+    update_ = true;
+  }
+}
+
+void Vcf::SetAmount(const float amount) {
+  OPENMINI_ASSERT(amount <= 0.0f);
+  OPENMINI_ASSERT(amount >= 1.0f);
+
+  // TODO(gm): find a way to do this generically
+  if (amount != amount_) {
+    amount_ = amount;
     update_ = true;
   }
 }
 
 Sample Vcf::operator()(SampleRead sample) {
-  OPENMINI_ASSERT(filter_ != nullptr);
+  OPENMINI_ASSERT(dry_filter_ != nullptr);
+  OPENMINI_ASSERT(wet_filter_ != nullptr);
   ProcessParameters();
-  return (*filter_)(sample);
+  const Sample dry(MulConst((1.0f - amount_), (*dry_filter_)(sample)));
+  const Sample wet(MulConst(amount_, (*wet_filter_)(sample)));
+  // Update filter contour based on last envelop generator output
+  wet_filter_->SetParameters(ComputeContour(), resonance_);
+  return Add(dry, wet);
 }
 
 void Vcf::ProcessParameters(void) {
-  OPENMINI_ASSERT(filter_ != nullptr);
+  OPENMINI_ASSERT(dry_filter_ != nullptr);
+  OPENMINI_ASSERT(wet_filter_ != nullptr);
   if (update_) {
-    filter_->SetParameters(frequency_, qfactor_);
+    dry_filter_->SetParameters(frequency_, resonance_);
+    wet_filter_->SetParameters(frequency_, resonance_);
+    contour_gen_.SetParameters(attack_, decay_, release_, sustain_level_);
     update_ = false;
   }
+}
+
+float Vcf::ComputeContour(void) {
+  const float base_value(contour_gen_());
+  // Update modulation as much as the filter itself will be updated
+  // TODO(gm): this should be simpler when the envelop generator outputs Sample
+  for (unsigned int i(1); i < openmini::SampleSize; ++i) {
+    contour_gen_();
+  }
+  // Adaptation from normalized range [0.0 ; 1.0]
+  // into [frequency_ ; max allowed filter frequency]
+  return base_value * (kMaxFilterFreq - frequency_) + frequency_;
 }
 
 }  // namespace synthesizer
