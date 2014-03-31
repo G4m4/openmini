@@ -69,6 +69,7 @@ void Synthesizer::NoteOn(const unsigned int note) {
   // Indeed things may have changed since last audio process!
   ProcessParameters();
 
+  filter_.TriggerOn();
   mixer_.NoteOn(note);
   modulator_.TriggerOn();
 }
@@ -81,6 +82,7 @@ void Synthesizer::NoteOff(const unsigned int note) {
   // Indeed things may have changed since last audio process!
   ProcessParameters();
 
+  filter_.TriggerOff();
   mixer_.NoteOff(note);
   modulator_.TriggerOff();
 }
