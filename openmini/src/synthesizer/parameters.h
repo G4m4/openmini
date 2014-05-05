@@ -28,7 +28,7 @@
 
 // TODO(gm): This should be required as a dependency,
 // it is now for easier handling of filter domain - get rid of it
-#include "externals\soundtailor\soundtailor\src\filters\moog.h"
+#include "soundtailor/src/filters/moog.h"
 
 namespace openmini {
 namespace synthesizer {
