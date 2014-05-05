@@ -26,6 +26,10 @@
 #include "openmini/src/common.h"
 #include "openmini/src/synthesizer/parameter_meta.h"
 
+// TODO(gm): This should be required as a dependency,
+// it is now for easier handling of filter domain - get rid of it
+#include "externals\soundtailor\soundtailor\src\filters\moog.h"
+
 namespace openmini {
 namespace synthesizer {
 
@@ -96,15 +100,15 @@ const std::array<ParameterMeta, Parameters::kCount> kParametersMeta = {{
                 Waveform::kCount,
                 "Osc3 Waveform",
                 "Waveform for oscillator 3"),
-  ParameterMeta(kMinFilterFreq,
-                kMaxFilterFreq,
+  ParameterMeta(soundtailor::filters::Moog::Meta().freq_min,
+                soundtailor::filters::Moog::Meta().freq_max,
                 1.0f,  // "almost" passthrough
                 1,
                 0,
                 "Filter Freq",
                 "Cutoff Frequency for the filter"),
-  ParameterMeta(1e-5f,
-                10.0f,
+  ParameterMeta(soundtailor::filters::Moog::Meta().res_min,
+                soundtailor::filters::Moog::Meta().res_max,
                 0.7f,
                 1,
                 0,

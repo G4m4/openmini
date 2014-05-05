@@ -67,14 +67,6 @@ template<typename Type> void IGNORE(const Type&) {}
 /// may be different from the one actually delivered at the output of the synth
 static const unsigned int kBlockSize = 64;
 
-/// @brief Min filter frequency (due to precision issues)
-static const float kMinFilterFreq = 10.0f / SamplingRate::Instance().Get();
-
-/// @brief Max filter frequency (slightly lower than half the sampling
-/// frequency, due to precision issues)
-static const float kMaxFilterFreq = (SamplingRate::Instance().GetHalf() - 10.0f)
-                                    / SamplingRate::Instance().Get();
-
 /// @brief Arbitrary lowest allowed key note (= C0)
 static const unsigned int kMinKeyNote(12);
 /// @brief Arbitrary highest allowed key note (= C7)

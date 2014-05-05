@@ -63,8 +63,8 @@ void Vcf::TriggerOff(void) {
 }
 
 void Vcf::SetFrequency(const float frequency) {
-  OPENMINI_ASSERT(frequency >= kMinFilterFreq);
-  OPENMINI_ASSERT(frequency <= kMaxFilterFreq);
+  OPENMINI_ASSERT(frequency >= soundtailor::filters::Moog::Meta().freq_min);
+  OPENMINI_ASSERT(frequency <= soundtailor::filters::Moog::Meta().freq_max);
 
   // TODO(gm): find a way to do this generically
   if (frequency != frequency_) {
@@ -74,8 +74,8 @@ void Vcf::SetFrequency(const float frequency) {
 }
 
 void Vcf::SetResonance(const float resonance) {
-  OPENMINI_ASSERT(resonance <= 100.0f);
-  OPENMINI_ASSERT(resonance >= 0.0f);
+  OPENMINI_ASSERT(resonance >= soundtailor::filters::Moog::Meta().res_min);
+  OPENMINI_ASSERT(resonance <= soundtailor::filters::Moog::Meta().res_max);
 
   // TODO(gm): find a way to do this generically
   if (resonance != resonance_) {
@@ -160,7 +160,7 @@ float Vcf::ComputeContour(void) {
   }
   // Adaptation from normalized range [0.0 ; 1.0]
   // into [frequency_ ; max allowed filter frequency]
-  return base_value * (kMaxFilterFreq - frequency_) + frequency_;
+  return base_value * (soundtailor::filters::Moog::Meta().freq_max - frequency_) + frequency_;
 }
 
 }  // namespace synthesizer
