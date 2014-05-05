@@ -24,7 +24,7 @@
 #include <algorithm>
 
 #include "soundtailor/src/filters/filter_base.h"
-#include "soundtailor/src/filters/secondorder_raw.h"
+#include "soundtailor/src/filters/moog.h"
 
 #include "openmini/src/synthesizer/parameters.h"
 
@@ -32,8 +32,8 @@ namespace openmini {
 namespace synthesizer {
 
 Vcf::Vcf()
-  : dry_filter_(new soundtailor::filters::SecondOrderRaw()),
-    wet_filter_(new soundtailor::filters::SecondOrderRaw()),
+  : dry_filter_(new soundtailor::filters::Moog()),
+    wet_filter_(new soundtailor::filters::Moog()),
     attack_(0),
     decay_(0),
     sustain_level_(0.0f),
