@@ -97,3 +97,90 @@ TEST(Synthesizer, RingBufferTypicalUse) {
     EXPECT_EQ(data[i], data_out[i]);
   }
 }
+
+/// @brief Push zero-length data, should work and be a NOP
+TEST(Synthesizer, RingBufferZeroPush) {
+  std::uniform_int_distribution<int> kLengthDistribution(1, kDataTestSetSize);
+  const unsigned int kRingbufferLength(kLengthDistribution(kRandomGenerator));
+  RingBuffer ringbuf(kRingbufferLength);
+  // Creating random data
+  std::vector<float> data(kRingbufferLength);
+  std::vector<float> data_out(kRingbufferLength);
+  std::generate(data.begin(),
+                data.end(),
+                std::bind(kNormDistribution, kRandomGenerator));
+
+  unsigned int data_index(0);
+  // First, we push the data with constant block sizes
+  while (ringbuf.Size() < data.size()) {
+    // ...And sometimes push zero-length data
+    std::bernoulli_distribution kBoolDistribution;
+    const bool kYesOrNo(kBoolDistribution(kRandomGenerator));
+    if (kYesOrNo) {
+      ringbuf.Push(&data[data_index], 0);
+    }
+    else {
+      const Sample current(Fill(&data[data_index]));
+      ringbuf.Push(current);
+      data_index += openmini::SampleSize;
+    }
+  }
+
+  // Now we pop data out with various random block sizes...
+  data_index = 0;
+  while (data_index < data_out.size()) {
+    std::uniform_int_distribution<int> kBlockSizeDistribution(1,
+                                                              ringbuf.Size());
+    const unsigned int kBlockSize(kBlockSizeDistribution(kRandomGenerator));
+    ringbuf.Pop(&data_out[data_index], kBlockSize);
+    data_index += kBlockSize;
+  }
+
+  // Data integrity check
+  for (unsigned int i(0); i < data_out.size(); ++i) {
+    EXPECT_EQ(data[i], data_out[i]);
+  }
+}
+
+/// @brief Pop zero-length data, should work and be a NOP
+TEST(Synthesizer, RingBufferZeroPop) {
+  std::uniform_int_distribution<int> kLengthDistribution(1, kDataTestSetSize);
+  const unsigned int kRingbufferLength(kLengthDistribution(kRandomGenerator));
+  RingBuffer ringbuf(kRingbufferLength);
+  // Creating random data
+  std::vector<float> data(kRingbufferLength);
+  std::vector<float> data_out(kRingbufferLength);
+  std::generate(data.begin(),
+                data.end(),
+                std::bind(kNormDistribution, kRandomGenerator));
+
+  unsigned int data_index(0);
+  // First, we push the data with constant block sizes
+  while (ringbuf.Size() < data.size()) {
+    const Sample current(Fill(&data[data_index]));
+    ringbuf.Push(current);
+    data_index += openmini::SampleSize;
+  }
+
+  // Now we pop data out with various random block sizes...
+  data_index = 0;
+  while (data_index < data_out.size()) {
+    // ...And sometimes pop zero-length data
+    std::bernoulli_distribution kBoolDistribution;
+    const bool kYesOrNo(kBoolDistribution(kRandomGenerator));
+    if (kYesOrNo) {
+      ringbuf.Pop(&data_out[data_index], 0);
+    } else {
+      std::uniform_int_distribution<int> kBlockSizeDistribution(1,
+        ringbuf.Size());
+      const unsigned int kBlockSize(kBlockSizeDistribution(kRandomGenerator));
+      ringbuf.Pop(&data_out[data_index], kBlockSize);
+      data_index += kBlockSize;
+    }
+  }
+
+  // Data integrity check
+  for (unsigned int i(0); i < data_out.size(); ++i) {
+    EXPECT_EQ(data[i], data_out[i]);
+  }
+}
