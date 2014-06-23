@@ -46,7 +46,6 @@ RingBuffer::~RingBuffer() {
 
 void RingBuffer::Pop(float* dest, const unsigned int count) {
   OPENMINI_ASSERT(IsGood());
-  OPENMINI_ASSERT(count > 0);
 
   // Is zero padding required ?
   // Using "ints" here cause count may be < size, or the opposite
@@ -88,7 +87,6 @@ void RingBuffer::Push(SampleRead value) {
 
 void RingBuffer::Push(const float* const src, const unsigned int count) {
   OPENMINI_ASSERT(IsGood());
-  OPENMINI_ASSERT(count > 0);
   OPENMINI_ASSERT(count <= Capacity() - Size());
   // Length of the "right" part: from writing cursor to the buffer end
   const unsigned int right_part_size(std::min(capacity_ - writing_position_,
