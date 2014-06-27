@@ -49,17 +49,22 @@ WidgetsManager::~WidgetsManager() {
 }
 
 void WidgetsManager::paint(juce::Graphics& g) {
+  g.fillAll(Colours::white);
+}
+
+void WidgetsManager::resized() {
+  // TODO(gm): use a cleaner area model
   int current_x(0);
   int current_y(0);
   for (int param_id(0);
        param_id < widgets_.size();
        ++param_id) {
     Widget* widget(widgets_[param_id]);
-    widget->setBounds(current_x, current_y, kWidgetWidth, kWidgetHeight);
-    current_y += kWidgetHeight;
-    current_y += kWidgetMargin;
-    if (current_y > kColumnHeight) {
-      current_x += kColumnWidth;
+    widget->setBounds(current_x, current_y, getWidth() / 5, getHeight() / 5);
+    current_y += getHeight() / 5;
+    current_y += getHeight() / 18;
+    if (current_y > getHeight()) {
+      current_x += getWidth() / 5;
       current_y = 0;
     }
   }

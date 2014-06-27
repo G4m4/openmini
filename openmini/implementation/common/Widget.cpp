@@ -37,6 +37,11 @@ Widget::~Widget() {
 }
 
 void Widget::paint(juce::Graphics& g) {
-  juce::Slider::paint(g);
-  label_.setCentreRelative(0.5f, 0.95f);
+  Slider::paint(g);
+  Rectangle<int> area(getLocalBounds());
+  label_.setBounds(area.removeFromBottom(getHeight() / 5));
+}
+
+void Widget::resized() {
+  Slider::resized();
 }

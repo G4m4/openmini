@@ -30,8 +30,8 @@
 #include "openmini/implementation/common/PluginProcessor.h"
 #include "openmini/implementation/common/WidgetsManager.h"
 
-static const int kMainWindowSizeX(800);
-static const int kMainWindowSizeY(600);
+static const int kMaxWindowWidth(1024);
+static const int kMaxWindowHeight(768);
 
 /// @brief Plugin "editor" class
 ///
@@ -45,6 +45,7 @@ class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
   ~OpenMiniAudioProcessorEditor();
 
   void paint(juce::Graphics& g);
+  void resized();
 
   // Overrides from inherited classes
   void changeListenerCallback(juce::ChangeBroadcaster *source);
@@ -61,6 +62,9 @@ class OpenMiniAudioProcessorEditor : public juce::AudioProcessorEditor,
 
  private:
   WidgetsManager widgets_manager_;
+  juce::ComponentBoundsConstrainer resize_limits_;
+  juce::ResizableCornerComponent resizer_;
+
   juce::MidiKeyboardComponent keyboard_;
   juce::TextEditor debug_infos_;
   static const int kTimerInterval = 100;

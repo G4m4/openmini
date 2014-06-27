@@ -56,6 +56,7 @@ class WidgetsManager : public juce::Component,
   ~WidgetsManager();
 
   void paint(juce::Graphics& g);
+  void resized();
 
   // Overrides from inherited classes
   void sliderValueChanged(juce::Slider* slider);

@@ -87,6 +87,8 @@ class OpenMiniAudioProcessor  : public juce::AudioProcessor,
 
   juce::MidiKeyboardState keyboard_state_;
 
+  int lastUIWidth, lastUIHeight;
+
  private:
   openmini::synthesizer::Synthesizer synth_;
   double process_time_;

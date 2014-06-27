@@ -44,6 +44,7 @@ class Widget : public juce::Slider {
   ~Widget();
 
   void paint(juce::Graphics& g);
+  void resized();
 
  private:
   juce::DrawableText label_;

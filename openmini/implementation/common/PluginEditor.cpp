@@ -34,6 +34,7 @@ OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
     OpenMiniAudioProcessor* owner)
     : AudioProcessorEditor(owner),
       widgets_manager_(openmini::synthesizer::Parameters::kParametersMeta),
+      resizer_(this, &resize_limits_),
       keyboard_(owner->keyboard_state_,
                 juce::MidiKeyboardComponent::horizontalKeyboard),
       debug_infos_() {
@@ -44,10 +45,6 @@ OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
   // For some reason Juce keyboard is one octave higher...
   keyboard_.setAvailableRange(openmini::kMinKeyNote + 12,
                               openmini::kMaxKeyNote + 12);
-  keyboard_.setKeyWidth(std::floor(static_cast<float>(kMainWindowSizeX)
-                        / ((openmini::kMaxKeyNote - openmini::kMinKeyNote)
-                        // remember, 5 keys out of 12 are black!
-                        * 7.0f / 12.0f)));
   addAndMakeVisible(&keyboard_);
 
   // DEBUG
@@ -55,9 +52,12 @@ OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
   this->startTimer(kTimerInterval);
   //  /DEBUG
 
+  addAndMakeVisible(resizer_);
+  resize_limits_.setSizeLimits(150, 150, kMaxWindowWidth, kMaxWindowHeight);
+
   getProcessor()->addChangeListener(this);
   // This is where our plugin's editor size is set.
-  setSize(kMainWindowSizeX, kMainWindowSizeY);
+  setSize(owner->lastUIWidth, owner->lastUIHeight);
 }
 
 OpenMiniAudioProcessorEditor::~OpenMiniAudioProcessorEditor() {
@@ -66,15 +66,26 @@ OpenMiniAudioProcessorEditor::~OpenMiniAudioProcessorEditor() {
 
 void OpenMiniAudioProcessorEditor::paint(juce::Graphics& g) {
   g.fillAll(Colours::white);
-  widgets_manager_.setBounds(0, 0, this->getWidth(), this->getHeight());
+}
 
-  const int kKeyboardHeight(this->getHeight() / 4);
-  const int kKeyboardTop(this->getHeight() - kKeyboardHeight);
-  keyboard_.setBounds(0, kKeyboardTop, this->getWidth(), kKeyboardHeight);
+void OpenMiniAudioProcessorEditor::resized() {
+  Rectangle<int> area(getLocalBounds());
+
+  widgets_manager_.setBounds(area.removeFromTop(getHeight() * 1 / 2).reduced(8));
 
   // DEBUG
-  debug_infos_.setBounds(0, 350, this->getWidth(), 100);
+  debug_infos_.setBounds(area.removeFromTop(getHeight() * 1 / 8).reduced(8));
   //  /DEBUG
+
+  keyboard_.setBounds(area.removeFromTop(getHeight() * 1 / 8).reduced(8));
+  keyboard_.setKeyWidth(std::floor(static_cast<float>(getWidth())
+                        / ((openmini::kMaxKeyNote - openmini::kMinKeyNote)
+                        // remember, 5 keys out of 12 are black!
+                        * 7.0f / 12.0f)));
+
+  resizer_.setBounds(getWidth() - 16, getHeight() - 16, 16, 16);
+  getProcessor()->lastUIWidth = getWidth();
+  getProcessor()->lastUIHeight = getHeight();
 }
 
 void OpenMiniAudioProcessorEditor::changeListenerCallback(

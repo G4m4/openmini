@@ -28,7 +28,9 @@
 #include "openmini/src/synthesizer/parameter_meta.h"
 
 OpenMiniAudioProcessor::OpenMiniAudioProcessor()
-  : process_time_(0.0) {
+  : lastUIWidth(kMaxWindowWidth / 2),
+    lastUIHeight(kMaxWindowHeight / 2),
+    process_time_(0.0) {
 }
 
 OpenMiniAudioProcessor::~OpenMiniAudioProcessor() {
