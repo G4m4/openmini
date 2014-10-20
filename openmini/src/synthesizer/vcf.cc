@@ -24,7 +24,7 @@
 #include <algorithm>
 
 #include "soundtailor/src/filters/filter_base.h"
-#include "soundtailor/src/filters/moog.h"
+#include "soundtailor/src/filters/moog_lowaliasnonlinear.h"
 
 #include "openmini/src/synthesizer/parameters.h"
 
@@ -32,8 +32,8 @@ namespace openmini {
 namespace synthesizer {
 
 Vcf::Vcf()
-  : dry_filter_(new soundtailor::filters::Moog()),
-    wet_filter_(new soundtailor::filters::Moog()),
+  : dry_filter_(new soundtailor::filters::MoogLowAliasNonLinear()),
+    wet_filter_(new soundtailor::filters::MoogLowAliasNonLinear()),
     attack_(0),
     decay_(0),
     sustain_level_(0.0f),
@@ -63,8 +63,8 @@ void Vcf::TriggerOff(void) {
 }
 
 void Vcf::SetFrequency(const float frequency) {
-  OPENMINI_ASSERT(frequency >= soundtailor::filters::Moog::Meta().freq_min);
-  OPENMINI_ASSERT(frequency <= soundtailor::filters::Moog::Meta().freq_max);
+  OPENMINI_ASSERT(frequency >= soundtailor::filters::MoogLowAliasNonLinear::Meta().freq_min);
+  OPENMINI_ASSERT(frequency <= soundtailor::filters::MoogLowAliasNonLinear::Meta().freq_max);
 
   // TODO(gm): find a way to do this generically
   if (frequency != frequency_) {
@@ -74,8 +74,8 @@ void Vcf::SetFrequency(const float frequency) {
 }
 
 void Vcf::SetResonance(const float resonance) {
-  OPENMINI_ASSERT(resonance >= soundtailor::filters::Moog::Meta().res_min);
-  OPENMINI_ASSERT(resonance <= soundtailor::filters::Moog::Meta().res_max);
+  OPENMINI_ASSERT(resonance >= soundtailor::filters::MoogLowAliasNonLinear::Meta().res_min);
+  OPENMINI_ASSERT(resonance <= soundtailor::filters::MoogLowAliasNonLinear::Meta().res_max);
 
   // TODO(gm): find a way to do this generically
   if (resonance != resonance_) {
@@ -160,7 +160,7 @@ float Vcf::ComputeContour(void) {
   }
   // Adaptation from normalized range [0.0 ; 1.0]
   // into [frequency_ ; max allowed filter frequency]
-  return base_value * (soundtailor::filters::Moog::Meta().freq_max - frequency_) + frequency_;
+  return base_value * (soundtailor::filters::MoogLowAliasNonLinear::Meta().freq_max - frequency_) + frequency_;
 }
 
 }  // namespace synthesizer
