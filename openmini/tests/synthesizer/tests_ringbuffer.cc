@@ -114,7 +114,6 @@ TEST(Synthesizer, RingBufferZeroPush) {
   // First, we push the data with constant block sizes
   while (ringbuf.Size() < data.size()) {
     // ...And sometimes push zero-length data
-    std::bernoulli_distribution kBoolDistribution;
     const bool kYesOrNo(kBoolDistribution(kRandomGenerator));
     if (kYesOrNo) {
       ringbuf.Push(&data[data_index], 0);
@@ -166,7 +165,6 @@ TEST(Synthesizer, RingBufferZeroPop) {
   data_index = 0;
   while (data_index < data_out.size()) {
     // ...And sometimes pop zero-length data
-    std::bernoulli_distribution kBoolDistribution;
     const bool kYesOrNo(kBoolDistribution(kRandomGenerator));
     if (kYesOrNo) {
       ringbuf.Pop(&data_out[data_index], 0);
