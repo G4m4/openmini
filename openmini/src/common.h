@@ -27,16 +27,18 @@
 // aligned_alloc
 #include <cstdlib>
 
+// Expose Soundtailor types
+#include "externals/soundtailor/soundtailor/src/common.h"
+
+using soundtailor::BlockIn;
+using soundtailor::BlockOut;
+using soundtailor::Sample;
+using soundtailor::SampleRead;
+using soundtailor::SampleSize;
+using soundtailor::SampleSizeBytes;
+
 #include "openmini/src/configuration.h"
 #include "openmini/src/samplingrate.h"
-
-// Flag _USE_SSE is defined in configuration.h, that's why this include
-// is done after the configuration.h include
-#if (_USE_SSE)
-extern "C" {
-#include <xmmintrin.h>
-}
-#endif  // (_USE_SSE)
 
 namespace openmini {
 
@@ -46,7 +48,7 @@ template<typename Type> void IGNORE(const Type&) {}
 /// @brief Assume that the following condition is always true
 /// (on some compilers, allows optimization)
 #if(_COMPILER_MSVC)
-  static inline void ASSUME(const bool condition) {_assume(condition);}
+  static inline void ASSUME(const bool condition) {__assume(condition);}
 #elif(_COMPILER_GCC)
   static inline void ASSUME(const bool condition) {if (!(condition)) __builtin_unreachable();}
 #else
@@ -60,6 +62,12 @@ template<typename Type> void IGNORE(const Type&) {}
   // Maps to "assume" in release configuration for better optimization
   #define OPENMINI_ASSERT(_condition_) {::openmini::ASSUME((_condition_));}
 #endif
+
+#if(_COMPILER_MSVC)
+  #define RESTRICT __restrict
+#elif(_COMPILER_GCC)
+  #define RESTRICT __restrict__
+#endif  // _COMPILER_ ?
 
 // Fixed globals for synthesis
 
@@ -91,52 +99,12 @@ enum Type {
 };
 }  // namespace Waveform
 
-/// @brief "Sample" type - actually, this is the data computed at each "tick";
-/// If using vectorization it may longer than 1 audio sample
-#if (_USE_SSE)
-  typedef __m128 Sample;
-#else
-  typedef float Sample;
-#endif  // (_USE_SSE)
-
-/// @brief Attribute for structures alignment
-#if (_USE_SSE)
-  #if (_COMPILER_MSVC)
-    #define ALIGN __declspec(align(16))
-  #else
-    #define ALIGN __attribute__((aligned(16)))
-  #endif
-#else
-  #define ALIGN
-#endif  // (_USE_SSE)
-
-/// @brief Type for Sample parameter "read only":
-/// It should be passed by value since it allows to keep it into a register,
-/// instead of passing its address and loading it.
-#if (_USE_SSE)
-  #if (_COMPILER_MSVC)
-    typedef const Sample SampleRead;
-  #else
-    typedef const Sample SampleRead;
-  #endif
-#else
-  typedef const Sample SampleRead;
-#endif  // (_USE_SSE)
-
-/// @brief "Sample" type size in bytes
-static const unsigned int SampleSizeBytes(sizeof(Sample));
-/// @brief "Sample" type size compared to audio samples
-/// (e.g., if Sample == float, SampleSize = 1)
-static const unsigned int SampleSize(sizeof(Sample) / sizeof(float));
-
 /// @brief Allocation function wrapper
 ///
 /// Allow aligned memory allocation
 ///
 /// @param  size    Size of the memory to allocate, in bytes
 static inline void* Allocate(const size_t size) {
-#if _USE_SSE
-
 #if _COMPILER_MSVC
   return _aligned_malloc(size, SampleSizeBytes);
 #else
@@ -150,11 +118,6 @@ static inline void* Allocate(const size_t size) {
     return aligned_alloc(SampleSizeBytes, size);
   #endif
 #endif
-
-#else  // _USE_SSE
-
-  return malloc(size);
-#endif  // _USE_SSE
 }
 
 /// @brief Deallocation function wrapper
@@ -163,20 +126,12 @@ static inline void* Allocate(const size_t size) {
 ///
 /// @param  memory    Pointer to the memory to be deallocated
 static inline void Deallocate(void* memory) {
-#if _USE_SSE
-
 #if _COMPILER_MSVC
   _aligned_free(memory);
 #else
   // C11
   free(memory);
 #endif
-
-#else  // _USE_SSE
-
-  free(memory);
-
-#endif  // _USE_SSE
 }
 
 }  // namespace openmini

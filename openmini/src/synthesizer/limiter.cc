@@ -26,8 +26,8 @@ namespace openmini {
 namespace synthesizer {
 
 Limiter::Limiter(const float threshold)
-    : threshold_neg_(Fill(-threshold)),
-      threshold_pos_(Fill(threshold)) {
+    : threshold_neg_(VectorMath::Fill(-threshold)),
+      threshold_pos_(VectorMath::Fill(threshold)) {
   // Nothing to do here for now
 }
 
@@ -36,7 +36,7 @@ Limiter::~Limiter() {
 }
 
 Sample Limiter::operator()(SampleRead input) {
-  return Min(Max(input, threshold_neg_), threshold_pos_);
+  return VectorMath::Min(VectorMath::Max(input, threshold_neg_), threshold_pos_);
 }
 
 }  // namespace synthesizer

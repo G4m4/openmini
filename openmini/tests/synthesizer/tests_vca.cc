@@ -21,7 +21,6 @@
 #include "openmini/tests/tests.h"
 
 // For the Differentiator
-// TODO(gm): do not use SoundTailor Differentiator here
 #include "soundtailor/src/generators/generators_common.h"
 
 #include "openmini/src/synthesizer/vca.h"
@@ -67,11 +66,11 @@ TEST(Vca, Range) {
         modulator.TriggerOff();
         trigged_off = true;
       }
-      const Sample input(FillWithFloatGenerator(input_signal));
-      const Sample amplitude(Abs(modulator(input)));
-      EXPECT_TRUE(LessEqual(0.0f - kEpsilon, amplitude));
-      EXPECT_TRUE(GreaterEqual(1.0f + kEpsilon, amplitude));
-      i += openmini::SampleSize;
+      const Sample input(VectorMath::FillWithFloatGenerator(input_signal));
+      const Sample amplitude(VectorMath::Abs(modulator(input)));
+      EXPECT_TRUE(VectorMath::LessEqual(0.0f - kEpsilon, amplitude));
+      EXPECT_TRUE(VectorMath::GreaterEqual(1.0f + kEpsilon, amplitude));
+      i += SampleSize;
     }
   }  // iterations?
 }
@@ -106,7 +105,7 @@ struct VcaFunctor {
 /// - when in sustain samples should all be equal
 /// - when in release samples should be in a continuous downward slope
 TEST(Vca, Timings) {
-  const Sample kConstant(Fill(0.5f));
+  const Sample kConstant(VectorMath::Fill(0.5f));
   for (unsigned int iterations(0); iterations < kIterations; ++iterations) {
     IGNORE(iterations);
 
@@ -115,13 +114,13 @@ TEST(Vca, Timings) {
     // "right" sections (e.f. ones beginning/ending on samples)
     const unsigned int kAttack(GetNextMultiple(
       kTimeDistribution(kRandomGenerator),
-      openmini::SampleSize));
+      SampleSize));
     const unsigned int kDecay(GetNextMultiple(
       kTimeDistribution(kRandomGenerator),
-      openmini::SampleSize));
+      SampleSize));
     const unsigned int kSustain(GetNextMultiple(
       kTimeDistribution(kRandomGenerator),
-      openmini::SampleSize));
+      SampleSize));
     const float kSustainLevel(kNormPosDistribution(kRandomGenerator));
 
     Vca modulator;
@@ -150,15 +149,11 @@ TEST(Vca, Timings) {
       zero_crossing_idx = zero_crossing.GetNextZeroCrossing(kTotalLength);
       zero_crossing_indexes.push_back(zero_crossing_idx);
     }
-    // Remove too close indexes
-    // TODO(gm): this should not have to be done,
-    // improve zero crossing detection
-    RemoveClose(&zero_crossing_indexes,
-                4);
-    EXPECT_NEAR(kAttack, zero_crossing_indexes[1], kEpsilon);
-    EXPECT_NEAR(kAttack + kDecay, zero_crossing_indexes[2], kEpsilon);
-    EXPECT_NEAR(kTriggerOnLength, zero_crossing_indexes[3], kEpsilon);
-    EXPECT_NEAR(kTriggerOnLength + kDecay, zero_crossing_indexes[4], kEpsilon);
+
+    EXPECT_NEAR(kAttack, zero_crossing_indexes[0], kEpsilon);
+    EXPECT_NEAR(kAttack + kDecay, zero_crossing_indexes[1], kEpsilon);
+    EXPECT_NEAR(kTriggerOnLength, zero_crossing_indexes[2], kEpsilon);
+    EXPECT_NEAR(kTriggerOnLength + kDecay, zero_crossing_indexes[3], kEpsilon);
   }  // iterations?
 }
 
@@ -183,24 +178,25 @@ TEST(Vca, ClickEnvelop) {
     // Since vectorized we have to ignore (the length worst case) samples
     unsigned int i(0);
     while (i < 4) {
-      const Sample input(FillWithFloatGenerator(input_signal));
-      IGNORE(modulator(input));
+      const Sample input(VectorMath::FillWithFloatGenerator(input_signal));
+      const Sample ignored(modulator(input));
+      openmini::IGNORE(ignored);
       i += 1;
     }
     while (i <= kSustain) {
-      const Sample input(FillWithFloatGenerator(input_signal));
+      const Sample input(VectorMath::FillWithFloatGenerator(input_signal));
       const Sample sample(modulator(input));
-      EXPECT_TRUE(Equal(MulConst(kSustainLevel, input), sample));
+      EXPECT_TRUE(VectorMath::Equal(VectorMath::MulConst(kSustainLevel, input), sample));
       i += 1;
     }
     modulator.TriggerOff();
     // Same here, ignoring (the length worst case) samples, due to the release
-    const Sample input(FillWithFloatGenerator(input_signal));
-    IGNORE(modulator(input));
+    const Sample ignored(VectorMath::FillWithFloatGenerator(input_signal));
+    openmini::IGNORE(modulator(ignored));
     while (i <= kSustain + kTail) {
-      const Sample input(FillWithFloatGenerator(input_signal));
+      const Sample input(VectorMath::FillWithFloatGenerator(input_signal));
       const Sample sample(modulator(input));
-      EXPECT_TRUE(Equal(Fill(0.0f), sample));
+      EXPECT_TRUE(VectorMath::Equal(VectorMath::Fill(0.0f), sample));
       i += 1;
     }
   }  // iterations?

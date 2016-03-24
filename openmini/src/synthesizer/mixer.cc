@@ -37,12 +37,11 @@ Mixer::~Mixer() {
 }
 
 Sample Mixer::operator()(void) {
-  Sample output(Fill(0.0f));
+  Sample output(VectorMath::Fill(0.0f));
   if (active_) {
-    VcoIterator iter(this);
-    do {
-      output = Add(output, iter.GetVco()());
-    } while (iter.Next());
+    for (auto& vco : vcos_) {
+      output = VectorMath::Add(output, vco());
+    }
   }
   return output;
 }
@@ -52,10 +51,9 @@ void Mixer::NoteOn(const unsigned int note) {
   OPENMINI_ASSERT(note <= openmini::kMaxKeyNote);
 
   const float frequency(NoteToFrequency(note));
-  VcoIterator iter(this);
-  do {
-    iter.GetVco().SetFrequency(frequency);
-  } while (iter.Next());
+  for (auto& vco : vcos_) {
+    vco.SetFrequency(frequency);
+  }
   active_ = true;
 }
 
@@ -81,25 +79,6 @@ void Mixer::SetWaveform(const int vco_id, const Waveform::Type value) {
   OPENMINI_ASSERT(vco_id < kVCOsCount);
 
   vcos_[vco_id].SetWaveform(value);
-}
-
-Mixer::VcoIterator::VcoIterator(Mixer* mixer_to_iterate)
-    : mixer_(mixer_to_iterate),
-      iterator_(mixer_to_iterate->vcos_.begin()) {
-  OPENMINI_ASSERT(mixer_ != nullptr);
-}
-
-bool Mixer::VcoIterator::Next() {
-  ++iterator_;
-  if (iterator_ != mixer_->vcos_.end()) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-Vco& Mixer::VcoIterator::GetVco() const {
-  return *iterator_;
 }
 
 }  // namespace synthesizer

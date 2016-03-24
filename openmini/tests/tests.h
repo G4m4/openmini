@@ -37,119 +37,22 @@
 #include "openmini/src/samplingrate.h"
 #include "openmini/src/synthesizer/synthesizer_common.h"
 
-using openmini::IGNORE;
-
-// Using declarations for openmini maths stuff
-using openmini::Sample;
-using openmini::SampleRead;
-using openmini::Fill;
-using openmini::FillWithFloatGenerator;
-using openmini::GetByIndex;
-using openmini::GetFirst;
-using openmini::GetLast;
-using openmini::Add;
-using openmini::AddHorizontal;
-using openmini::Sub;
-using openmini::Mul;
-using openmini::MulConst;
-using openmini::Abs;
-using openmini::Sgn;
-using openmini::SgnNoZero;
-using openmini::Store;
-using openmini::Round;
-using openmini::RotateOnRight;
-using openmini::SamplingRate;
-
-// Tests-specific maths (comparison operators) stuff
-
-static inline bool IsMaskNull(SampleRead value) {
-#if (_USE_SSE)
-  return 0 == _mm_movemask_ps(value);
-#else
-  return value == 0.0f;
-#endif
-}
-
-static inline bool IsMaskFull(SampleRead value) {
-#if (_USE_SSE)
-  return 15 == _mm_movemask_ps(value);
-#else
-  return value == 1.0f;
-#endif
-}
-
-static inline bool GreaterThan(const float threshold, SampleRead value) {
-#if (_USE_SSE)
-  const Sample test_result(_mm_cmpgt_ps(Fill(threshold), value));
-  return IsMaskFull(test_result);
-#else
-  return threshold > value;
-#endif
-}
-
-static inline bool GreaterEqual(const float threshold, SampleRead value) {
-#if (_USE_SSE)
-  const Sample test_result(_mm_cmpge_ps(Fill(threshold), value));
-  return IsMaskFull(test_result);
-#else
-  return threshold >= value;
-#endif
-}
-
-#if (_USE_SSE)
-static inline bool GreaterEqual(SampleRead threshold, SampleRead value) {
-  const Sample test_result(_mm_cmpge_ps(threshold, value));
-  return IsMaskFull(test_result);
-}
-#endif
-
-static inline bool LessThan(const float threshold, SampleRead value) {
-#if (_USE_SSE)
-  const Sample test_result(_mm_cmplt_ps(Fill(threshold), value));
-  return IsMaskFull(test_result);
-#else
-  return threshold < value;
-#endif
-}
-
-static inline bool LessEqual(const float threshold, SampleRead value) {
-#if (_USE_SSE)
-  const Sample test_result(_mm_cmple_ps(Fill(threshold), value));
-  return IsMaskFull(test_result);
-#else
-  return threshold <= value;
-#endif
-}
-
-#if (_USE_SSE)
-static inline bool LessEqual(SampleRead threshold, SampleRead value) {
-  const Sample test_result(_mm_cmple_ps(threshold, value));
-  return IsMaskFull(test_result);
-}
-#endif
-
-static inline bool Equal(const float threshold, SampleRead value) {
-#if (_USE_SSE)
-  const Sample test_result(_mm_cmpeq_ps(Fill(threshold), value));
-  return IsMaskFull(test_result);
-#else
-  return threshold == value;
-#endif
-}
-
-#if (_USE_SSE)
-static inline bool Equal(SampleRead threshold, SampleRead value) {
-  const Sample test_result(_mm_cmpeq_ps(threshold, value));
-  return IsMaskFull(test_result);
-}
-#endif
+#include "soundtailor/tests/analysis.h"
 
 // Using declarations for openmini stuff
 using openmini::IGNORE;
 using openmini::kMinKeyNote;
 using openmini::kMaxKeyNote;
+using openmini::SamplingRate;
 using openmini::synthesizer::NoteToFrequency;
 using openmini::synthesizer::GetNextMultiple;
+
+// Using declarations for soundtailor tests utilities
+using soundtailor::ComputeMean;
+using soundtailor::ComputePower;
+using soundtailor::ComputeZeroCrossing;
+using soundtailor::IsContinuous;
+using soundtailor::ZeroCrossing;
 
 static const unsigned int kDataTestSetSize(32768);
 static const unsigned int kIterations(16);
@@ -185,116 +88,6 @@ static std::uniform_real_distribution<float> kNormDistribution(-1.0f, 1.0f);
 static std::uniform_real_distribution<float> kNormPosDistribution(0.0f, 1.0f);
 static std::bernoulli_distribution kBoolDistribution;
 static std::default_random_engine kRandomGenerator;
-
-/// @brief Compute the mean value of a signal generator for the given length
-///
-/// @param[in]    generator      Generator to compute value from
-/// @param[in]    length         Sample length
-///
-/// @return the generator mean for such length
-template <typename TypeGenerator>
-float ComputeMean(TypeGenerator& generator, const unsigned int length) {
-  Sample sum(Fill(0.0f));
-  unsigned int sample_idx(0);
-  while (sample_idx < length) {
-    const Sample sample(generator());
-    sum = Add(sum, sample);
-    sample_idx += openmini::SampleSize;
-  }
-  return AddHorizontal(sum) / static_cast<float>(length);
-}
-
-/// @brief Compute the mean power of a signal generator for the given length
-///
-/// @param[in]    generator      Generator to compute value from
-/// @param[in]    length         Sample length
-///
-/// @return the generator mean for such length
-template <typename TypeGenerator>
-float ComputePower(TypeGenerator& generator, const unsigned int length) {
-  Sample power(Fill(0.0f));
-  unsigned int sample_idx(0);
-  while (sample_idx < length) {
-    const Sample sample(generator());
-    const Sample squared(Mul(sample, sample));
-    power = Add(power, squared);
-    sample_idx += openmini::SampleSize;
-  }
-  return AddHorizontal(power) / static_cast<float>(length);
-}
-
-/// @brief Helper structure for retrieving zero crossings informations
-template <typename TypeGenerator>
-struct ZeroCrossing {
-  explicit ZeroCrossing(TypeGenerator& generator)
-      : generator_(generator),
-        // TODO(gm): this may introduces an additional zero crossing,
-        // it must be initialized to the first input value
-        previous_sgn_(0.0f),
-        cursor_(0) {
-    // Nothing to do here
-  }
-
-  /// @brief Get next zero crossing absolute index
-  unsigned int GetNextZeroCrossing(unsigned int max_length) {
-    while (cursor_ < max_length) {
-      int index_zc(GetZeroCrossingRelative(generator_()));
-      if (index_zc >= 0) {
-        const unsigned int out(index_zc + cursor_);
-        cursor_ += openmini::SampleSize;
-        return out;
-      }
-      cursor_ += openmini::SampleSize;
-    }
-    return max_length;
-  }
-
-  unsigned int Cursor(void) {
-    return cursor_;
-  }
-
- private:
-  /// @brief Actual zero crossing detection method
-  ///
-  /// Beware, it cannot detect zero crossings closer than 4 samples!
-  /// TODO(gm): Fix it
-  ///
-  /// @return the (relative) index of the next zero crossing, or -1
-  int GetZeroCrossingRelative(Sample input) {
-    const Sample sign_v(SgnNoZero(input));
-    for (unsigned int index(0); index < openmini::SampleSize; index += 1) {
-      const float current_sgn(GetByIndex(sign_v, index));
-      if (previous_sgn_ != current_sgn) {
-        previous_sgn_ = current_sgn;
-        return index;
-      }
-      previous_sgn_ = current_sgn;
-    }
-    return -1;
-  }
-
-  TypeGenerator generator_;
-  float previous_sgn_;
-  unsigned int cursor_;
-};
-
-/// @brief Compute zero crossings of a signal generator for the given length
-///
-/// @param[in]    generator      Generator to compute value from
-/// @param[in]    length         Sample length
-///
-/// @return zero crossings occurence for such length
-template <typename TypeGenerator>
-int ComputeZeroCrossing(TypeGenerator& generator, const unsigned int length) {
-  ZeroCrossing<TypeGenerator> zero_crossing(generator);
-  int out(0);
-  unsigned int zero_crossing_idx(zero_crossing.GetNextZeroCrossing(length));
-  while (zero_crossing_idx < length) {
-    out += 1;
-    zero_crossing_idx = zero_crossing.GetNextZeroCrossing(length);
-  }
-  return out;
-}
 
 /// @brief Basic click detection using derivative
 ///
@@ -361,36 +154,5 @@ void RemoveClose(TypeContainer* container, const TypeValue threshold) {
                                IsClose<TypeValue>(threshold)),
                    container->end());
 }
-
-/// @brief Helper structure for checking a signal continuity
-struct IsContinuous {
-  /// @brief Default constructor
-  ///
-  /// @param[in]  threshold   Max difference between two consecutive samples
-  /// @param[in]  previous   First sample initialization
-  IsContinuous(const float threshold, const float previous)
-      : threshold_(threshold),
-        previous_(previous) {
-    OPENMINI_ASSERT(threshold >= 0.0f);
-  }
-
-  /// @brief Check next sample continuity
-  ///
-  /// @param[in]  input   Sample to be tested
-  bool operator()(SampleRead input) {
-    const float before_diff(GetLast(input));
-    const Sample prev(RotateOnRight(input,
-                                    previous_));
-    const Sample after_diff(Sub(input, prev));
-    previous_ = before_diff;
-    if (LessThan(threshold_, Abs(after_diff))) {
-      return false;
-    }
-    return true;
-  }
-
-  float threshold_;
-  float previous_;
-};
 
 #endif  // OPENMINI_TESTS_TESTS_H_

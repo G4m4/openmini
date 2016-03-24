@@ -130,11 +130,11 @@ Sample Vcf::operator()(SampleRead sample) {
   OPENMINI_ASSERT(dry_filter_ != nullptr);
   OPENMINI_ASSERT(wet_filter_ != nullptr);
   ProcessParameters();
-  const Sample dry(MulConst((1.0f - amount_), (*dry_filter_)(sample)));
-  const Sample wet(MulConst(amount_, (*wet_filter_)(sample)));
+  const Sample dry(VectorMath::MulConst((1.0f - amount_), (*dry_filter_)(sample)));
+  const Sample wet(VectorMath::MulConst(amount_, (*wet_filter_)(sample)));
   // Update filter contour based on last envelop generator output
   wet_filter_->SetParameters(ComputeContour(), resonance_);
-  return Add(dry, wet);
+  return VectorMath::Add(dry, wet);
 }
 
 void Vcf::ProcessParameters(void) {
@@ -150,14 +150,10 @@ void Vcf::ProcessParameters(void) {
 
 float Vcf::ComputeContour(void) {
   // TODO(gm): Decide if accumulation is allowed for filter contour generator
-  const float base_value(std::max(0.0f, std::min(1.0f, contour_gen_())));
+  const Sample contour(contour_gen_());
+  const float base_value(Math::Max(0.0f, Math::Min(1.0f, VectorMath::GetLast(contour))));
   OPENMINI_ASSERT(base_value >= 0.0f);
   OPENMINI_ASSERT(base_value <= 1.0f);
-  // Update modulation as much as the filter itself will be updated
-  // TODO(gm): this should be simpler when the envelop generator outputs Sample
-  for (unsigned int i(1); i < openmini::SampleSize; ++i) {
-    contour_gen_();
-  }
   // Adaptation from normalized range [0.0 ; 1.0]
   // into [frequency_ ; max allowed filter frequency]
   return base_value * (soundtailor::filters::MoogLowAliasNonLinear::Meta().freq_max - frequency_) + frequency_;

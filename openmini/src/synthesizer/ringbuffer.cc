@@ -80,9 +80,9 @@ void RingBuffer::Push(SampleRead value) {
   OPENMINI_ASSERT(IsGood());
 
   // TODO(gm): optimize out this
-  float tmp[openmini::SampleSize];
-  Store(&tmp[0], value);
-  return Push(&tmp[0], openmini::SampleSize);
+  float tmp[SampleSize];
+  VectorMath::Store(&tmp[0], value);
+  return Push(&tmp[0], SampleSize);
 }
 
 void RingBuffer::Push(const float* const src, const unsigned int count) {

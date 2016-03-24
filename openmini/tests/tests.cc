@@ -72,5 +72,6 @@ float SinusGenerator::operator()(void) {
 }
 
 Sample RoundToIncrement(SampleRead input, const float increment) {
-  return MulConst(increment, Round(MulConst(1.0f / increment, input)));
+  return VectorMath::MulConst(increment,
+                              VectorMath::Round(VectorMath::MulConst(1.0f / increment, input)));
 }

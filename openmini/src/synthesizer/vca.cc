@@ -20,9 +20,9 @@
 
 #include "openmini/src/synthesizer/vca.h"
 
-#include "soundtailor/src/maths.h"
 #include "soundtailor/src/modulators/adsd.h"
-#include "soundtailor/src/modulators/envelopgenerator_base.h"
+
+#include "openmini/src/maths.h"
 
 namespace openmini {
 namespace synthesizer {
@@ -60,20 +60,11 @@ Sample Vca::operator()(SampleRead input) {
   // TODO(gm): this cast should not be done:
   // the generator is actually known at compile-time,
   // so find an elegant way to statically do this
-  // TODO(gm): SoundTailor should output only Samples
-  // TODO(gm): The SoundTailor Math header should probably not be used here
-#if (_USE_SSE)
-  const Sample envelop(soundtailor::Fill(
-    static_cast<soundtailor::modulators::Adsd*>(generator_)->operator()(),
-    static_cast<soundtailor::modulators::Adsd*>(generator_)->operator()(),
-    static_cast<soundtailor::modulators::Adsd*>(generator_)->operator()(),
-    static_cast<soundtailor::modulators::Adsd*>(generator_)->operator()()));
-#else
-  const Sample envelop(soundtailor::Fill(
-    static_cast<soundtailor::modulators::Adsd*>(generator_)->operator()()));
-#endif  // _USE_SSE
+  soundtailor::modulators::Adsd* static_generator_ptr
+    = static_cast<soundtailor::modulators::Adsd*>(generator_);
+  const Sample envelop((*static_generator_ptr)());
 
-  return soundtailor::Mul(input, envelop);
+  return VectorMath::Mul(input, envelop);
 }
 
 void Vca::SetAttack(const unsigned int attack) {

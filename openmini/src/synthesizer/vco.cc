@@ -32,7 +32,7 @@ Vco::Vco()
     generator_(generators::CreateGenerator(Waveform::kTriangle)),
     volume_(1.0f),
     frequency_(0.0f),
-    last_(Fill(0.0f)),
+    last_(VectorMath::Fill(0.0f)),
     waveform_(Waveform::kTriangle),
     update_(false) {
   OPENMINI_ASSERT(generator_ != nullptr);
@@ -65,7 +65,7 @@ void Vco::SetWaveform(const Waveform::Type value) {
   // This is temporary
   if (value != waveform_) {
     ::soundtailor::generators::Generator_Base* temp
-      = generators::CreateGenerator(value, GetLast(last_));
+      = generators::CreateGenerator(value, VectorMath::GetLast(last_));
     OPENMINI_ASSERT(temp != nullptr);
     generators::DestroyGenerator(generator_);
     generator_ = temp;
@@ -81,7 +81,7 @@ void Vco::SetWaveform(const Waveform::Type value) {
 Sample Vco::operator()(void) {
   OPENMINI_ASSERT(generator_ != nullptr);
   ProcessParameters();
-  last_ = openmini::MulConst(volume_, (*generator_)());
+  last_ = VectorMath::MulConst(volume_, (*generator_)());
   return last_;
 }
 

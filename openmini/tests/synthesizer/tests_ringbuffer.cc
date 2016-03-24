@@ -41,9 +41,9 @@ TEST(Synthesizer, RingBufferRandomPushPop) {
   unsigned int data_index(0);
   // First, we push the data with constant block sizes
   while (ringbuf.Size() < data.size()) {
-    const Sample current(Fill(&data[data_index]));
+    const Sample current(VectorMath::Fill(&data[data_index]));
     ringbuf.Push(current);
-    data_index += openmini::SampleSize;
+    data_index += SampleSize;
   }
 
   // Now we pop data out with various random block sizes
@@ -67,7 +67,7 @@ TEST(Synthesizer, RingBufferRandomPushPop) {
 TEST(Synthesizer, RingBufferTypicalUse) {
   const unsigned int kBlockSize(3303);
   const unsigned int kDataLength(GetNextMultiple(GetNextMultiple(32768, 3303),
-                                                 openmini::SampleSize));
+                                                 SampleSize));
 
   RingBuffer ringbuf(kBlockSize);
   // Creating random data
@@ -83,17 +83,17 @@ TEST(Synthesizer, RingBufferTypicalUse) {
     // At each iteration the ringbuffer is filled, then data extracted by blocks
     unsigned int block_idx(0);
     while ((block_idx < kBlockSize) && (in_data_idx < kDataLength)) {
-      const Sample current(Fill(&data[in_data_idx]));
+      const Sample current(VectorMath::Fill(&data[in_data_idx]));
       ringbuf.Push(current);
-      block_idx += openmini::SampleSize;
-      in_data_idx += openmini::SampleSize;
+      block_idx += SampleSize;
+      in_data_idx += SampleSize;
     }
     ringbuf.Pop(&data_out[out_data_idx], kBlockSize);
     out_data_idx += kBlockSize;
   }
 
   // Data integrity check - not checking last samples due to misalignment issues
-  for (unsigned int i(0); i < data_out.size() - openmini::SampleSize; ++i) {
+  for (unsigned int i(0); i < data_out.size() - SampleSize; ++i) {
     EXPECT_EQ(data[i], data_out[i]);
   }
 }
@@ -120,9 +120,9 @@ TEST(Synthesizer, RingBufferZeroPush) {
       ringbuf.Push(&data[data_index], 0);
     }
     else {
-      const Sample current(Fill(&data[data_index]));
+      const Sample current(VectorMath::Fill(&data[data_index]));
       ringbuf.Push(current);
-      data_index += openmini::SampleSize;
+      data_index += SampleSize;
     }
   }
 
@@ -157,9 +157,9 @@ TEST(Synthesizer, RingBufferZeroPop) {
   unsigned int data_index(0);
   // First, we push the data with constant block sizes
   while (ringbuf.Size() < data.size()) {
-    const Sample current(Fill(&data[data_index]));
+    const Sample current(VectorMath::Fill(&data[data_index]));
     ringbuf.Push(current);
-    data_index += openmini::SampleSize;
+    data_index += SampleSize;
   }
 
   // Now we pop data out with various random block sizes...

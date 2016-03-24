@@ -53,26 +53,26 @@ TEST(Vco, SmoothWaveformChange) {
     const unsigned int kHistoryLength(GetNextMultiple(
       static_cast<unsigned int>(std::floor((0.5f / kFrequency)
                                 * kSignalDataPeriod)),
-      openmini::SampleSize));
+      SampleSize));
 
     vco.SetFrequency(kFrequency * SamplingRate::Instance().Get());
 
     // Allowing 20% of margin on the max delta for differentiation imprecisions
     const float kMaxDelta(4.0f * kFrequency * 1.2f);
 
-    unsigned int i(openmini::SampleSize);
-    Sample input(Fill(0.0f));
+    unsigned int i(SampleSize);
+    Sample input(VectorMath::Fill(0.0f));
     // Creating an history
     while (i < kHistoryLength) {
       input = vco();
-      i += openmini::SampleSize;
+      i += SampleSize;
     }
     vco.SetWaveform(static_cast<openmini::Waveform::Type>(
                       kWaveformDistribution(kRandomGenerator)));
-    IsContinuous is_continuous(kMaxDelta, GetLast(input));
+    IsContinuous is_continuous(kMaxDelta, VectorMath::GetLast(input));
     while (i < kHistoryLength + 4) {
       EXPECT_TRUE(is_continuous(vco()));
-      i += openmini::SampleSize;
+      i += SampleSize;
     }
   }  // iterations?
 }
