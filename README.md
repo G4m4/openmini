@@ -1,6 +1,8 @@
 OpenMini - Open homage to Minimoog
 ==================================
 
+[![Build Status](https://travis-ci.org/G4m4/openmini.svg?branch=master)](https://travis-ci.org/G4m4/openmini)
+
 OpenMini is a modern C++ implementation of a Minimoog-like digital synthesizer.
 It rely on the [SoundTailor library](https://github.com/G4m4/soundtailor) which provide a simple, cross-platform yet efficient implementation of state of the art low-aliasing audio synthesis algorithms.
 

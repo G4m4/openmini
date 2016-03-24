@@ -1,10 +1,12 @@
 # @brief OpenMini standalone root cmake file
 
 # On Linux these are required in order to build an audio application
-if (${SYSTEM_IS_LINUX})
+if (SYSTEM_IS_LINUX)
+  find_package(ALSA REQUIRED)
   find_package(Freetype REQUIRED)
   find_package(X11 REQUIRED)
-endif (${SYSTEM_IS_LINUX})
+  find_package(Threads REQUIRED)
+endif (SYSTEM_IS_LINUX)
 
 set(OPENMINI_STANDALONE_DIR
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -25,7 +27,7 @@ include_directories(
 )
 
 # Source files declaration
-if(${SYSTEM_IS_MACOSX})
+if(SYSTEM_IS_MACOSX)
   # On Mac we have to pass through Juce wrappers (.mm files)
   set(OPENMINI_JUCE_SRC
     ${JUCE_INCLUDE_DIR}/modules/juce_audio_basics/juce_audio_basics.mm
@@ -56,7 +58,7 @@ else()
     ${JUCE_INCLUDE_DIR}/modules/juce_gui_basics/juce_gui_basics.cpp
     ${JUCE_INCLUDE_DIR}/modules/juce_gui_extra/juce_gui_extra.cpp
   )
-endif(${SYSTEM_IS_MACOSX})
+endif(SYSTEM_IS_MACOSX)
 
 # Disable warnings for external source
 disable_warnings_list("${OPENMINI_JUCE_SRC}")
@@ -77,7 +79,7 @@ source_group("openmini_implementation" FILES ${OPENMINI_IMPLEMENTATION_SRC} ${OP
 source_group("standalone_specifics" FILES ${OPENMINI_STANDALONE_SRC} ${OPENMINI_STANDALONE_HDR})
 
 # MSVC-specific issues
-if(${COMPILER_IS_MSVC})
+if(COMPILER_IS_MSVC)
   # Known MSVC issue: can't figure out whether we're building a console or windows application
   add_executable(openmini WIN32
     ${OPENMINI_JUCE_SRC}
@@ -98,22 +100,22 @@ else()
     ${OPENMINI_STANDALONE_SRC}
     ${OPENMINI_STANDALONE_HDR}
   )
-endif(${COMPILER_IS_MSVC})
+endif(COMPILER_IS_MSVC)
 
 # On Linux the application has to be linked with many others libraries
-if (${SYSTEM_IS_LINUX})
+if (SYSTEM_IS_LINUX)
   target_link_libraries(openmini
                         openmini_lib
                         soundtailor_lib
                         ${CMAKE_DL_LIBS}
                         ${FREETYPE_LIBRARIES}
-                        pthread
+                        ${CMAKE_THREAD_LIBS_INIT}
                         ${X11_LIBRARIES}
-                        asound)
+                        ${ALSA_LIBRARIES})
 else()
   target_link_libraries(openmini
                         openmini_lib
                         soundtailor_lib)
-endif(${SYSTEM_IS_LINUX})
+endif(SYSTEM_IS_LINUX)
 
 set_target_mt(openmini)

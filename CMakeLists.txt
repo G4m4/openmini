@@ -11,7 +11,7 @@ set(OPENMINI_INCLUDE_DIR
 
 # Default parameters
 
-if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
+if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug)
 endif()
 
@@ -24,18 +24,20 @@ set(COMPILER_IS_GCC
     0)
 set(COMPILER_IS_MSVC
     0)
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   set(COMPILER_IS_CLANG
       1)
   message("Compiler detected as Clang")
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   set(COMPILER_IS_GCC
       1)
   message("Compiler detected as gcc")
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   set(COMPILER_IS_MSVC
       1)
   message("Compiler detected as MSVC")
+else()
+  message(SEND_ERROR "Could not deduce compiler")
 endif()
 
 # Systems
@@ -45,11 +47,11 @@ set(SYSTEM_IS_MACOSX
     0)
 set(SYSTEM_IS_LINUX
     0)
-if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+if (CMAKE_SYSTEM_NAME MATCHES "Windows")
   set(SYSTEM_IS_WINDOWS
       1)
   message("System detected as Windows")
-elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
   set(SYSTEM_IS_MACOSX
       1)
   message("System detected as Mac OS X")
@@ -63,7 +65,7 @@ endif()
 # Build configuration
 set(BUILD_IS_DEBUG
     0)
-if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
   set(BUILD_IS_DEBUG
       1)
   message("Build configuration set to Debug")
@@ -127,7 +129,7 @@ endfunction(add_release_linker_flags)
 #
 # @param _TARGETS      List of targets
 function(disable_warnings_list _TARGETS)
- if (${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+ if (COMPILER_IS_GCC OR COMPILER_IS_CLANG)
    set(FLAG
        "-w")
  else()
@@ -144,7 +146,7 @@ endfunction(disable_warnings_list)
 #
 # @param _TARGET_NAME           target name
 function(set_target_mt _TARGET_NAME)
-  if(${COMPILER_IS_MSVC})
+  if(COMPILER_IS_MSVC)
     # Cannot use "add_CONFIG_flags" function here due to variable scoping
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd"
         PARENT_SCOPE)
@@ -152,16 +154,16 @@ function(set_target_mt _TARGET_NAME)
         PARENT_SCOPE)
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /MT"
         PARENT_SCOPE)
-  endif(${COMPILER_IS_MSVC})
+  endif(COMPILER_IS_MSVC)
 endfunction(set_target_mt)
 
 option(OPENMINI_HAS_GTEST "Allowing to use GTest framework (should be present into environment variable GTEST_ROOT." OFF)
 message(STATUS "GTest framework: ${OPENMINI_HAS_GTEST}")
 
-option(OPENMINI_HAS_JUCE "Allowing to use Juce framework (should be present into environment variable JUCE_ROOT)." OFF)
+option(OPENMINI_HAS_JUCE "Allowing to use Juce framework (should be present into environment variable JUCE_ROOT)." ON)
 message(STATUS "Juce framework: ${OPENMINI_HAS_JUCE}")
 
-option(OPENMINI_HAS_VST "Allowing to use VST SDK (should be present into environment variable VST_ROOT)." OFF)
+option(OPENMINI_HAS_VST "Allowing to use VST SDK (should be present into environment variable VST_ROOT)." ON)
 message(STATUS "VST framework: ${OPENMINI_HAS_VST}")
 
 option(OPENMINI_ENABLE_COVERAGE "Enables coverage build (using gcov)." OFF)
@@ -172,59 +174,57 @@ message(STATUS "Simd instructions use: ${OPENMINI_ENABLE_SIMD}")
 
 
 # Routing options to SoundTailor library
-if(${OPENMINI_ENABLE_SIMD} STREQUAL "ON")
+if(OPENMINI_ENABLE_SIMD STREQUAL "ON")
   set(SOUNDTAILOR_ENABLE_SIMD
       ON)
-endif(${OPENMINI_ENABLE_SIMD} STREQUAL "ON")
+endif(OPENMINI_ENABLE_SIMD STREQUAL "ON")
 
 # Project-wide various options
-if (${COMPILER_IS_MSVC})
+if (COMPILER_IS_MSVC)
   # Multithreaded build
   add_definitions("/MP")
-endif (${COMPILER_IS_MSVC})
+endif (COMPILER_IS_MSVC)
 
 # Project-wide options (SIMD, if enabled)
-if (${OPENMINI_ENABLE_SIMD} STREQUAL "ON")
-  if (${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+if (SOUNDTAILOR_ENABLE_SIMD)
+  if (COMPILER_IS_GCC OR COMPILER_IS_CLANG)
     add_definitions("-msse2")
   else()
     add_release_flags("/arch:SSE2")
-  endif (${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+  endif (COMPILER_IS_GCC OR COMPILER_IS_CLANG)
 else()
   add_definitions(-D_DISABLE_SIMD)
-endif (${OPENMINI_ENABLE_SIMD} STREQUAL "ON")
+endif (SOUNDTAILOR_ENABLE_SIMD)
 
 # Project-wide warning options
-if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+if(COMPILER_IS_GCC OR COMPILER_IS_CLANG)
   add_definitions(-pedantic)
   add_definitions(-Wall)
   add_definitions(-Wextra)
   add_definitions(-Wpointer-arith)
   add_definitions(-Wcast-qual)
   add_definitions(-Weffc++)
-  add_definitions(-ggdb)
-elseif(${COMPILER_IS_MSVC})
+elseif(COMPILER_IS_MSVC)
   add_definitions(-W4)
   # This disable useless msvc warnings about checked iterators
   add_definitions(-D_SCL_SECURE_NO_WARNINGS)
-endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+endif(COMPILER_IS_GCC OR COMPILER_IS_CLANG)
 
 # Debug-only options
-if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+if(COMPILER_IS_GCC OR COMPILER_IS_CLANG)
   add_debug_flags("-ggdb")
-elseif(${COMPILER_IS_MSVC})
-  add_debug_flags("/Zi")
-endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+elseif(COMPILER_IS_MSVC)
+endif(COMPILER_IS_GCC OR COMPILER_IS_CLANG)
 
 # Release-only options
-if(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+if(COMPILER_IS_GCC OR COMPILER_IS_CLANG)
   add_release_flags("-Ofast")
   add_release_flags("-march=native")
   add_release_flags("-mfpmath=sse")
   add_release_flags("-Ofast")
   # More informations about vectorization
   add_release_flags("-ftree-vectorizer-verbose=10")
-elseif(${COMPILER_IS_MSVC})
+elseif(COMPILER_IS_MSVC)
   add_release_linker_flags("/LTCG")
   add_release_flags("/Ox")
   add_release_flags("/Ob2")
@@ -232,15 +232,15 @@ elseif(${COMPILER_IS_MSVC})
   add_release_flags("/Ot")
   add_release_flags("/GL")
   add_release_flags("/fp:fast")
-endif(${COMPILER_IS_GCC} OR ${COMPILER_IS_CLANG})
+endif(COMPILER_IS_GCC OR COMPILER_IS_CLANG)
 
 # C++11 related options:
 # If using Clang we have to add the flag "std=c++11"
 # if using gcc, the c++11 flag change depending on the version
 # Nothing special with msvc
-if (${COMPILER_IS_CLANG})
+if (COMPILER_IS_CLANG)
   add_definitions(-std=c++11)
-elseif (${COMPILER_IS_GCC})
+elseif (COMPILER_IS_GCC)
   execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
                   OUTPUT_VARIABLE GCC_VERSION)
   if ((GCC_VERSION VERSION_LESS 4.6) OR (GCC_VERSION VERSION_EQUAL 4.6))
@@ -252,21 +252,21 @@ endif()
 
 # C++11 on Mac: we have to use libc++ as well, because the libstdc++ provided
 # with Macs is based on 4.2, with no C++11 support.
-if (${SYSTEM_IS_MACOSX})
+if (SYSTEM_IS_MACOSX)
   add_definitions(-stdlib=libc++)
-endif (${SYSTEM_IS_MACOSX})
+endif (SYSTEM_IS_MACOSX)
 
 # Coverage only available on Linux, with debug configuration
-if (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
+if (OPENMINI_ENABLE_COVERAGE)
   if (UNIX)
-    if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    if (CMAKE_BUILD_TYPE MATCHES "Debug")
       include(CTest)
       enable_testing()
       add_definitions("--coverage")
       set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
-    endif (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    endif (CMAKE_BUILD_TYPE MATCHES "Debug")
   endif(UNIX)
-endif (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
+endif (OPENMINI_ENABLE_COVERAGE)
 
 # Various includes
 
@@ -287,7 +287,7 @@ endif(EXISTS ${SOUNDTAILOR_DIR})
 
 
 # Google Test framework
-if (${OPENMINI_HAS_GTEST} STREQUAL "ON")
+if (OPENMINI_HAS_GTEST)
   # GTest path may be defined from an outside CMake file,
   # if this is used as an external library
   if(NOT EXISTS ${GTEST_DIR})
@@ -310,7 +310,7 @@ if (${OPENMINI_HAS_GTEST} STREQUAL "ON")
   # Not displaying gtest warnings
   add_subdirectory(${GTEST_DIR} ${GTEST_BUILD_DIR})
   add_compiler_flags(gtest " -w")
-endif (${OPENMINI_HAS_GTEST} STREQUAL "ON")
+endif (OPENMINI_HAS_GTEST)
 
 
 # JUCE

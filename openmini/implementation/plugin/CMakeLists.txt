@@ -26,7 +26,7 @@ include_directories(
 )
 
 # Source files declaration
-if(${SYSTEM_IS_MACOSX})
+if(SYSTEM_IS_MACOSX)
   # On Mac we have to pass through Juce wrappers (.mm files)
   set(OPENMINI_JUCE_SRC
     ${JUCE_INCLUDE_DIR}/modules/juce_audio_basics/juce_audio_basics.mm
@@ -63,7 +63,7 @@ else()
     ${JUCE_INCLUDE_DIR}/modules/juce_gui_extra/juce_gui_extra.cpp
     ${JUCE_INCLUDE_DIR}/modules/juce_audio_plugin_client/VST/juce_VST_Wrapper.cpp
   )
-endif(${SYSTEM_IS_MACOSX})
+endif(SYSTEM_IS_MACOSX)
 
 # Disable warnings for external source
 disable_warnings_list("${OPENMINI_JUCE_SRC}")
@@ -88,7 +88,7 @@ add_library(openmini_vst SHARED
 
 
 # Specific Mac stuff
-if (${SYSTEM_IS_MACOSX})
+if (SYSTEM_IS_MACOSX)
   # Bundle stuff
   set_target_properties(openmini_vst PROPERTIES
     BUNDLE TRUE
@@ -106,7 +106,7 @@ if (${SYSTEM_IS_MACOSX})
   set(CMAKE_OSX_DEPLOYEMENT_TARGET 10.5)
   set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION com.apple.compilers.llvm.clang.1_0)
 
-endif (${SYSTEM_IS_MACOSX})
+endif (SYSTEM_IS_MACOSX)
 
 target_link_libraries(openmini_vst
                       openmini_lib

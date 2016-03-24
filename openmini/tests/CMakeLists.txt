@@ -38,7 +38,7 @@ add_executable(openmini_tests
 
 set_target_mt(openmini_tests)
 
-if (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
+if (OPENMINI_ENABLE_COVERAGE)
   target_link_libraries(openmini_tests
     openmini_lib
     gtest_main
@@ -53,4 +53,4 @@ else()
     gtest_main
     soundtailor_lib
   )
-endif (${OPENMINI_ENABLE_COVERAGE} STREQUAL "ON")
+endif (OPENMINI_ENABLE_COVERAGE)
