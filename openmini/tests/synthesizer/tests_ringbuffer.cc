@@ -184,3 +184,43 @@ TEST(Synthesizer, RingBufferZeroPop) {
     EXPECT_EQ(data[i], data_out[i]);
   }
 }
+
+/// @brief Push and pop random data of random length,
+/// in a pre-reserved buffer
+TEST(Synthesizer, RingBufferReserve) {
+  std::uniform_int_distribution<int> kLengthDistribution(1, kDataTestSetSize);
+  const unsigned int kRingbufferLength(kLengthDistribution(kRandomGenerator));
+  std::uniform_int_distribution<int> kPushBlockSizeDistribution(1,
+                                                                kRingbufferLength);
+  const unsigned int kPushBlockSize(kPushBlockSizeDistribution(kRandomGenerator));
+  RingBuffer ringbuf;
+  ringbuf.Reserve(kRingbufferLength, kPushBlockSize);
+  // Creating random data
+  std::vector<float> data(kRingbufferLength);
+  std::vector<float> data_out(kRingbufferLength);
+  std::generate(data.begin(),
+                data.end(),
+                std::bind(kNormDistribution, kRandomGenerator));
+
+  // First, we push the data with various random block sizes
+  unsigned int data_index(0);
+  while (ringbuf.Size() < data.size()) {
+    ringbuf.Push(&data[data_index], kPushBlockSize);
+    data_index += kPushBlockSize;
+  }
+
+  // Now we pop data out with various random block sizes
+  data_index = 0;
+  while (data_index < data.size()) {
+    std::uniform_int_distribution<int> kBlockSizeDistribution(1,
+                                                              data_out.size() - data_index);
+    const unsigned int kBlockSize(kBlockSizeDistribution(kRandomGenerator));
+    ringbuf.Pop(&data_out[data_index], kBlockSize);
+    data_index += kBlockSize;
+  }
+
+  // Data integrity check
+  for (unsigned int i(0); i < data_out.size(); ++i) {
+    EXPECT_EQ(data[i], data_out[i]);
+  }
+}

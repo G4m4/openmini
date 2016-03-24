@@ -30,7 +30,7 @@ namespace synthesizer {
 
 RingBuffer::RingBuffer(const unsigned int capacity)
     : data_(nullptr),
-      capacity_(GetNextMultiple(capacity, openmini::kBlockSize)),
+      capacity_(ComputeRequiredElements(capacity)),
       size_(0),
       writing_position_(0),
       reading_position_(0) {
@@ -117,15 +117,13 @@ void RingBuffer::Clear(void) {
   }
 }
 
-void RingBuffer::Reserve(const unsigned int size) {
+void RingBuffer::Reserve(const unsigned int size,
+                         const unsigned int chunk_size) {
   OPENMINI_ASSERT(IsGood());
 
-  // Taking into account the already existing data - the plain samples!
-  // TODO(gm): Check that all successive size computation do not result in
+  // @todo (gm) Check that all successive size computation do not result in
   // too much data being allocated, or find a smart data size allocation scheme
-  const unsigned int actual_capacity(ComputeRequiredElements(size)
-                                     + GetNextMultiple(size_,
-                                                       openmini::SampleSize));
+  const unsigned int actual_capacity(ComputeRequiredElements(size, chunk_size));
   if (actual_capacity > Capacity()) {
     return Resize(actual_capacity);
   }
@@ -149,13 +147,13 @@ void RingBuffer::Resize(const unsigned int size) {
   OPENMINI_ASSERT(IsGood());
   OPENMINI_ASSERT(size > 0);
 
-  // TODO(gm): this should probably be moved into ComputeCapacity()
-  const unsigned int actual_capacity(GetNextMultiple(size,
-                                     openmini::SampleSize)
+  const unsigned int actual_capacity(size
   // This is the offset required in order to make future left space
   // a multiple of SampleSize.
   // E.g., IsMultiple(future capacity - currently filled data, SampleSize)
-    + GetOffsetFromNextMultiple(size_, openmini::SampleSize));
+  // USELESS FOR NOW
+  // + GetOffsetFromNextMultiple(size_, SampleSize)
+    );
   const unsigned int max_fill_count(std::min(size_, actual_capacity));
   float* temp(static_cast<float*>(Allocate(actual_capacity * sizeof(*data_))));
   OPENMINI_ASSERT(temp != nullptr);
@@ -180,9 +178,18 @@ void RingBuffer::Resize(const unsigned int size) {
 }
 
 unsigned int RingBuffer::ComputeRequiredElements(
-    const unsigned int size) const {
+    const unsigned int size,
+    const unsigned int chunk_size) const {
   // For this implementation, one internal sample = one output sample
-  return size;
+  //
+  // However one needs to take into account the chunk size,
+  // which is at least the sample size
+  const unsigned int actual_chunk_size(Math::Max(chunk_size, SampleSize));
+  // The worst use case is that one:
+  // [chunk_size - 1][...data...][chunk_size - 1]
+  //                 ^ cursor1   ^ cursor2
+  // hence the extra padding
+  return GetNextMultiple(size + 2 * actual_chunk_size - 1, actual_chunk_size);
 }
 
 unsigned int RingBuffer::ComputeMaxElements(const unsigned int size) const {

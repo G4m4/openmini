@@ -69,10 +69,10 @@ class RingBuffer {
   virtual void Clear(void);
 
   /// @brief Check if the buffer is big enough to store and later retrieve
-  /// at least "size" elements
+  /// at least "size" elements, by bits of "chunk_size" elements
   ///
   /// Resize if this is not the case.
-  virtual void Reserve(const unsigned int size);
+  virtual void Reserve(unsigned int size, unsigned int chunk_size = 1);
 
   /// @brief Returns true if the buffer is "usable"
   ///
@@ -96,10 +96,12 @@ class RingBuffer {
   virtual void Resize(const unsigned int size);
 
   /// @brief Compute required elements count in order to be able to output
-  /// at least "size" elements
+  /// at least "size" elements, by bits of "chunk_size" elements
   ///
   /// @param[in]  size   Minimal amout of elements to be retrieved
-  virtual unsigned int ComputeRequiredElements(const unsigned int size) const;
+  virtual unsigned int ComputeRequiredElements(
+      unsigned int size,
+      unsigned int chunk_size = 1) const;
 
   /// @brief Compute how much elements can be retrieved with the given number
   /// of elements
