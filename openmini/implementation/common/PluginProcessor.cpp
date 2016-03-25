@@ -31,6 +31,9 @@ OpenMiniAudioProcessor::OpenMiniAudioProcessor()
   : lastUIWidth(kMaxWindowWidth / 2),
     lastUIHeight(kMaxWindowHeight / 2),
     process_time_(0.0) {
+  // Manually create one output bus
+  busArrangement.outputBuses.clear();
+  busArrangement.outputBuses.add(AudioProcessorBus(String("Output #") += String(1), AudioChannelSet::disabled()));
 }
 
 OpenMiniAudioProcessor::~OpenMiniAudioProcessor() {
@@ -62,24 +65,6 @@ const juce::String OpenMiniAudioProcessor::getParameterText(int index) {
   return juce::String(synth_.GetMetadata(index).description());
 }
 
-const juce::String OpenMiniAudioProcessor::getInputChannelName(
-    int channelIndex) const {
-  return juce::String(channelIndex + 1);
-}
-
-const juce::String OpenMiniAudioProcessor::getOutputChannelName(
-    int channelIndex) const {
-  return juce::String(channelIndex + 1);
-}
-
-bool OpenMiniAudioProcessor::isInputChannelStereoPair(int index) const {
-  return true;
-}
-
-bool OpenMiniAudioProcessor::isOutputChannelStereoPair(int index) const {
-  return true;
-}
-
 bool OpenMiniAudioProcessor::acceptsMidi() const {
   #if JucePlugin_WantsMidiInput
   return true;
@@ -94,10 +79,6 @@ bool OpenMiniAudioProcessor::producesMidi() const {
   #else
   return false;
   #endif
-}
-
-bool OpenMiniAudioProcessor::silenceInProducesSilenceOut() const {
-  return false;
 }
 
 double OpenMiniAudioProcessor::getTailLengthSeconds() const {
@@ -164,7 +145,7 @@ void OpenMiniAudioProcessor::processBlock(juce::AudioSampleBuffer& buffer,
 
   const double counter_start(juce::Time::getMillisecondCounterHiRes());
 
-  synth_.ProcessAudio(buffer.getArrayOfChannels()[0], buffer.getNumSamples());
+  synth_.ProcessAudio(buffer.getArrayOfWritePointers()[0], buffer.getNumSamples());
 
   process_time_ = juce::Time::getMillisecondCounterHiRes() - counter_start;
 }

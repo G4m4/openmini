@@ -25,7 +25,7 @@
 #include "openmini/implementation/standalone/MainApplication.h"
 
 MainApplication::MainApplication()
-    : plugin_(getApplicationName(), juce::Colours::white, nullptr) {
+    : plugin_(getApplicationName(), juce::Colours::white, nullptr, false) {
   // Nothing to do here for now
 }
 
@@ -40,7 +40,7 @@ bool MainApplication::moreThanOneInstanceAllowed() {
 }
 
 void MainApplication::initialise(const juce::String& commandLine) {
-  plugin_.resetFilter();
+  plugin_.resetToDefaultState();
   plugin_.setVisible(true);
 }
 

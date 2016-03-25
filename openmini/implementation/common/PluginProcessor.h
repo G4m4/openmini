@@ -55,14 +55,8 @@ class OpenMiniAudioProcessor  : public juce::AudioProcessor,
   const String getParameterName(int index);
   const String getParameterText(int index);
 
-  const String getInputChannelName(int channelIndex) const;
-  const String getOutputChannelName(int channelIndex) const;
-  bool isInputChannelStereoPair(int index) const;
-  bool isOutputChannelStereoPair(int index) const;
-
   bool acceptsMidi() const;
   bool producesMidi() const;
-  bool silenceInProducesSilenceOut() const;
   double getTailLengthSeconds() const;
 
   int getNumPrograms();
