@@ -30,7 +30,7 @@
 // SoundTailor forward declarations
 namespace soundtailor {
 namespace filters {
-class Filter_Base;
+class MoogOversampled;
 }  // namespace filters
 }  // namespace soundtailor
 
@@ -92,12 +92,16 @@ class Vcf {
   void SetAmount(const float amount);
   /// @brief Actual process function for one sample
   Sample operator()(SampleRead sample);
+
+
   /// @brief Update internal generator parameters
   ///
   /// Allows asynchronous updates; to be called within an update loop.
   void ProcessParameters(void);
 
  private:
+  typedef soundtailor::filters::MoogOversampled InternalFilter;
+
   /// @brief Internal helper wrapper for filter contour computation
   ///
   /// @return the new filter contour (e.g. its new cutoff frequency)
@@ -105,9 +109,10 @@ class Vcf {
   // No assignment operator for this class
   Vcf& operator=(const Vcf& right);
 
-  // TODO(gm): polymorphism probably no longer useful here
-  soundtailor::filters::Filter_Base* dry_filter_;  ///< Internal dry filter
-  soundtailor::filters::Filter_Base* wet_filter_;  ///< Internal wet filter
+  InternalFilter* const filters_;  ///< Internal filters, not to be used:
+                                   ///< access done through the pointers below
+  InternalFilter* const dry_filter_;  ///< Internal dry filter
+  InternalFilter* const wet_filter_;  ///< Internal wet filter
   soundtailor::modulators::Adsd contour_gen_;  ///< Internal envelop generator
 
   unsigned int attack_; ///< Envelop attack time (due to asynchronous update,

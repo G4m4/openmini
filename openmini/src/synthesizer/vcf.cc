@@ -23,8 +23,8 @@
 // std::min
 #include <algorithm>
 
-#include "soundtailor/src/filters/filter_base.h"
-#include "soundtailor/src/filters/moog_lowaliasnonlinear.h"
+#include "soundtailor/src/filters/moog_oversampled.h"
+#include "soundtailor/src/utilities.h"
 
 #include "openmini/src/synthesizer/parameters.h"
 
@@ -32,8 +32,9 @@ namespace openmini {
 namespace synthesizer {
 
 Vcf::Vcf()
-  : dry_filter_(new soundtailor::filters::MoogLowAliasNonLinear()),
-    wet_filter_(new soundtailor::filters::MoogLowAliasNonLinear()),
+  : filters_(Allocate<InternalFilter>(2)),
+    dry_filter_(new (&filters_[0]) InternalFilter()),
+    wet_filter_(new (&filters_[1]) InternalFilter()),
     contour_gen_(),
     attack_(0),
     decay_(0),
@@ -42,15 +43,14 @@ Vcf::Vcf()
     resonance_(0.0f),
     amount_(0.0f),
     update_(false) {
+  OPENMINI_ASSERT(filters_ != nullptr);
   OPENMINI_ASSERT(dry_filter_ != nullptr);
   OPENMINI_ASSERT(wet_filter_ != nullptr);
 }
 
 Vcf::~Vcf() {
-  OPENMINI_ASSERT(dry_filter_ != nullptr);
-  OPENMINI_ASSERT(wet_filter_ != nullptr);
-  delete dry_filter_;
-  delete wet_filter_;
+  OPENMINI_ASSERT(filters_ != nullptr);
+  Deallocate(filters_);
 }
 
 void Vcf::TriggerOn(void) {
@@ -64,8 +64,8 @@ void Vcf::TriggerOff(void) {
 }
 
 void Vcf::SetFrequency(const float frequency) {
-  OPENMINI_ASSERT(frequency >= soundtailor::filters::MoogLowAliasNonLinear::Meta().freq_min);
-  OPENMINI_ASSERT(frequency <= soundtailor::filters::MoogLowAliasNonLinear::Meta().freq_max);
+  OPENMINI_ASSERT(frequency >= InternalFilter::Meta().freq_min);
+  OPENMINI_ASSERT(frequency <= InternalFilter::Meta().freq_max);
 
   // TODO(gm): find a way to do this generically
   if (frequency != frequency_) {
@@ -75,8 +75,8 @@ void Vcf::SetFrequency(const float frequency) {
 }
 
 void Vcf::SetResonance(const float resonance) {
-  OPENMINI_ASSERT(resonance >= soundtailor::filters::MoogLowAliasNonLinear::Meta().res_min);
-  OPENMINI_ASSERT(resonance <= soundtailor::filters::MoogLowAliasNonLinear::Meta().res_max);
+  OPENMINI_ASSERT(resonance >= InternalFilter::Meta().res_min);
+  OPENMINI_ASSERT(resonance <= InternalFilter::Meta().res_max);
 
   // TODO(gm): find a way to do this generically
   if (resonance != resonance_) {
@@ -157,7 +157,7 @@ float Vcf::ComputeContour(void) {
   OPENMINI_ASSERT(base_value <= 1.0f);
   // Adaptation from normalized range [0.0 ; 1.0]
   // into [frequency_ ; max allowed filter frequency]
-  return base_value * (soundtailor::filters::MoogLowAliasNonLinear::Meta().freq_max - frequency_) + frequency_;
+  return base_value * (InternalFilter::Meta().freq_max - frequency_) + frequency_;
 }
 
 }  // namespace synthesizer
