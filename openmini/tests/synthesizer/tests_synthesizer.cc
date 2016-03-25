@@ -236,6 +236,12 @@ TEST(Synthesizer, Perf96k) {
   unsigned int sample_idx(0);
   synth.NoteOn(kMinKeyNote);
   synth.SetOutputSamplingFrequency(kOutFrequency);
+  // Random parameters value
+  for (unsigned int param_id(0);
+        param_id < openmini::synthesizer::Parameters::kCount;
+        ++param_id) {
+    synth.SetValue(param_id, kNormPosDistribution(kRandomGenerator));
+  }
 
   while (sample_idx < static_cast<unsigned int>(kSynthesizerPerfSetLength
                                                 * kOutFrequency)) {
@@ -258,6 +264,12 @@ TEST(Synthesizer, Perf48k) {
   unsigned int sample_idx(0);
   synth.NoteOn(kMinKeyNote);
   synth.SetOutputSamplingFrequency(kOutFrequency);
+    // Random parameters value
+  for (unsigned int param_id(0);
+        param_id < openmini::synthesizer::Parameters::kCount;
+        ++param_id) {
+    synth.SetValue(param_id, kNormPosDistribution(kRandomGenerator));
+  }
 
   while (sample_idx < static_cast<unsigned int>(kSynthesizerPerfSetLength
                                                 * kOutFrequency)) {
