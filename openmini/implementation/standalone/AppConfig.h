@@ -48,7 +48,7 @@
 
 //==============================================================================
 #ifndef    JUCE_STANDALONE_APPLICATION
- #define   JUCE_STANDALONE_APPLICATION 0
+ #define   JUCE_STANDALONE_APPLICATION 1
 #endif
 
 //==============================================================================
