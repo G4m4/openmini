@@ -71,7 +71,7 @@ static const float kSynthesizerPerfSetLength(0.1f);
 #else  // (_BUILD_CONFIGURATION_DEBUG)
 static const unsigned int kFilterDataPerfSetSize(16 * 1024 * 256);
 static const unsigned int kGeneratorDataPerfSetSize(16 * 1024 * 256);
-static const float kSynthesizerPerfSetLength(10.0f);
+static const float kSynthesizerPerfSetLength(100.0f);
 #endif  // (_BUILD_CONFIGURATION_DEBUG)
 
 /// @brief Uniform distribution of normalized frequencies
