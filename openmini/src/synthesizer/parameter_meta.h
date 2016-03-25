@@ -1,7 +1,7 @@
 /// @filename parameter_meta.h
 /// @brief Parameter "Meta" class: handle parameter metadata
 /// @author gm
-/// @copyright gm 2013
+/// @copyright gm 2016
 ///
 /// This file is part of OpenMini
 ///
@@ -34,13 +34,13 @@ namespace synthesizer {
 class ParameterMeta {
  public:
   /// @brief Default constructor, allowing members initialisation
-  explicit ParameterMeta(float min = 0.0f,
-                         float max = 1.0f,
-                         float default_value = 0.5f,
-                         int sig_figs = 1,
-                         int cardinality = 0,
-                         const std::string& name = "Name",
-                         const std::string& description = "Description");
+  ParameterMeta(float min = 0.0f,
+                float max = 1.0f,
+                float default_value = 0.5f,
+                int sig_figs = 1,
+                int cardinality = 0,
+                const std::string& name = "Name",
+                const std::string& description = "Description");
 
   /// Getters
 
