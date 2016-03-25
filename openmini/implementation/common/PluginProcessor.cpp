@@ -1,7 +1,7 @@
 /// @filename PluginProcessor.cpp
 /// @brief OpenMini plugin processor (audio)
 /// @author gm
-/// @copyright gm 2013
+/// @copyright gm 2016
 ///
 /// This file is part of OpenMini
 ///
@@ -34,8 +34,9 @@ OpenMiniAudioProcessor::OpenMiniAudioProcessor()
     synth_(),
     process_time_(0.0) {
   // Manually create one output bus
+  busArrangement.inputBuses.clear();
   busArrangement.outputBuses.clear();
-  busArrangement.outputBuses.add(AudioProcessorBus(String("Output #") += String(1), AudioChannelSet::disabled()));
+  busArrangement.outputBuses.add(AudioProcessorBus(String("Output #") += String(1), AudioChannelSet::mono()));
 }
 
 OpenMiniAudioProcessor::~OpenMiniAudioProcessor() {
