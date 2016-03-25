@@ -29,7 +29,8 @@ using openmini::synthesizer::RingBuffer;
 /// and check that no data gets corrupted
 TEST(Synthesizer, RingBufferRandomPushPop) {
   std::uniform_int_distribution<int> kLengthDistribution(1, kDataTestSetSize);
-  const unsigned int kRingbufferLength(kLengthDistribution(kRandomGenerator));
+  const unsigned int kRingbufferLength(
+    GetNextMultiple(kLengthDistribution(kRandomGenerator), SampleSize));
   RingBuffer ringbuf(kRingbufferLength);
   // Creating random data
   std::vector<float> data(kRingbufferLength);
@@ -101,7 +102,8 @@ TEST(Synthesizer, RingBufferTypicalUse) {
 /// @brief Push zero-length data, should work and be a NOP
 TEST(Synthesizer, RingBufferZeroPush) {
   std::uniform_int_distribution<int> kLengthDistribution(1, kDataTestSetSize);
-  const unsigned int kRingbufferLength(kLengthDistribution(kRandomGenerator));
+  const unsigned int kRingbufferLength(
+    GetNextMultiple(kLengthDistribution(kRandomGenerator), SampleSize));
   RingBuffer ringbuf(kRingbufferLength);
   // Creating random data
   std::vector<float> data(kRingbufferLength);
@@ -144,7 +146,8 @@ TEST(Synthesizer, RingBufferZeroPush) {
 /// @brief Pop zero-length data, should work and be a NOP
 TEST(Synthesizer, RingBufferZeroPop) {
   std::uniform_int_distribution<int> kLengthDistribution(1, kDataTestSetSize);
-  const unsigned int kRingbufferLength(kLengthDistribution(kRandomGenerator));
+  const unsigned int kRingbufferLength(
+    GetNextMultiple(kLengthDistribution(kRandomGenerator), SampleSize));
   RingBuffer ringbuf(kRingbufferLength);
   // Creating random data
   std::vector<float> data(kRingbufferLength);
@@ -202,14 +205,14 @@ TEST(Synthesizer, RingBufferReserve) {
 
   // First, we push the data with various random block sizes
   unsigned int data_index(0);
-  while (ringbuf.Size() < data.size()) {
+  while (ringbuf.Size() < data.size() - kPushBlockSize) {
     ringbuf.Push(&data[data_index], kPushBlockSize);
     data_index += kPushBlockSize;
   }
 
   // Now we pop data out with various random block sizes
   data_index = 0;
-  while (data_index < data.size()) {
+  while (data_index < data.size() - kPushBlockSize) {
     std::uniform_int_distribution<int> kBlockSizeDistribution(1,
                                                               data_out.size() - data_index);
     const unsigned int kBlockSize(kBlockSizeDistribution(kRandomGenerator));
@@ -218,7 +221,7 @@ TEST(Synthesizer, RingBufferReserve) {
   }
 
   // Data integrity check
-  for (unsigned int i(0); i < data_out.size(); ++i) {
+  for (unsigned int i(0); i < data_out.size() - kPushBlockSize; ++i) {
     EXPECT_EQ(data[i], data_out[i]);
   }
 }
