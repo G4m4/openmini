@@ -6,6 +6,7 @@ install:
     - echo ${CXX}
     - ${CXX} --version
     - ${CXX} -v
+    - ldd -v
 addons:
     apt:
         sources:
@@ -15,6 +16,7 @@ addons:
             - clang-3.7
             - g++-4.8
             - gcc-4.8
+            - libc6
             - valgrind
             - cmake
             - libfreetype6-dev
