@@ -6,7 +6,7 @@ install:
     - echo ${CXX}
     - ${CXX} --version
     - ${CXX} -v
-    - ldd -v
+    - ldd --version
 addons:
     apt:
         sources:
