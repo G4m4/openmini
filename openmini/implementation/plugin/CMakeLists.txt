@@ -86,7 +86,6 @@ add_library(openmini_vst SHARED
   ${OPENMINI_PLUGIN_VST_HDR}
 )
 
-
 # Specific Mac stuff
 if (SYSTEM_IS_MACOSX)
   # Bundle stuff
@@ -113,3 +112,8 @@ target_link_libraries(openmini_vst
                       soundtailor_lib)
 
 set_target_mt(openmini_vst)
+
+if (COMPILER_IS_GCC)
+  # Enable "efficient C++" warnings for this target
+  add_compiler_flags(openmini_vst " -Weffc++")
+endif (COMPILER_IS_GCC)

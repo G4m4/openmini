@@ -119,3 +119,8 @@ else()
 endif(SYSTEM_IS_LINUX)
 
 set_target_mt(openmini)
+
+if (COMPILER_IS_GCC)
+  # Enable "efficient C++" warnings for this target
+  add_compiler_flags(openmini " -Weffc++")
+endif (COMPILER_IS_GCC)

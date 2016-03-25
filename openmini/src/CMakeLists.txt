@@ -39,6 +39,8 @@ if(COMPILER_IS_GCC)
   # position-independant code is required
   add_compiler_flags(openmini_lib " -fPIC")
   add_compiler_flags(soundtailor_lib " -fPIC")
+  # Enable "efficient C++" warnings for this target
+  add_compiler_flags(openmini_lib " -Weffc++")
 endif(COMPILER_IS_GCC)
 
 set_target_mt(openmini_lib)

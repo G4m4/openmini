@@ -203,7 +203,6 @@ if(COMPILER_IS_GCC OR COMPILER_IS_CLANG)
   add_definitions(-Wextra)
   add_definitions(-Wpointer-arith)
   add_definitions(-Wcast-qual)
-  add_definitions(-Weffc++)
 elseif(COMPILER_IS_MSVC)
   add_definitions(-W4)
   # This disable useless msvc warnings about checked iterators
