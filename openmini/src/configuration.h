@@ -35,6 +35,13 @@
   #else
     #define _COMPILER_GCC 1
   #endif
+  /// @brief Glibc version detection
+  // We only distinguish between "new" and "old", for C11 stuff
+  #if (defined(__GLIBC_MINOR__) && (__GLIBC_MINOR__ <= 15))
+    #define _COMPILER_GCC_GLIBC_OLD 1
+  #else
+    #define _COMPILER_GCC_GLIBC_OLD 0
+  #endif
 #elif(defined(_MSC_VER))
   #define _COMPILER_MSVC 1
 #else

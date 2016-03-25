@@ -108,14 +108,16 @@ static inline void* Allocate(const size_t size) {
 #if _COMPILER_MSVC
   return _aligned_malloc(size, SampleSizeBytes);
 #else
-  #if _COMPILER_GCC_OLD
-    // Posix stuff
-    void* memory(nullptr);
-    posix_memalign(&memory, SampleSizeBytes, size);
-    OPENMINI_ASSERT(memory != nullptr);
-    return memory;
-  #else
-    return aligned_alloc(SampleSizeBytes, size);
+  #if _COMPILER_GCC
+    #if _COMPILER_GCC_GLIBC_OLD
+      // Posix stuff for glibc version. < 2.16
+      void* memory(nullptr);
+      posix_memalign(&memory, SampleSizeBytes, size);
+      OPENMINI_ASSERT(memory != nullptr);
+      return memory;
+    #else
+      return aligned_alloc(SampleSizeBytes, size);
+    #endif
   #endif
 #endif
 }
