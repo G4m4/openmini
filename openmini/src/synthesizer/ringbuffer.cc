@@ -35,7 +35,7 @@ RingBuffer::RingBuffer(const unsigned int capacity)
       writing_position_(0),
       reading_position_(0) {
   OPENMINI_ASSERT(capacity > 0);
-  data_ = static_cast<float*>(Allocate(capacity_ * sizeof(*data_)));
+  data_ = Allocate<float>(capacity_);
   std::fill(&data_[0], &data_[capacity_], 0.0f);
 }
 
@@ -155,7 +155,7 @@ void RingBuffer::Resize(const unsigned int size) {
   // + GetOffsetFromNextMultiple(size_, SampleSize)
     );
   const unsigned int max_fill_count(std::min(size_, actual_capacity));
-  float* temp(static_cast<float*>(Allocate(actual_capacity * sizeof(*data_))));
+  float* temp(Allocate<float>(actual_capacity));
   OPENMINI_ASSERT(temp != nullptr);
   std::fill(&temp[0],
             &temp[actual_capacity],

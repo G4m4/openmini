@@ -122,6 +122,12 @@ static inline void* Allocate(const size_t size) {
 #endif
 }
 
+/// @brief Syntactic nicety of the one above
+template <class T>
+static inline T* Allocate(unsigned int count) {
+  return static_cast<T*>(Allocate(count * sizeof(T)));
+}
+
 /// @brief Deallocation function wrapper
 ///
 /// Has to be called for each allocation performed with the above function
