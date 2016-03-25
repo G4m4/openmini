@@ -34,4 +34,11 @@ add_library(openmini_lib
   ${OPENMINI_HDR}
 )
 
+if(COMPILER_IS_GCC)
+  # Linking a static library with dynamic ones in the case of a plugin,
+  # position-independant code is required
+  add_compiler_flags(openmini_lib " -fPIC")
+  add_compiler_flags(soundtailor_lib " -fPIC")
+endif(COMPILER_IS_GCC)
+
 set_target_mt(openmini_lib)
