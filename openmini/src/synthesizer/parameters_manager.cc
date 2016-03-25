@@ -65,6 +65,7 @@ int UnnormalizedToInt(const float unnormalized) {
 ParametersManager::ParametersManager(
   const std::array<ParameterMeta, Parameters::kCount>& params)
     : updated_parameters_(),
+      values_(),
       metadatas_(params) {
   AssignDefault();
 }

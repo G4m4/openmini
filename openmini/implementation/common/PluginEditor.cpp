@@ -35,6 +35,7 @@ OpenMiniAudioProcessorEditor::OpenMiniAudioProcessorEditor(
     : AudioProcessorEditor(owner),
       widgets_manager_(openmini::synthesizer::Parameters::kParametersMeta),
       resizer_(this, &resize_limits_),
+      resize_limits_(),
       keyboard_(owner->keyboard_state_,
                 juce::MidiKeyboardComponent::horizontalKeyboard),
       debug_infos_() {

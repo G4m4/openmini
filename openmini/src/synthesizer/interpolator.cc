@@ -30,8 +30,9 @@ namespace synthesizer {
 
 Interpolator::Interpolator()
     : cursor_pos_(0.0),
-      ratio_(1.0f) {
-  history_.fill(0.0f);
+      ratio_(1.0f),
+      history_{0.0f, 0.0f} {
+  // Nothing to do here for now
 }
 
 Interpolator::~Interpolator() {

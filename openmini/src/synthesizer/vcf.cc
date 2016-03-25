@@ -34,6 +34,7 @@ namespace synthesizer {
 Vcf::Vcf()
   : dry_filter_(new soundtailor::filters::MoogLowAliasNonLinear()),
     wet_filter_(new soundtailor::filters::MoogLowAliasNonLinear()),
+    contour_gen_(),
     attack_(0),
     decay_(0),
     sustain_level_(0.0f),

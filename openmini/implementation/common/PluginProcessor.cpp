@@ -28,8 +28,10 @@
 #include "openmini/src/synthesizer/parameter_meta.h"
 
 OpenMiniAudioProcessor::OpenMiniAudioProcessor()
-  : lastUIWidth(kMaxWindowWidth / 2),
+  : keyboard_state_(),
+    lastUIWidth(kMaxWindowWidth / 2),
     lastUIHeight(kMaxWindowHeight / 2),
+    synth_(),
     process_time_(0.0) {
   // Manually create one output bus
   busArrangement.outputBuses.clear();

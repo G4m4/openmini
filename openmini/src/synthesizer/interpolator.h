@@ -21,8 +21,6 @@
 #ifndef OPENMINI_SRC_SYNTHESIZER_INTERPOLATOR_H_
 #define OPENMINI_SRC_SYNTHESIZER_INTERPOLATOR_H_
 
-#include <array>
-
 #include "openmini/src/common.h"
 
 namespace openmini {
@@ -90,7 +88,7 @@ class Interpolator {
   double cursor_pos_;  ///< Actual cursor position relative to the beginning
                       ///< of the data cursor
   float ratio_;  ///< Interpolation ratio
-  std::array<float, 2> history_;  ///< Interpolation history
+  float history_[2];  ///< Interpolation history
 };
 
 }  // namespace synthesizer
